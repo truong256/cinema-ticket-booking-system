@@ -29,7 +29,7 @@
                 <div class="card card-hover" style="display: flex; flex-direction: column; justify-content: space-between;">
                     <div>
                         <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
-                            <img src="<%= st.poster_url %>" alt="<%= st.movie_title %>" style="width: 80px; height: 115px; object-fit: cover; border-radius: var(--radius-sm); flex-shrink: 0; box-shadow: var(--shadow-sm);">
+                            <img src="<%= st.poster_url %>" alt="<%= st.movie_title %>" style="width: 80px; height: 115px; object-fit: cover; border-radius: var(--radius-sm); flex-shrink: 0; box-shadow: var(--shadow-sm);" onerror="this.onerror=null; this.src='/images/default_poster.jpg';">
                             <div style="flex: 1; min-width: 0;">
                                 <div style="display: flex; gap: 0.4rem; margin-bottom: 0.35rem; flex-wrap: wrap;">
                                     <span class="age-badge <%= st.age_rating %>" style="position: static; font-size: 0.7rem; padding: 0.15rem 0.45rem;"><%= st.age_rating %></span>

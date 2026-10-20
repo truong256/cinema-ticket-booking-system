@@ -18,7 +18,7 @@
             <!-- Left Poster -->
             <div>
                 <div style="position: relative; border-radius: var(--radius-card); overflow: hidden; box-shadow: var(--shadow-elevated); border: 1px solid var(--border-color); aspect-ratio: 2/3;">
-                    <img src="<%= movie.poster_url %>" alt="<%= movie.title %>" style="width: 100%; height: 100%; object-fit: cover;">
+                    <img src="<%= movie.poster_url %>" alt="<%= movie.title %>" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='/images/default_poster.jpg';">
                     <span class="age-badge <%= movie.age_rating %>"><%= movie.age_rating %></span>
                 </div>
             </div>

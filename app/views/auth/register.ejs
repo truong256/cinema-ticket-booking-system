@@ -1,81 +1,115 @@
 <%- include('../partials/header') %>
 <%- include('../partials/navbar') %>
 
-<main class="main-wrapper" style="max-width: 540px; padding-top: 3rem; padding-bottom: 3.5rem;">
-    <div class="card" style="padding: 2.75rem 2.25rem; background: var(--bg-secondary); border-color: var(--border-color); box-shadow: var(--shadow-elevated);">
+<div class="auth-page-container">
+    <div class="auth-card" style="max-width: 520px;">
         <!-- Form Header -->
         <div style="text-align: center; margin-bottom: 2.25rem;">
-            <div class="brand-logo" style="justify-content: center; margin-bottom: 0.75rem;">
-                <i class="fas fa-film" style="color: var(--color-primary);"></i>
+            <div class="brand-logo" style="justify-content: center; margin-bottom: 0.85rem;">
+                <i class="fas fa-film"></i>
                 <span>CINE<span style="color: var(--color-primary);">VIBE</span></span>
             </div>
-            <h1 style="font-family: var(--font-heading); font-size: 1.75rem; font-weight: 800; color: #fff; letter-spacing: -0.5px;">
+            <h1 style="font-family: var(--font-heading); font-size: 1.85rem; font-weight: 800; color: #ffffff; letter-spacing: -0.5px; margin-bottom: 0.35rem;">
                 Đăng Ký Thành Viên Mới
             </h1>
-            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.25rem;">
-                Mật khẩu được mã hóa an toàn bằng tiêu chuẩn <strong>bcrypt (rounds 10)</strong>
+            <p style="color: var(--text-secondary); font-size: 0.92rem;">
+                Gia nhập CINEVIBE để nhận đặc quyền ghế VIP và ưu đãi độc quyền
             </p>
         </div>
 
+        <!-- Feedback Alerts -->
         <% if (error) { %>
-            <div class="alert alert-danger">
-                <i class="fas fa-triangle-exclamation"></i>
+            <div class="alert alert-danger" role="alert">
+                <i class="fas fa-triangle-exclamation" style="font-size: 1.1rem; flex-shrink: 0;"></i>
                 <div><%= error %></div>
             </div>
         <% } %>
 
-        <form action="/auth/register" method="POST">
+        <form action="/auth/register" method="POST" id="registerForm" autocomplete="on">
             <div class="form-group">
                 <label class="form-label" for="full_name">
-                    <i class="fas fa-id-card" style="color: var(--color-gold); margin-right: 0.35rem;"></i> Họ và tên người dùng *
+                    <i class="fas fa-id-card" style="color: var(--color-gold); margin-right: 0.4rem;"></i> Họ và tên người dùng <span style="color: var(--color-primary);">*</span>
                 </label>
-                <input type="text" id="full_name" name="full_name" class="form-control" required value="<%= formData?.full_name || '' %>" placeholder="Nguyễn Văn A">
+                <input type="text" id="full_name" name="full_name" class="form-control" required value="<%= formData?.full_name || '' %>" placeholder="Ví dụ: Nguyễn Văn A" autocomplete="name">
             </div>
 
             <div class="form-group">
                 <label class="form-label" for="username">
-                    <i class="fas fa-user" style="color: var(--color-gold); margin-right: 0.35rem;"></i> Tên đăng nhập *
+                    <i class="fas fa-user" style="color: var(--color-gold); margin-right: 0.4rem;"></i> Tên đăng nhập <span style="color: var(--color-primary);">*</span>
                 </label>
-                <input type="text" id="username" name="username" class="form-control" required value="<%= formData?.username || '' %>" placeholder="username123">
+                <input type="text" id="username" name="username" class="form-control" required value="<%= formData?.username || '' %>" placeholder="Tối thiểu 3 ký tự (chữ hoặc số)" autocomplete="username">
             </div>
 
-            <div class="form-group">
-                <label class="form-label" for="email">
-                    <i class="fas fa-envelope" style="color: var(--color-gold); margin-right: 0.35rem;"></i> Địa chỉ Email *
-                </label>
-                <input type="email" id="email" name="email" class="form-control" required value="<%= formData?.email || '' %>" placeholder="email@domain.com">
-            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                <div class="form-group">
+                    <label class="form-label" for="email">
+                        <i class="fas fa-envelope" style="color: var(--color-gold); margin-right: 0.4rem;"></i> Địa chỉ Email <span style="color: var(--color-primary);">*</span>
+                    </label>
+                    <input type="email" id="email" name="email" class="form-control" required value="<%= formData?.email || '' %>" placeholder="email@domain.com" autocomplete="email">
+                </div>
 
-            <div class="form-group">
-                <label class="form-label" for="phone">
-                    <i class="fas fa-phone" style="color: var(--color-gold); margin-right: 0.35rem;"></i> Số điện thoại
-                </label>
-                <input type="tel" id="phone" name="phone" class="form-control" value="<%= formData?.phone || '' %>" placeholder="0912345678">
+                <div class="form-group">
+                    <label class="form-label" for="phone">
+                        <i class="fas fa-phone" style="color: var(--color-gold); margin-right: 0.4rem;"></i> Số điện thoại
+                    </label>
+                    <input type="tel" id="phone" name="phone" class="form-control" value="<%= formData?.phone || '' %>" placeholder="0912345678" autocomplete="tel">
+                </div>
             </div>
 
             <div class="form-group">
                 <label class="form-label" for="password">
-                    <i class="fas fa-lock" style="color: var(--color-gold); margin-right: 0.35rem;"></i> Mật khẩu bảo vệ *
+                    <i class="fas fa-lock" style="color: var(--color-gold); margin-right: 0.4rem;"></i> Mật khẩu bảo vệ <span style="color: var(--color-primary);">*</span>
                 </label>
-                <input type="password" id="password" name="password" class="form-control" required placeholder="Tối thiểu 6 ký tự">
+                <div class="password-input-group">
+                    <input type="password" id="password" name="password" class="form-control" required placeholder="Tối thiểu 6 ký tự" autocomplete="new-password">
+                    <button type="button" class="btn-toggle-password" onclick="togglePasswordVisibility('password', this)" title="Hiển thị/Ẩn mật khẩu" aria-label="Toggle password visibility">
+                        <i class="far fa-eye"></i>
+                    </button>
+                </div>
             </div>
 
             <div class="form-group">
                 <label class="form-label" for="confirm_password">
-                    <i class="fas fa-check-double" style="color: var(--color-gold); margin-right: 0.35rem;"></i> Xác nhận mật khẩu *
+                    <i class="fas fa-check-double" style="color: var(--color-gold); margin-right: 0.4rem;"></i> Xác nhận mật khẩu <span style="color: var(--color-primary);">*</span>
                 </label>
-                <input type="password" id="confirm_password" name="confirm_password" class="form-control" required placeholder="Nhập lại mật khẩu để xác thực">
+                <div class="password-input-group">
+                    <input type="password" id="confirm_password" name="confirm_password" class="form-control" required placeholder="Nhập lại mật khẩu để xác thực" autocomplete="new-password">
+                    <button type="button" class="btn-toggle-password" onclick="togglePasswordVisibility('confirm_password', this)" title="Hiển thị/Ẩn mật khẩu" aria-label="Toggle password visibility">
+                        <i class="far fa-eye"></i>
+                    </button>
+                </div>
             </div>
 
-            <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; margin-top: 1rem;">
-                <i class="fas fa-user-plus"></i> Hoàn tất đăng ký
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.4rem;">
+                <i class="fas fa-shield-halved" style="color: #10b981;"></i>
+                Mật khẩu được mã hóa an toàn bằng thuật toán <strong>bcrypt (rounds 10)</strong>.
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">
+                <i class="fas fa-user-plus"></i> Hoàn tất đăng ký thành viên
             </button>
         </form>
 
-        <div style="text-align: center; margin-top: 1.75rem; font-size: 0.92rem; color: var(--text-secondary);">
-            Đã có tài khoản CineVibe? <a href="/auth/login" style="color: var(--color-primary); font-weight: 700;">Đăng nhập ngay</a>
+        <div style="text-align: center; margin-top: 2rem; font-size: 0.92rem; color: var(--text-secondary);">
+            Đã có tài khoản CineVibe? <a href="/auth/login" style="color: var(--color-primary); font-weight: 700; text-decoration: none;">Đăng nhập ngay</a>
         </div>
     </div>
-</main>
+</div>
+
+<script>
+function togglePasswordVisibility(fieldId, btn) {
+    const input = document.getElementById(fieldId);
+    const icon = btn.querySelector('i');
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+    }
+}
+</script>
 
 <%- include('../partials/footer') %>

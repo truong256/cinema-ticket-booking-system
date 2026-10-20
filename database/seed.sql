@@ -1,7 +1,10 @@
 -- ====================================================================
 -- SEED DATA - HỆ THỐNG ĐẶT VÉ XEM PHIM / SỰ KIỆN - ĐỀ 11
 -- ====================================================================
+SET NAMES utf8mb4;
+SET CHARACTER SET utf8mb4;
 USE cinema_db;
+
 
 -- 1. Users (Mật khẩu hash bằng bcrypt vòng 10: 'Admin@123456' và 'User@123456')
 -- Hash của 'Admin@123456': $2a$10$vI8aWBnW3fID.ZQ4/zo1G.q1lR5eK5f1E6fTfL0O8m5K5f1E6fTfL (hoặc chuỗi bcrypt tương đương)
@@ -16,7 +19,7 @@ ON DUPLICATE KEY UPDATE password_hash=VALUES(password_hash), full_name=VALUES(fu
 INSERT INTO cinemas (id, name, address, city, phone) VALUES
 (1, 'CineStar Vincom Center', '72 Lê Thánh Tôn, Bến Nghé, Quận 1', 'TP. Hồ Chí Minh', '19006017'),
 (2, 'Galaxy Cinema Royal City', '72A Nguyễn Trãi, Thượng Đình, Thanh Xuân', 'Hà Nội', '19002224')
-ON DUPLICATE KEY UPDATE name=VALUES(name);
+ON DUPLICATE KEY UPDATE name=VALUES(name), address=VALUES(address), city=VALUES(city), phone=VALUES(phone);
 
 -- 3. Rooms
 INSERT INTO rooms (id, cinema_id, name, room_type, total_seats) VALUES
@@ -80,7 +83,7 @@ INSERT INTO movies (id, title, description, duration_minutes, release_date, post
 (4, 'Inside Out 2 (Những Mảnh Ghép Cảm Xúc 2)', 'Riley bước vào tuổi dậy thì với những cảm xúc hoàn toàn mới: Lo Âu (Anxiety), Ganh Tị (Envy), Xấu Hổ (Embarrassment) khiến trụ sở cảm xúc đảo lộn hoàn toàn.', 96, '2026-06-14', '/images/inside_out2.jpg', 'https://www.youtube.com/watch?v=LEjhY15eCx0', 'Hoạt hình, Gia đình', 'P', 1),
 (5, 'Lật Mặt 7: Một Điều Ước', 'Bộ phim cảm động về tình mẫu tử của bà Hai 73 tuổi và 5 người con trưởng thành với những hoàn cảnh và góc khuất cuộc đời riêng biệt.', 138, '2026-04-26', '/images/lat_mat_7.jpg', 'https://www.youtube.com/watch?v=d_k8E4U_HqE', 'Gia đình, Tình cảm', 'K', 1),
 (6, 'Oppenheimer', 'Câu chuyện cuộc đời nhà vật lý J. Robert Oppenheimer, người đóng vai trò then chốt trong Dự án Manhattan phát triển vũ khí hạt nhân đầu tiên của nhân loại.', 180, '2026-05-15', '/images/oppenheimer.jpg', 'https://www.youtube.com/watch?v=uYPbbksJxIg', 'Lịch sử, Kịch tính', 'T18', 1)
-ON DUPLICATE KEY UPDATE title=VALUES(title);
+ON DUPLICATE KEY UPDATE title=VALUES(title), description=VALUES(description), genre=VALUES(genre), duration_minutes=VALUES(duration_minutes), poster_url=VALUES(poster_url), trailer_url=VALUES(trailer_url), age_rating=VALUES(age_rating);
 
 -- 6. Showtimes (Suất chiếu cho hôm nay và những ngày tới)
 INSERT INTO showtimes (id, movie_id, room_id, start_time, end_time, price_regular, price_vip, price_couple, status) VALUES

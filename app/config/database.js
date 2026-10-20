@@ -11,7 +11,8 @@ const dbConfig = {
     connectionLimit: parseInt(process.env.DB_CONNECTION_LIMIT || '20', 10),
     queueLimit: 0,
     connectTimeout: 10000,
-    timezone: '+07:00'
+    timezone: '+07:00',
+    charset: 'utf8mb4'
 };
 
 let pool = null;

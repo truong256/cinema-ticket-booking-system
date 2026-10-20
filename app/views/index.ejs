@@ -25,11 +25,11 @@
                 <a href="/movies/1" class="btn btn-primary btn-lg">
                     <i class="fas fa-ticket"></i> Đặt vé ngay
                 </a>
-                <a href="/movies" class="btn btn-secondary btn-lg">
-                    <i class="fas fa-list"></i> Xem toàn bộ phim
+                <a href="/movies/1" class="btn btn-secondary btn-lg">
+                    <i class="fas fa-circle-info"></i> Xem chi tiết
                 </a>
-                <a href="/about" class="btn btn-secondary btn-lg" title="Kiến trúc hệ thống">
-                    <i class="fas fa-layer-group"></i> DevOps Stack
+                <a href="/movies" class="btn btn-secondary btn-lg">
+                    <i class="fas fa-film"></i> Toàn bộ phim
                 </a>
             </div>
         </div>
@@ -54,7 +54,7 @@
                 <% movies.forEach(movie => { %>
                     <div class="movie-card">
                         <div class="movie-poster-wrap">
-                            <img src="<%= movie.poster_url %>" alt="<%= movie.title %>" class="movie-poster" loading="lazy">
+                            <img src="<%= movie.poster_url %>" alt="<%= movie.title %>" class="movie-poster" loading="lazy" onerror="this.onerror=null; this.src='/images/default_poster.jpg';">
                             <div class="movie-poster-overlay"></div>
                             <span class="age-badge <%= movie.age_rating %>"><%= movie.age_rating %></span>
                         </div>
@@ -94,7 +94,7 @@
         <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem;">
             <% todayShowtimes.forEach(st => { %>
                 <div class="card card-hover" style="display: flex; gap: 1.25rem; align-items: center;">
-                    <img src="<%= st.poster_url %>" alt="<%= st.movie_title %>" style="width: 75px; height: 110px; border-radius: var(--radius-sm); object-fit: cover; flex-shrink: 0; box-shadow: var(--shadow-sm);">
+                    <img src="<%= st.poster_url %>" alt="<%= st.movie_title %>" style="width: 75px; height: 110px; border-radius: var(--radius-sm); object-fit: cover; flex-shrink: 0; box-shadow: var(--shadow-sm);" onerror="this.onerror=null; this.src='/images/default_poster.jpg';">
                     <div style="flex: 1; min-width: 0;">
                         <h4 style="font-family: var(--font-heading); font-size: 1.05rem; font-weight: 700; color: #fff; margin-bottom: 0.35rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="<%= st.movie_title %>">
                             <%= st.movie_title %>

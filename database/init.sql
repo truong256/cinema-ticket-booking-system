@@ -6,6 +6,8 @@
 
 CREATE DATABASE IF NOT EXISTS cinema_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE cinema_db;
+SET NAMES utf8mb4;
+SET CHARACTER SET utf8mb4;
 
 -- 1. Bảng Người dùng (users)
 CREATE TABLE IF NOT EXISTS users (
