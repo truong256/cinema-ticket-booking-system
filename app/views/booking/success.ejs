@@ -1,0 +1,106 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<main class="main-wrapper" style="max-width: 720px;">
+    <!-- Alert Success -->
+    <div class="alert alert-success" style="margin-bottom: 2rem;">
+        <i class="fas fa-check-circle" style="font-size: 1.5rem;"></i>
+        <div>
+            <strong>Đặt vé & Thanh toán thành công!</strong>
+            <div style="font-size: 0.85rem;">Thông tin vé đã được lưu vào hệ thống và gửi xác nhận qua email của bạn.</div>
+        </div>
+    </div>
+
+    <!-- Electronic Ticket Layout -->
+    <div class="card" id="eTicket" style="background: #111827; border: 2px dashed #4338ca; border-radius: var(--radius-lg); padding: 2.5rem; position: relative; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.6);">
+        <!-- Top ticket branding -->
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem; margin-bottom: 1.5rem;">
+            <div class="brand-logo">
+                <i class="fas fa-film" style="color: var(--primary);"></i>
+                <span>CINE<span style="color: var(--primary);">VIBE</span></span>
+            </div>
+            <div style="text-align: right;">
+                <span class="brand-badge" style="background: #10b981;">VÉ ĐIỆN TỬ HỢP LỆ</span>
+                <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.25rem;">Mã vé: <strong><%= booking.booking_code %></strong></div>
+            </div>
+        </div>
+
+        <!-- Ticket Body -->
+        <div style="display: grid; grid-template-columns: 1fr 140px; gap: 2rem; align-items: center; margin-bottom: 2rem;">
+            <div>
+                <h2 style="font-family: var(--font-heading); font-size: 1.6rem; color: #fff; margin-bottom: 0.5rem;"><%= booking.movie_title %></h2>
+                <div style="font-size: 0.9rem; color: #a5b4fc; margin-bottom: 0.75rem;">
+                    <i class="fas fa-map-marker-alt"></i> <%= booking.cinema_name %> - <%= booking.room_name %>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; font-size: 0.9rem;">
+                    <div>
+                        <span style="color: var(--text-muted); display: block;">Thời gian chiếu:</span>
+                        <strong style="color: #fff;"><%= new Date(booking.start_time).toLocaleString('vi-VN') %></strong>
+                    </div>
+                    <div>
+                        <span style="color: var(--text-muted); display: block;">Khách hàng:</span>
+                        <strong style="color: #fff;"><%= booking.customer_name %></strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Simulated QR Code -->
+            <div style="background: #fff; padding: 0.75rem; border-radius: var(--radius-sm); text-align: center;">
+                <svg viewBox="0 0 100 100" width="100%" height="100%">
+                    <rect width="100" height="100" fill="#fff" />
+                    <rect x="10" y="10" width="25" height="25" fill="#000" />
+                    <rect x="15" y="15" width="15" height="15" fill="#fff" />
+                    <rect x="19" y="19" width="7" height="7" fill="#000" />
+                    
+                    <rect x="65" y="10" width="25" height="25" fill="#000" />
+                    <rect x="70" y="15" width="15" height="15" fill="#fff" />
+                    <rect x="74" y="19" width="7" height="7" fill="#000" />
+                    
+                    <rect x="10" y="65" width="25" height="25" fill="#000" />
+                    <rect x="15" y="70" width="15" height="15" fill="#fff" />
+                    <rect x="19" y="74" width="7" height="7" fill="#000" />
+                    
+                    <rect x="42" y="15" width="10" height="10" fill="#000" />
+                    <rect x="42" y="35" width="15" height="10" fill="#000" />
+                    <rect x="60" y="45" width="25" height="10" fill="#000" />
+                    <rect x="42" y="65" width="15" height="15" fill="#000" />
+                    <rect x="65" y="70" width="20" height="15" fill="#000" />
+                </svg>
+                <div style="font-size: 0.65rem; color: #1e293b; font-weight: 700; margin-top: 0.2rem;">SCAN AT GATE</div>
+            </div>
+        </div>
+
+        <!-- Seats list -->
+        <div style="border-top: 1px dashed var(--border-color); padding-top: 1.5rem; margin-bottom: 1.5rem;">
+            <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">VỊ TRÍ GHẾ NGỒI ĐÃ XÁC NHẬN:</div>
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                <% seats.forEach(s => { %>
+                    <span class="selected-seat-tag" style="background: rgba(16, 185, 129, 0.2); border-color: rgba(16, 185, 129, 0.4); color: #6ee7b7; font-size: 0.9rem; padding: 0.3rem 0.75rem;">
+                        <i class="fas fa-couch"></i> Hàng <%= s.row_label %> - Số <%= s.seat_number %> (<%= s.seat_type %>)
+                    </span>
+                <% }); %>
+            </div>
+        </div>
+
+        <!-- Payment details -->
+        <div style="background: rgba(15, 23, 42, 0.7); border-radius: var(--radius-sm); padding: 1rem; display: flex; justify-content: space-between; align-items: center;">
+            <div style="font-size: 0.85rem;">
+                <div style="color: var(--text-secondary);">Mã giao dịch: <code><%= booking.transaction_id || 'TXN-MOCK-SUCCESS' %></code></div>
+                <div style="color: var(--text-muted);">Phương thức: <%= booking.payment_method || 'VNPAY_MOCK' %></div>
+            </div>
+            <div style="text-align: right;">
+                <div style="font-size: 0.75rem; color: var(--text-muted);">ĐÃ THANH TOÁN</div>
+                <div class="total-price" style="font-size: 1.4rem;"><%= new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(booking.total_amount) %></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actions -->
+    <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem;">
+        <button onclick="window.print()" class="btn btn-secondary"><i class="fas fa-print"></i> In vé điện tử</button>
+        <a href="/" class="btn btn-primary"><i class="fas fa-home"></i> Về trang chủ</a>
+    </div>
+</main>
+
+<%- include('../partials/footer') %>

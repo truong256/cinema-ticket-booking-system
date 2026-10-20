@@ -1,0 +1,78 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<main class="main-wrapper">
+    <div class="section-header">
+        <div>
+            <a href="/admin" style="color: var(--primary); font-size: 0.85rem;"><i class="fas fa-chevron-left"></i> Quay lại Dashboard</a>
+            <h1 class="section-title" style="margin-top: 0.25rem;"><i class="fas fa-ticket"></i> Danh Sách Đơn Đặt Vé Toàn Hệ Thống</h1>
+        </div>
+    </div>
+
+    <div class="card" style="padding: 0; overflow: hidden; margin-bottom: 2rem;">
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+                <thead>
+                    <tr style="background: rgba(15, 23, 42, 0.8); border-bottom: 1px solid var(--border-color); color: var(--text-muted); text-transform: uppercase; font-size: 0.75rem;">
+                        <th style="padding: 1rem;">Mã Đơn</th>
+                        <th style="padding: 1rem;">Khách Hàng</th>
+                        <th style="padding: 1rem;">Liên Hệ</th>
+                        <th style="padding: 1rem;">Phim & Phòng</th>
+                        <th style="padding: 1rem;">Số Ghế</th>
+                        <th style="padding: 1rem;">Tổng Tiền</th>
+                        <th style="padding: 1rem;">Thanh Toán</th>
+                        <th style="padding: 1rem;">Thời Gian Đặt</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (bookings && bookings.length > 0) { %>
+                        <% bookings.forEach(b => { %>
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td style="padding: 1rem; font-weight: 700; color: #a5b4fc;"><%= b.booking_code %></td>
+                                <td style="padding: 1rem; font-weight: 600; color: #fff;"><%= b.customer_name %></td>
+                                <td style="padding: 1rem; color: var(--text-secondary); font-size: 0.85rem;">
+                                    <div><%= b.customer_email %></div>
+                                    <div><%= b.customer_phone %></div>
+                                </td>
+                                <td style="padding: 1rem;">
+                                    <div style="color: #fff; font-weight: 600;"><%= b.movie_title %></div>
+                                    <div style="font-size: 0.8rem; color: var(--text-secondary);"><%= b.room_name %></div>
+                                </td>
+                                <td style="padding: 1rem; font-weight: 600;">
+                                    <span class="selected-seat-tag"><%= b.seat_count %> ghế</span>
+                                </td>
+                                <td style="padding: 1rem; font-weight: 700; color: var(--accent);">
+                                    <%= new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(b.total_amount) %>
+                                </td>
+                                <td style="padding: 1rem;">
+                                    <% if (b.payment_status === 'completed') { %>
+                                        <span style="background: rgba(16, 185, 129, 0.2); color: #6ee7b7; padding: 0.25rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700;">
+                                            <i class="fas fa-check-circle"></i> ĐÃ THANH TOÁN
+                                        </span>
+                                    <% } else if (b.payment_status === 'failed') { %>
+                                        <span style="background: rgba(239, 68, 68, 0.2); color: #fca5a5; padding: 0.25rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700;">
+                                            <i class="fas fa-times-circle"></i> THẤT BẠI / ĐÃ HỦY
+                                        </span>
+                                    <% } else { %>
+                                        <span style="background: rgba(245, 158, 11, 0.2); color: #fcd34d; padding: 0.25rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700;">
+                                            <i class="fas fa-clock"></i> CHỜ XỬ LÝ
+                                        </span>
+                                    <% } %>
+                                </td>
+                                <td style="padding: 1rem; color: var(--text-muted); font-size: 0.8rem;">
+                                    <%= new Date(b.created_at).toLocaleString('vi-VN') %>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="8" style="text-align: center; padding: 2rem; color: var(--text-muted);">Chưa có đơn đặt vé nào</td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<%- include('../partials/footer') %>

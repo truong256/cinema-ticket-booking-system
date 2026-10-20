@@ -1,0 +1,36 @@
+<nav class="navbar">
+    <div class="nav-container">
+        <a href="/" class="brand-logo">
+            <i class="fas fa-film" style="color: var(--primary);"></i>
+            <span>CINE<span style="color: var(--primary);">VIBE</span></span>
+            <span class="brand-badge">ĐỀ 11</span>
+        </a>
+
+        <ul class="nav-links">
+            <li><a href="/" class="<%= currentPath === '/' ? 'active' : '' %>"><i class="fas fa-home"></i> Trang chủ</a></li>
+            <li><a href="/movies" class="<%= currentPath.startsWith('/movies') ? 'active' : '' %>"><i class="fas fa-clapperboard"></i> Danh sách Phim</a></li>
+            <li><a href="/about" class="<%= currentPath === '/about' ? 'active' : '' %>"><i class="fas fa-info-circle"></i> Giới thiệu Đề 11</a></li>
+            <% if (currentUser) { %>
+                <li><a href="/booking/history" class="<%= currentPath === '/booking/history' ? 'active' : '' %>"><i class="fas fa-ticket"></i> Vé của tôi</a></li>
+            <% } %>
+            <% if (currentUser && currentUser.role === 'admin') { %>
+                <li><a href="/admin" class="<%= currentPath.startsWith('/admin') ? 'active' : '' %>" style="color: #f59e0b;"><i class="fas fa-shield-halved"></i> Quản trị</a></li>
+            <% } %>
+        </ul>
+
+        <div class="nav-actions">
+            <% if (currentUser) { %>
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <span style="font-size: 0.9rem; color: var(--text-secondary);">
+                        <i class="fas fa-user-circle" style="color: var(--primary);"></i> 
+                        <%= currentUser.full_name || currentUser.username %>
+                    </span>
+                    <a href="/auth/logout" class="btn btn-secondary btn-sm"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
+                </div>
+            <% } else { %>
+                <a href="/auth/login" class="btn btn-secondary btn-sm"><i class="fas fa-sign-in-alt"></i> Đăng nhập</a>
+                <a href="/auth/register" class="btn btn-primary btn-sm"><i class="fas fa-user-plus"></i> Đăng ký</a>
+            <% } %>
+        </div>
+    </div>
+</nav>

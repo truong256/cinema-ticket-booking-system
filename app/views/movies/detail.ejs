@@ -1,0 +1,92 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<main class="main-wrapper">
+    <!-- Movie Overview Section -->
+    <div class="card" style="margin-bottom: 3rem; padding: 2.5rem; background: linear-gradient(135deg, rgba(22, 30, 49, 0.85), rgba(15, 23, 42, 0.95));">
+        <div style="display: grid; grid-template-columns: 240px 1fr; gap: 2.5rem; align-items: start;">
+            <div>
+                <img src="<%= movie.poster_url %>" alt="<%= movie.title %>" style="width: 100%; border-radius: var(--radius-md); box-shadow: 0 10px 25px rgba(0,0,0,0.6); object-fit: cover;">
+                <span class="age-badge <%= movie.age_rating %>" style="position: static; display: inline-block; margin-top: 0.75rem;">Độ tuổi: <%= movie.age_rating %></span>
+            </div>
+
+            <div>
+                <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem;">
+                    <span class="selected-seat-tag"><%= movie.genre %></span>
+                    <span style="color: var(--text-muted); font-size: 0.85rem;"><i class="far fa-clock"></i> <%= movie.duration_minutes %> phút</span>
+                    <span style="color: var(--text-muted); font-size: 0.85rem;"><i class="far fa-calendar-alt"></i> Khởi chiếu: <%= new Date(movie.release_date).toLocaleDateString('vi-VN') %></span>
+                </div>
+
+                <h1 style="font-family: var(--font-heading); font-size: 2.4rem; font-weight: 800; margin-bottom: 1rem; color: #fff;">
+                    <%= movie.title %>
+                </h1>
+
+                <p style="color: var(--text-secondary); font-size: 1.05rem; line-height: 1.7; margin-bottom: 1.5rem;">
+                    <%= movie.description %>
+                </p>
+
+                <% if (movie.trailer_url) { %>
+                    <a href="<%= movie.trailer_url %>" target="_blank" class="btn btn-secondary btn-sm" style="margin-bottom: 1rem;">
+                        <i class="fab fa-youtube" style="color: #ef4444;"></i> Xem Trailer chính thức
+                    </a>
+                <% } %>
+            </div>
+        </div>
+    </div>
+
+    <!-- Showtimes Section -->
+    <section>
+        <div class="section-header">
+            <div>
+                <h2 class="section-title"><i class="fas fa-calendar-check"></i> Lịch Chiếu & Suất Chiếu</h2>
+                <p style="color: var(--text-secondary); font-size: 0.95rem;">Chọn suất chiếu phù hợp với thời gian của bạn</p>
+            </div>
+        </div>
+
+        <% if (Object.keys(groupedShowtimes).length > 0) { %>
+            <div style="display: flex; flex-direction: column; gap: 2rem;">
+                <% for (const [date, showtimesList] of Object.entries(groupedShowtimes)) { %>
+                    <div class="card">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem;">
+                            <i class="fas fa-calendar-alt" style="color: var(--primary); font-size: 1.2rem;"></i>
+                            <h3 style="font-family: var(--font-heading); font-size: 1.2rem; text-transform: capitalize;"><%= date %></h3>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem;">
+                            <% showtimesList.forEach(st => { %>
+                                <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 1rem; display: flex; flex-direction: column; justify-content: space-between;">
+                                    <div>
+                                        <div style="font-weight: 700; color: #fff; font-size: 1.05rem; margin-bottom: 0.25rem;">
+                                            <i class="far fa-clock" style="color: #a5b4fc;"></i> 
+                                            <%= new Date(st.start_time).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) %>
+                                        </div>
+                                        <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.2rem;">
+                                            <i class="fas fa-map-marker-alt"></i> <%= st.cinema_name %>
+                                        </div>
+                                        <div style="font-size: 0.85rem; color: #cbd5e1; margin-bottom: 0.5rem;">
+                                            Phòng: <strong><%= st.room_name %></strong> (<%= st.room_type %>)
+                                        </div>
+                                        <div style="font-size: 0.85rem; color: #f59e0b; margin-bottom: 0.85rem;">
+                                            Từ <%= new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(st.price_regular) %>
+                                        </div>
+                                    </div>
+                                    <a href="/booking/showtime/<%= st.id %>" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-couch"></i> Chọn ghế
+                                    </a>
+                                </div>
+                            <% }); %>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        <% } else { %>
+            <div class="card" style="text-align: center; padding: 3rem;">
+                <i class="far fa-calendar-times" style="font-size: 2.5rem; color: var(--text-muted); margin-bottom: 1rem;"></i>
+                <p style="color: var(--text-secondary);">Hiện chưa có suất chiếu nào được lên lịch cho bộ phim này.</p>
+                <a href="/movies" class="btn btn-secondary btn-sm" style="margin-top: 1rem;">Xem phim khác</a>
+            </div>
+        <% } %>
+    </section>
+</main>
+
+<%- include('../partials/footer') %>

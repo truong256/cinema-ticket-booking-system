@@ -1,0 +1,52 @@
+<footer class="footer">
+    <div class="footer-container">
+        <div>
+            <div class="brand-logo" style="margin-bottom: 1rem;">
+                <i class="fas fa-film" style="color: var(--primary);"></i>
+                <span>CINE<span style="color: var(--primary);">VIBE</span> ĐỀ 11</span>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; max-width: 420px; margin-bottom: 1rem;">
+                Hệ thống Đặt vé Xem phim & Sự kiện trực tuyến. Dự án học phần Triển khai và Quản trị Hệ thống Phần mềm với đầy đủ Nginx, MySQL, Prometheus, Grafana, Loki & Promtail.
+            </p>
+            <p style="color: #a5b4fc; font-size: 0.85rem; font-weight: 600;">
+                <i class="fas fa-user-graduate"></i> Sinh viên: Nguyễn Duy Trường | MSV: DTC245200120 | Lớp: CNTTK23E
+            </p>
+        </div>
+
+        <div>
+            <h4 style="font-family: var(--font-heading); margin-bottom: 1rem; color: #fff;">Điều hướng</h4>
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.9rem; color: var(--text-secondary);">
+                <li><a href="/">Trang chủ</a></li>
+                <li><a href="/movies">Danh sách Phim</a></li>
+                <li><a href="/about">Kiến trúc Hệ thống</a></li>
+                <li><a href="/booking/history">Lịch sử đặt vé</a></li>
+            </ul>
+        </div>
+
+        <div>
+            <h4 style="font-family: var(--font-heading); margin-bottom: 1rem; color: #fff;">Quản trị & Giám sát</h4>
+            <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.9rem; color: var(--text-secondary);">
+                <li><a href="http://localhost:8080" target="_blank"><i class="fas fa-database"></i> phpMyAdmin (:8080)</a></li>
+                <li><a href="http://localhost:3001" target="_blank"><i class="fas fa-chart-line"></i> Grafana (:3001)</a></li>
+                <li><a href="http://localhost:9090" target="_blank"><i class="fas fa-server"></i> Prometheus (:9090)</a></li>
+                <li><a href="/metrics" target="_blank"><i class="fas fa-code"></i> Metrics Endpoint (/metrics)</a></li>
+                <li><a href="/healthz" target="_blank"><i class="fas fa-heart-pulse"></i> Healthcheck (/healthz)</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <div>
+            &copy; 2026 CineVibe. Học phần Triển khai và Quản trị Hệ thống Phần mềm.
+        </div>
+        <div>
+            <span>Docker Compose</span> &bull; <span>Nginx Reverse Proxy</span> &bull; <span>Loki Centralized Logging</span>
+        </div>
+    </div>
+</footer>
+
+<% if (typeof extraJs !== 'undefined') { %>
+    <script src="<%= extraJs %>"></script>
+<% } %>
+</body>
+</html>

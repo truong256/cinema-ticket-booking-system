@@ -1,0 +1,133 @@
+<%- include('partials/header') %>
+<%- include('partials/navbar') %>
+
+<main class="main-wrapper" style="max-width: 900px;">
+    <div style="text-align: center; margin-bottom: 3rem;">
+        <span class="brand-badge" style="margin-bottom: 0.5rem; display: inline-block;">ĐỀ TÀI SỐ 11</span>
+        <h1 style="font-family: var(--font-heading); font-size: 2.2rem; font-weight: 800; color: #fff;">
+            Hệ Thống Đặt Vé Xem Phim / Sự Kiện
+        </h1>
+        <p style="color: var(--text-secondary); font-size: 1.05rem;">
+            Học phần: <strong>Triển khai và Quản trị Hệ thống Phần mềm</strong>
+        </p>
+    </div>
+
+    <!-- Student Info Card -->
+    <div class="card" style="margin-bottom: 2rem; border-color: rgba(99, 102, 241, 0.4); background: linear-gradient(135deg, rgba(30, 27, 75, 0.5), rgba(15, 23, 42, 0.8));">
+        <h3 style="font-family: var(--font-heading); font-size: 1.25rem; margin-bottom: 1rem; color: #818cf8;">
+            <i class="fas fa-id-card"></i> Thông Tin Sinh Viên Thực Hiện
+        </h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; font-size: 0.95rem;">
+            <div>
+                <span style="color: var(--text-secondary); display: block;">Họ và tên:</span>
+                <strong style="color: #fff; font-size: 1.1rem;">Nguyễn Duy Trường</strong>
+            </div>
+            <div>
+                <span style="color: var(--text-secondary); display: block;">Mã sinh viên:</span>
+                <strong style="color: #facc15; font-size: 1.1rem;">DTC245200120</strong>
+            </div>
+            <div>
+                <span style="color: var(--text-secondary); display: block;">Lớp học phần:</span>
+                <strong style="color: #fff; font-size: 1.1rem;">CNTTK23E</strong>
+            </div>
+            <div>
+                <span style="color: var(--text-secondary); display: block;">GitHub Repository:</span>
+                <a href="https://github.com/truong256/h-th-ng-t-v-xem-phim-s-ki-n.git" target="_blank" style="color: #38bdf8; font-weight: 600;">
+                    <i class="fab fa-github"></i> truong256/repo
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Architecture & Tech Stack Card -->
+    <div class="card" style="margin-bottom: 2rem;">
+        <h3 style="font-family: var(--font-heading); font-size: 1.25rem; margin-bottom: 1.25rem;">
+            <i class="fas fa-cubes" style="color: var(--primary);"></i> Kiến Trúc Công Nghệ Triển Khai
+        </h3>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; font-size: 0.9rem;">
+            <div>
+                <h4 style="color: #fff; margin-bottom: 0.5rem;"><i class="fas fa-layer-group" style="color: #6366f1;"></i> Tầng Ứng Dụng & Dữ Liệu</h4>
+                <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.4rem; color: var(--text-secondary);">
+                    <li>&bull; <strong>Web Application:</strong> Node.js, Express, EJS Engine, Vanilla CSS</li>
+                    <li>&bull; <strong>Database:</strong> MySQL 8.0 InnoDB với Transaction & For Update chống đặt trùng ghế</li>
+                    <li>&bull; <strong>DB Management:</strong> phpMyAdmin (:8080)</li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 style="color: #fff; margin-bottom: 0.5rem;"><i class="fas fa-shield-halved" style="color: #10b981;"></i> Tầng Hạ Tầng, Giám Sát & Bảo Mật</h4>
+                <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.4rem; color: var(--text-secondary);">
+                    <li>&bull; <strong>Reverse Proxy:</strong> Nginx với SSL tự ký & Security Headers (CSP, HSTS, X-Frame)</li>
+                    <li>&bull; <strong>Monitoring:</strong> Prometheus (:9090) + mysqld-exporter (:9104)</li>
+                    <li>&bull; <strong>Visualization:</strong> Grafana (:3001) với provisioned dashboard</li>
+                    <li>&bull; <strong>Logging:</strong> Loki (:3100) + Promtail thu thập log App & Nginx</li>
+                    <li>&bull; <strong>Hardening:</strong> Non-root user, tách network front/back/monitor, least privilege</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 7 Grading Criteria Table -->
+    <div class="card">
+        <h3 style="font-family: var(--font-heading); font-size: 1.25rem; margin-bottom: 1rem;">
+            <i class="fas fa-clipboard-check" style="color: #10b981;"></i> Bảng Đối Chiếu 7 Tiêu Chí Đánh Giá (Thang 10 Điểm)
+        </h3>
+        <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left;">
+            <thead>
+                <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-muted);">
+                    <th style="padding: 0.75rem;">Tiêu chí</th>
+                    <th style="padding: 0.75rem;">Nội dung đánh giá</th>
+                    <th style="padding: 0.75rem; text-align: center;">Điểm</th>
+                    <th style="padding: 0.75rem; text-align: center;">Trạng thái</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.75rem; font-weight: 600;">1. GitHub & Commits</td>
+                    <td style="padding: 0.75rem;">Repo đủ source + config, đủ 3 commit chuẩn, README chi tiết</td>
+                    <td style="padding: 0.75rem; text-align: center; font-weight: 700;">1.5đ</td>
+                    <td style="padding: 0.75rem; text-align: center; color: #10b981; font-weight: 700;">HOÀN THÀNH</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.75rem; font-weight: 600;">2. App + Database</td>
+                    <td style="padding: 0.75rem;">Website chạy ổn định, kết nối DB, phpMyAdmin quản trị</td>
+                    <td style="padding: 0.75rem; text-align: center; font-weight: 700;">1.5đ</td>
+                    <td style="padding: 0.75rem; text-align: center; color: #10b981; font-weight: 700;">HOÀN THÀNH</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.75rem; font-weight: 600;">3. Nginx Reverse Proxy</td>
+                    <td style="padding: 0.75rem;">Cấu hình reverse proxy, HTTPS hoặc security headers cơ bản (Commit 1)</td>
+                    <td style="padding: 0.75rem; text-align: center; font-weight: 700;">1.5đ</td>
+                    <td style="padding: 0.75rem; text-align: center; color: #10b981; font-weight: 700;">HOÀN THÀNH</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.75rem; font-weight: 600;">4. Prometheus + Grafana</td>
+                    <td style="padding: 0.75rem;">Prometheus thu thập metrics, Grafana dashboard giám sát web/DB/container (Commit 2)</td>
+                    <td style="padding: 0.75rem; text-align: center; font-weight: 700;">1.5đ</td>
+                    <td style="padding: 0.75rem; text-align: center; color: #10b981; font-weight: 700;">HOÀN THÀNH</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.75rem; font-weight: 600;">5. Loki + Promtail</td>
+                    <td style="padding: 0.75rem;">Loki + Promtail hoạt động, truy vấn log bằng 3 câu LogQL (Commit 3)</td>
+                    <td style="padding: 0.75rem; text-align: center; font-weight: 700;">1.5đ</td>
+                    <td style="padding: 0.75rem; text-align: center; color: #10b981; font-weight: 700;">HOÀN THÀNH</td>
+                </tr>
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                    <td style="padding: 0.75rem; font-weight: 600;">6. Hardening Bảo Mật</td>
+                    <td style="padding: 0.75rem;">Áp dụng 6 biện pháp: non-root, network isolation, password mạnh, least privilege DB...</td>
+                    <td style="padding: 0.75rem; text-align: center; font-weight: 700;">1.5đ</td>
+                    <td style="padding: 0.75rem; text-align: center; color: #10b981; font-weight: 700;">HOÀN THÀNH</td>
+                </tr>
+                <tr>
+                    <td style="padding: 0.75rem; font-weight: 600;">7. Tổng thể & Báo cáo</td>
+                    <td style="padding: 0.75rem;">Docker Compose 1 lệnh, demo rõ ràng, báo cáo >10 trang chuyên nghiệp</td>
+                    <td style="padding: 0.75rem; text-align: center; font-weight: 700;">1.0đ</td>
+                    <td style="padding: 0.75rem; text-align: center; color: #10b981; font-weight: 700;">HOÀN THÀNH</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<%- include('partials/footer') %>

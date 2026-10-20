@@ -1,0 +1,21 @@
+<%- include('partials/header') %>
+<%- include('partials/navbar') %>
+
+<main class="main-wrapper" style="max-width: 600px; text-align: center; padding-top: 4rem;">
+    <div class="card" style="padding: 3rem 2rem;">
+        <div style="font-family: var(--font-heading); font-size: 4rem; font-weight: 900; color: var(--danger); line-height: 1; margin-bottom: 1rem;">
+            <%= typeof statusCode !== 'undefined' ? statusCode : 500 %>
+        </div>
+        <h2 style="font-family: var(--font-heading); font-size: 1.5rem; color: #fff; margin-bottom: 1rem;">
+            <%= typeof title !== 'undefined' ? title : 'Đã Xảy Ra Lỗi' %>
+        </h2>
+        <p style="color: var(--text-secondary); margin-bottom: 2rem;">
+            <%= typeof message !== 'undefined' ? message : 'Máy chủ gặp sự cố trong khi xử lý yêu cầu.' %>
+        </p>
+        <a href="/" class="btn btn-primary">
+            <i class="fas fa-home"></i> Quay lại trang chủ
+        </a>
+    </div>
+</main>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,83 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<main class="main-wrapper">
+    <div class="section-header">
+        <div>
+            <h1 class="section-title"><i class="fas fa-history"></i> Lịch Sử Đặt Vé Của Tôi</h1>
+            <p style="color: var(--text-secondary); font-size: 0.95rem;">Quản lý và tra cứu các vé xem phim bạn đã đặt</p>
+        </div>
+    </div>
+
+    <div class="card" style="padding: 0; overflow: hidden;">
+        <% if (bookings && bookings.length > 0) { %>
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+                    <thead>
+                        <tr style="background: rgba(15, 23, 42, 0.8); border-bottom: 1px solid var(--border-color); color: var(--text-muted); text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.5px;">
+                            <th style="padding: 1rem 1.25rem;">Mã Đặt Vé</th>
+                            <th style="padding: 1rem 1.25rem;">Phim & Rạp</th>
+                            <th style="padding: 1rem 1.25rem;">Thời gian chiếu</th>
+                            <th style="padding: 1rem 1.25rem;">Tổng tiền</th>
+                            <th style="padding: 1rem 1.25rem;">Trạng thái</th>
+                            <th style="padding: 1rem 1.25rem; text-align: right;">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% bookings.forEach(b => { %>
+                            <tr style="border-bottom: 1px solid var(--border-color); transition: var(--transition);">
+                                <td style="padding: 1rem 1.25rem; font-weight: 700; color: #a5b4fc;">
+                                    <%= b.booking_code %>
+                                </td>
+                                <td style="padding: 1rem 1.25rem;">
+                                    <div style="font-weight: 600; color: #fff;"><%= b.movie_title %></div>
+                                    <div style="font-size: 0.8rem; color: var(--text-secondary);"><%= b.cinema_name %> - <%= b.room_name %></div>
+                                </td>
+                                <td style="padding: 1rem 1.25rem; color: var(--text-secondary);">
+                                    <%= new Date(b.start_time).toLocaleString('vi-VN') %>
+                                </td>
+                                <td style="padding: 1rem 1.25rem; font-weight: 700; color: var(--accent);">
+                                    <%= new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(b.total_amount) %>
+                                </td>
+                                <td style="padding: 1rem 1.25rem;">
+                                    <% if (b.payment_status === 'completed') { %>
+                                        <span style="background: rgba(16, 185, 129, 0.2); color: #6ee7b7; padding: 0.25rem 0.6rem; border-radius: 4px; font-size: 0.8rem; font-weight: 600;">
+                                            <i class="fas fa-check"></i> Đã thanh toán
+                                        </span>
+                                    <% } else if (b.payment_status === 'failed') { %>
+                                        <span style="background: rgba(239, 68, 68, 0.2); color: #fca5a5; padding: 0.25rem 0.6rem; border-radius: 4px; font-size: 0.8rem; font-weight: 600;">
+                                            <i class="fas fa-times"></i> Đã hủy
+                                        </span>
+                                    <% } else { %>
+                                        <span style="background: rgba(245, 158, 11, 0.2); color: #fcd34d; padding: 0.25rem 0.6rem; border-radius: 4px; font-size: 0.8rem; font-weight: 600;">
+                                            <i class="fas fa-clock"></i> Chờ thanh toán
+                                        </span>
+                                    <% } %>
+                                </td>
+                                <td style="padding: 1rem 1.25rem; text-align: right;">
+                                    <% if (b.payment_status === 'completed') { %>
+                                        <a href="/booking/success/<%= b.id %>" class="btn btn-secondary btn-sm">
+                                            <i class="fas fa-ticket"></i> Xem vé
+                                        </a>
+                                    <% } else if (b.payment_status === 'pending') { %>
+                                        <a href="/booking/payment/<%= b.id %>" class="btn btn-primary btn-sm">
+                                            Thanh toán
+                                        </a>
+                                    <% } %>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </div>
+        <% } else { %>
+            <div style="text-align: center; padding: 3rem;">
+                <i class="fas fa-ticket" style="font-size: 2.5rem; color: var(--text-muted); margin-bottom: 1rem;"></i>
+                <p style="color: var(--text-secondary);">Bạn chưa có lịch sử đặt vé nào.</p>
+                <a href="/movies" class="btn btn-primary btn-sm" style="margin-top: 1rem;">Đặt vé ngay</a>
+            </div>
+        <% } %>
+    </div>
+</main>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,72 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<main class="main-wrapper" style="max-width: 480px; padding-top: 3rem;">
+    <div class="card" style="padding: 2.5rem 2rem;">
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <div class="brand-logo" style="justify-content: center; margin-bottom: 0.5rem;">
+                <i class="fas fa-film" style="color: var(--primary);"></i>
+                <span>CINE<span style="color: var(--primary);">VIBE</span></span>
+            </div>
+            <h1 style="font-family: var(--font-heading); font-size: 1.6rem; color: #fff;">Đăng Nhập Tài Khoản</h1>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">Truy cập để quản lý vé và đặt chỗ nhanh chóng</p>
+        </div>
+
+        <% if (error) { %>
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-circle"></i> <%= error %>
+            </div>
+        <% } %>
+
+        <% if (success) { %>
+            <div class="alert alert-success">
+                <i class="fas fa-check-circle"></i> <%= success %>
+            </div>
+        <% } %>
+
+        <form action="/auth/login" method="POST">
+            <div class="form-group">
+                <label class="form-label" for="username">Tên đăng nhập hoặc Email</label>
+                <input type="text" id="username" name="username" class="form-control" required placeholder="admin / customer1 / truong256">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="password">Mật khẩu</label>
+                <input type="password" id="password" name="password" class="form-control" required placeholder="••••••••">
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                <i class="fas fa-sign-in-alt"></i> Đăng nhập
+            </button>
+        </form>
+
+        <!-- Quick Login Demo Buttons -->
+        <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color); text-align: center;">
+            <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem;">ĐĂNG NHẬP NHANH CHO GIẢNG VIÊN / DEMO:</div>
+            <div style="display: flex; gap: 0.5rem; flex-direction: column;">
+                <button type="button" class="btn btn-secondary btn-sm" onclick="fillLogin('admin', 'Admin@123456')">
+                    <i class="fas fa-shield-alt" style="color: #f59e0b;"></i> Tài khoản Quản trị: admin / Admin@123456
+                </button>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="fillLogin('truong256', 'Truong@2026!')">
+                    <i class="fas fa-user-graduate" style="color: #6366f1;"></i> Sinh viên: truong256 / Truong@2026!
+                </button>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="fillLogin('customer1', 'User@123456')">
+                    <i class="fas fa-user" style="color: #10b981;"></i> Khách hàng: customer1 / User@123456
+                </button>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem; color: var(--text-secondary);">
+            Chưa có tài khoản? <a href="/auth/register" style="color: var(--primary); font-weight: 600;">Đăng ký ngay</a>
+        </div>
+    </div>
+</main>
+
+<script>
+function fillLogin(u, p) {
+    document.getElementById('username').value = u;
+    document.getElementById('password').value = p;
+}
+</script>
+
+<%- include('../partials/footer') %>

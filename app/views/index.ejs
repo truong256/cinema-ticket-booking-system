@@ -1,0 +1,116 @@
+<%- include('partials/header') %>
+<%- include('partials/navbar') %>
+
+<main class="main-wrapper">
+    <!-- Hero Banner -->
+    <section class="hero-banner">
+        <div class="hero-content">
+            <div class="hero-tag">
+                <i class="fas fa-sparkles"></i> Hệ thống Đặt vé Xem phim & Sự kiện Trực tuyến
+            </div>
+            <h1 class="hero-title">Trải Nghiệm Điện Ảnh Đỉnh Cao</h1>
+            <p class="hero-desc">
+                Khám phá những bộ phim bom tấn mới nhất, lựa chọn vị trí ghế VIP thời gian thực và thanh toán giả lập nhanh chóng, an toàn.
+            </p>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <a href="/movies" class="btn btn-primary"><i class="fas fa-ticket-alt"></i> Đặt vé ngay</a>
+                <a href="/about" class="btn btn-secondary"><i class="fas fa-layer-group"></i> Xem kiến trúc DevOps</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Phim Đang Chiếu -->
+    <section style="margin-bottom: 4rem;">
+        <div class="section-header">
+            <div>
+                <h2 class="section-title"><i class="fas fa-film"></i> Phim Đang Chiếu Nổi Bật</h2>
+                <p style="color: var(--text-secondary); font-size: 0.95rem;">Lựa chọn phim yêu thích để xem lịch chiếu và chọn ghế</p>
+            </div>
+            <a href="/movies" class="btn btn-secondary btn-sm">Xem tất cả <i class="fas fa-arrow-right"></i></a>
+        </div>
+
+        <div class="movies-grid">
+            <% if (movies && movies.length > 0) { %>
+                <% movies.forEach(movie => { %>
+                    <div class="movie-card">
+                        <div class="movie-poster-wrap">
+                            <img src="<%= movie.poster_url %>" alt="<%= movie.title %>" class="movie-poster">
+                            <span class="age-badge <%= movie.age_rating %>"><%= movie.age_rating %></span>
+                        </div>
+                        <div class="movie-info">
+                            <span class="movie-genre"><%= movie.genre %></span>
+                            <h3 class="movie-title"><%= movie.title %></h3>
+                            <div class="movie-meta">
+                                <span><i class="far fa-clock"></i> <%= movie.duration_minutes %> phút</span>
+                                <a href="/movies/<%= movie.id %>" class="btn btn-primary btn-sm" style="margin-left: auto;">
+                                    Đặt vé <i class="fas fa-chevron-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <p style="color: var(--text-muted);">Hiện chưa có phim nào trong danh sách.</p>
+            <% } %>
+        </div>
+    </section>
+
+    <!-- Suất Chiếu Hôm Nay -->
+    <% if (todayShowtimes && todayShowtimes.length > 0) { %>
+    <section style="margin-bottom: 4rem;">
+        <div class="section-header">
+            <div>
+                <h2 class="section-title"><i class="fas fa-calendar-day"></i> Suất Chiếu Sắp Diễn Ra</h2>
+                <p style="color: var(--text-secondary); font-size: 0.95rem;">Chọn suất chiếu nhanh để chuyển đến sơ đồ ghế</p>
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem;">
+            <% todayShowtimes.forEach(st => { %>
+                <div class="card" style="display: flex; gap: 1rem; align-items: center;">
+                    <img src="<%= st.poster_url %>" alt="<%= st.movie_title %>" style="width: 70px; height: 100px; border-radius: var(--radius-sm); object-fit: cover;">
+                    <div style="flex: 1;">
+                        <h4 style="font-family: var(--font-heading); font-size: 1rem; margin-bottom: 0.3rem;"><%= st.movie_title %></h4>
+                        <div style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.2rem;">
+                            <i class="fas fa-map-marker-alt"></i> <%= st.cinema_name %> - <%= st.room_name %>
+                        </div>
+                        <div style="font-size: 0.85rem; color: #a5b4fc; font-weight: 600; margin-bottom: 0.6rem;">
+                            <i class="far fa-clock"></i> <%= new Date(st.start_time).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) %>
+                        </div>
+                        <a href="/booking/showtime/<%= st.id %>" class="btn btn-primary btn-sm" style="width: 100%;">
+                            Chọn ghế ngay
+                        </a>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    </section>
+    <% } %>
+
+    <!-- Kiến trúc DevOps & Hardening Highlights -->
+    <section class="card" style="background: linear-gradient(135deg, rgba(30, 27, 75, 0.4), rgba(15, 23, 42, 0.6)); border-color: rgba(99, 102, 241, 0.3);">
+        <h3 style="font-family: var(--font-heading); font-size: 1.3rem; margin-bottom: 1rem; color: #fff;">
+            <i class="fas fa-server" style="color: var(--primary);"></i> Tiêu Chuẩn Kỹ Thuật Đề 11 - Triển Khai Hệ Thống
+        </h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+            <div>
+                <h5 style="color: #818cf8; margin-bottom: 0.3rem;"><i class="fas fa-network-wired"></i> Nginx Reverse Proxy</h5>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">Security headers (CSP, HSTS, X-Frame-Options) bảo vệ ứng dụng, định tuyến port 80/443.</p>
+            </div>
+            <div>
+                <h5 style="color: #f59e0b; margin-bottom: 0.3rem;"><i class="fas fa-chart-line"></i> Prometheus + Grafana</h5>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">Giám sát thời gian thực HTTP metrics, database connections, và business KPIs.</p>
+            </div>
+            <div>
+                <h5 style="color: #ec4899; margin-bottom: 0.3rem;"><i class="fas fa-file-lines"></i> Loki + Promtail</h5>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">Thu thập log tập trung cho App & Nginx, hỗ trợ truy vấn LogQL chi tiết.</p>
+            </div>
+            <div>
+                <h5 style="color: #10b981; margin-bottom: 0.3rem;"><i class="fas fa-shield-alt"></i> Hardening Bảo Mật</h5>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">Non-root user, cách ly network (front/back/monitor), least-privilege DB users.</p>
+            </div>
+        </div>
+    </section>
+</main>
+
+<%- include('partials/footer') %>

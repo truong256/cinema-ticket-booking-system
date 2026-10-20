@@ -1,0 +1,152 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<main class="main-wrapper">
+    <div class="section-header">
+        <div>
+            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+                <span class="brand-badge" style="background: #f59e0b;">ADMINISTRATOR</span>
+                <span style="font-size: 0.85rem; color: var(--text-muted);">Đề 11 - Quản Trị Hệ Thống</span>
+            </div>
+            <h1 class="section-title"><i class="fas fa-gauge-high"></i> Bảng Điều Khiển Quản Trị</h1>
+        </div>
+
+        <div style="display: flex; gap: 0.75rem;">
+            <a href="/admin/movies" class="btn btn-secondary btn-sm"><i class="fas fa-film"></i> Quản lý phim</a>
+            <a href="/admin/showtimes" class="btn btn-secondary btn-sm"><i class="fas fa-calendar-alt"></i> Quản lý suất chiếu</a>
+            <a href="/admin/bookings" class="btn btn-secondary btn-sm"><i class="fas fa-ticket"></i> Quản lý đặt vé</a>
+        </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
+        <div class="card" style="border-left: 4px solid var(--primary);">
+            <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem;">PHIM ĐANG HOẠT ĐỘNG</div>
+            <div style="font-family: var(--font-heading); font-size: 2.2rem; font-weight: 800; color: #fff;">
+                <%= stats.totalMovies %>
+            </div>
+            <div style="font-size: 0.8rem; color: #818cf8; margin-top: 0.5rem;">
+                <i class="fas fa-film"></i> Trong danh mục hệ thống
+            </div>
+        </div>
+
+        <div class="card" style="border-left: 4px solid #06b6d4;">
+            <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem;">SUẤT CHIẾU LÊN LỊCH</div>
+            <div style="font-family: var(--font-heading); font-size: 2.2rem; font-weight: 800; color: #fff;">
+                <%= stats.totalShowtimes %>
+            </div>
+            <div style="font-size: 0.8rem; color: #22d3ee; margin-top: 0.5rem;">
+                <i class="fas fa-clock"></i> Các phòng chiếu hoạt động
+            </div>
+        </div>
+
+        <div class="card" style="border-left: 4px solid #10b981;">
+            <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem;">SỐ VÉ ĐÃ BÁN (PAID)</div>
+            <div style="font-family: var(--font-heading); font-size: 2.2rem; font-weight: 800; color: #fff;">
+                <%= stats.totalTicketsSold %>
+            </div>
+            <div style="font-size: 0.8rem; color: #34d399; margin-top: 0.5rem;">
+                <i class="fas fa-check-double"></i> Đã hoàn tất thanh toán
+            </div>
+        </div>
+
+        <div class="card" style="border-left: 4px solid #f59e0b;">
+            <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 0.5rem;">TỔNG DOANH THU</div>
+            <div style="font-family: var(--font-heading); font-size: 1.8rem; font-weight: 800; color: var(--accent);">
+                <%= new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(stats.totalRevenue) %>
+            </div>
+            <div style="font-size: 0.8rem; color: #fcd34d; margin-top: 0.5rem;">
+                <i class="fas fa-coins"></i> Doanh thu thực tế từ DB
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Tools Links for Exam Presentation -->
+    <div class="card" style="margin-bottom: 2.5rem; background: rgba(30, 41, 59, 0.5);">
+        <h3 style="font-family: var(--font-heading); font-size: 1.1rem; margin-bottom: 1rem;">
+            <i class="fas fa-toolbox" style="color: var(--primary);"></i> Công Cụ Quản Trị DevOps (Môi Trường Triển Khai)
+        </h3>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+            <a href="http://localhost:8080" target="_blank" class="card" style="padding: 1rem; text-align: center; border-color: rgba(245, 158, 11, 0.4);">
+                <i class="fas fa-database" style="font-size: 1.8rem; color: #f59e0b; margin-bottom: 0.5rem;"></i>
+                <div style="font-weight: 700; color: #fff;">phpMyAdmin</div>
+                <div style="font-size: 0.8rem; color: var(--text-secondary);">Cổng :8080 (Quản lý MySQL)</div>
+            </a>
+            <a href="http://localhost:3001" target="_blank" class="card" style="padding: 1rem; text-align: center; border-color: rgba(236, 72, 153, 0.4);">
+                <i class="fas fa-chart-line" style="font-size: 1.8rem; color: #ec4899; margin-bottom: 0.5rem;"></i>
+                <div style="font-weight: 700; color: #fff;">Grafana Dashboard</div>
+                <div style="font-size: 0.8rem; color: var(--text-secondary);">Cổng :3001 (admin/admin)</div>
+            </a>
+            <a href="http://localhost:9090" target="_blank" class="card" style="padding: 1rem; text-align: center; border-color: rgba(99, 102, 241, 0.4);">
+                <i class="fas fa-server" style="font-size: 1.8rem; color: #818cf8; margin-bottom: 0.5rem;"></i>
+                <div style="font-weight: 700; color: #fff;">Prometheus</div>
+                <div style="font-size: 0.8rem; color: var(--text-secondary);">Cổng :9090 (/targets)</div>
+            </a>
+            <a href="/metrics" target="_blank" class="card" style="padding: 1rem; text-align: center; border-color: rgba(16, 185, 129, 0.4);">
+                <i class="fas fa-code" style="font-size: 1.8rem; color: #10b981; margin-bottom: 0.5rem;"></i>
+                <div style="font-weight: 700; color: #fff;">App Metrics</div>
+                <div style="font-size: 0.8rem; color: var(--text-secondary);">Prom-client raw metrics</div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Recent Bookings Table -->
+    <div class="card" style="padding: 0; overflow: hidden;">
+        <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+            <h3 style="font-family: var(--font-heading); font-size: 1.15rem; color: #fff;">
+                <i class="fas fa-list" style="color: var(--primary);"></i> Đơn Đặt Vé Gần Đây
+            </h3>
+            <a href="/admin/bookings" class="btn btn-secondary btn-sm">Xem toàn bộ</a>
+        </div>
+
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+                <thead>
+                    <tr style="background: rgba(15, 23, 42, 0.8); border-bottom: 1px solid var(--border-color); color: var(--text-muted); text-transform: uppercase; font-size: 0.75rem;">
+                        <th style="padding: 0.85rem 1.25rem;">Mã Đơn</th>
+                        <th style="padding: 0.85rem 1.25rem;">Khách Hàng</th>
+                        <th style="padding: 0.85rem 1.25rem;">Phim</th>
+                        <th style="padding: 0.85rem 1.25rem;">Tổng Tiền</th>
+                        <th style="padding: 0.85rem 1.25rem;">Trạng Thái</th>
+                        <th style="padding: 0.85rem 1.25rem;">Thời Gian</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (recentBookings && recentBookings.length > 0) { %>
+                        <% recentBookings.forEach(b => { %>
+                            <tr style="border-bottom: 1px solid var(--border-color);">
+                                <td style="padding: 0.85rem 1.25rem; font-weight: 700; color: #a5b4fc;"><%= b.booking_code %></td>
+                                <td style="padding: 0.85rem 1.25rem;">
+                                    <div style="font-weight: 600; color: #fff;"><%= b.customer_name %></div>
+                                    <div style="font-size: 0.8rem; color: var(--text-secondary);"><%= b.customer_phone %></div>
+                                </td>
+                                <td style="padding: 0.85rem 1.25rem; color: #cbd5e1;"><%= b.movie_title %></td>
+                                <td style="padding: 0.85rem 1.25rem; font-weight: 700; color: var(--accent);">
+                                    <%= new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(b.total_amount) %>
+                                </td>
+                                <td style="padding: 0.85rem 1.25rem;">
+                                    <% if (b.payment_status === 'completed') { %>
+                                        <span style="background: rgba(16, 185, 129, 0.2); color: #6ee7b7; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">Completed</span>
+                                    <% } else if (b.payment_status === 'failed') { %>
+                                        <span style="background: rgba(239, 68, 68, 0.2); color: #fca5a5; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">Failed</span>
+                                    <% } else { %>
+                                        <span style="background: rgba(245, 158, 11, 0.2); color: #fcd34d; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">Pending</span>
+                                    <% } %>
+                                </td>
+                                <td style="padding: 0.85rem 1.25rem; color: var(--text-muted); font-size: 0.8rem;">
+                                    <%= new Date(b.created_at).toLocaleString('vi-VN') %>
+                                </td>
+                            </tr>
+                        <% }); %>
+                    <% } else { %>
+                        <tr>
+                            <td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-muted);">Chưa có đơn đặt vé nào</td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<%- include('../partials/footer') %>

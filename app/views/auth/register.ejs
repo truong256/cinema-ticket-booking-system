@@ -1,0 +1,63 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<main class="main-wrapper" style="max-width: 520px; padding-top: 2rem;">
+    <div class="card" style="padding: 2.5rem 2rem;">
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <div class="brand-logo" style="justify-content: center; margin-bottom: 0.5rem;">
+                <i class="fas fa-film" style="color: var(--primary);"></i>
+                <span>CINE<span style="color: var(--primary);">VIBE</span></span>
+            </div>
+            <h1 style="font-family: var(--font-heading); font-size: 1.6rem; color: #fff;">Đăng Ký Thành Viên</h1>
+            <p style="color: var(--text-secondary); font-size: 0.9rem;">Tạo tài khoản để nhận ưu đãi và quản lý vé</p>
+        </div>
+
+        <% if (error) { %>
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-circle"></i> <%= error %>
+            </div>
+        <% } %>
+
+        <form action="/auth/register" method="POST">
+            <div class="form-group">
+                <label class="form-label" for="full_name">Họ và tên *</label>
+                <input type="text" id="full_name" name="full_name" class="form-control" required value="<%= formData?.full_name || '' %>" placeholder="Nguyễn Văn A">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="username">Tên đăng nhập *</label>
+                <input type="text" id="username" name="username" class="form-control" required value="<%= formData?.username || '' %>" placeholder="username123">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="email">Địa chỉ Email *</label>
+                <input type="email" id="email" name="email" class="form-control" required value="<%= formData?.email || '' %>" placeholder="email@domain.com">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="phone">Số điện thoại</label>
+                <input type="tel" id="phone" name="phone" class="form-control" value="<%= formData?.phone || '' %>" placeholder="0912345678">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="password">Mật khẩu *</label>
+                <input type="password" id="password" name="password" class="form-control" required placeholder="Tối thiểu 6 ký tự">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="confirm_password">Xác nhận mật khẩu *</label>
+                <input type="password" id="confirm_password" name="confirm_password" class="form-control" required placeholder="Nhập lại mật khẩu">
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                <i class="fas fa-user-plus"></i> Đăng ký tài khoản
+            </button>
+        </form>
+
+        <div style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem; color: var(--text-secondary);">
+            Đã có tài khoản? <a href="/auth/login" style="color: var(--primary); font-weight: 600;">Đăng nhập</a>
+        </div>
+    </div>
+</main>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="900" viewBox="0 0 600 900">
+  <defs>
+    <linearGradient id="grad_inside_out2jpg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a8a" />
+      <stop offset="100%" stop-color="#3b82f6" />
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="600" height="900" fill="url(#grad_inside_out2jpg)" />
+  <rect width="600" height="900" fill="url(#grid)" />
+  <circle cx="300" cy="400" r="180" fill="rgba(255,255,255,0.08)" />
+  <text x="300" y="240" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#facc15" text-anchor="middle" letter-spacing="4">ANIMATION</text>
+  <text x="300" y="440" font-family="Arial, sans-serif" font-size="36" font-weight="900" fill="#ffffff" text-anchor="middle">INSIDE OUT 2</text>
+  <rect x="200" y="490" width="200" height="4" fill="#facc15" rx="2" />
+  <text x="300" y="550" font-family="Arial, sans-serif" font-size="20" fill="rgba(255,255,255,0.8)" text-anchor="middle">HỆ THỐNG ĐẶT VÉ ĐỀ 11</text>
+  <text x="300" y="800" font-family="Arial, sans-serif" font-size="16" fill="rgba(255,255,255,0.6)" text-anchor="middle">SV: Nguyễn Duy Trường - DTC245200120</text>
+</svg>

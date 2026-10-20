@@ -1,0 +1,142 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<main class="main-wrapper" style="max-width: 800px;">
+    <div style="text-align: center; margin-bottom: 2.5rem;">
+        <span class="brand-badge" style="margin-bottom: 0.5rem; display: inline-block;">CỔNG THANH TOÁN GIẢ LẬP</span>
+        <h1 style="font-family: var(--font-heading); font-size: 2.2rem; font-weight: 800; color: #fff;">
+            Xác Nhận & Thanh Toán Đặt Vé
+        </h1>
+        <p style="color: var(--text-secondary);">Mã đơn đặt: <strong style="color: #a5b4fc;"><%= booking.booking_code %></strong></p>
+    </div>
+
+    <!-- Order Review Card -->
+    <div class="card" style="margin-bottom: 2rem;">
+        <h3 style="font-family: var(--font-heading); font-size: 1.2rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem; margin-bottom: 1.25rem;">
+            <i class="fas fa-ticket" style="color: var(--primary);"></i> Chi tiết đơn vé
+        </h3>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.95rem; margin-bottom: 1.5rem;">
+            <div>
+                <span style="color: var(--text-secondary); display: block;">Phim:</span>
+                <strong style="color: #fff;"><%= booking.movie_title %></strong>
+            </div>
+            <div>
+                <span style="color: var(--text-secondary); display: block;">Thời gian:</span>
+                <strong style="color: #fff;"><%= new Date(booking.start_time).toLocaleString('vi-VN') %></strong>
+            </div>
+            <div>
+                <span style="color: var(--text-secondary); display: block;">Rạp & Phòng:</span>
+                <strong style="color: #fff;"><%= booking.cinema_name %> - <%= booking.room_name %></strong>
+            </div>
+            <div>
+                <span style="color: var(--text-secondary); display: block;">Khách hàng:</span>
+                <strong style="color: #fff;"><%= booking.customer_name %> (<%= booking.customer_phone %>)</strong>
+            </div>
+        </div>
+
+        <div style="background: rgba(15, 23, 42, 0.5); padding: 1rem; border-radius: var(--radius-sm); margin-bottom: 1.5rem;">
+            <div style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Danh sách ghế đặt:</div>
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                <% seats.forEach(s => { %>
+                    <span class="selected-seat-tag">
+                        Ghế <%= s.row_label %><%= s.seat_number %> (<%= s.seat_type %>) - <%= new Intl.NumberFormat('vi-VN').format(s.price) %> đ
+                    </span>
+                <% }); %>
+            </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 1rem;">
+            <span style="font-size: 1.1rem; font-weight: 600;">Tổng tiền thanh toán:</span>
+            <span class="total-price" style="font-size: 2rem;">
+                <%= new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(booking.total_amount) %>
+            </span>
+        </div>
+    </div>
+
+    <!-- Mock Payment Methods -->
+    <div class="card" style="margin-bottom: 2rem;">
+        <h3 style="font-family: var(--font-heading); font-size: 1.2rem; margin-bottom: 1.25rem;">
+            <i class="fas fa-wallet" style="color: var(--primary);"></i> Chọn Phương Thức Thanh Toán Giả Lập
+        </h3>
+
+        <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 2rem;">
+            <label style="display: flex; align-items: center; gap: 1rem; background: rgba(15, 23, 42, 0.6); padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); cursor: pointer;">
+                <input type="radio" name="paymentMethod" value="VNPAY_MOCK" checked style="accent-color: var(--primary);">
+                <i class="fas fa-qrcode" style="font-size: 1.5rem; color: #0284c7;"></i>
+                <div>
+                    <strong>Cổng thanh toán VNPAY QR (Mô phỏng)</strong>
+                    <div style="font-size: 0.8rem; color: var(--text-secondary);">Thanh toán qua quét mã QR trên ứng dụng ngân hàng</div>
+                </div>
+            </label>
+
+            <label style="display: flex; align-items: center; gap: 1rem; background: rgba(15, 23, 42, 0.6); padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); cursor: pointer;">
+                <input type="radio" name="paymentMethod" value="MOMO_MOCK" style="accent-color: var(--primary);">
+                <i class="fas fa-mobile-alt" style="font-size: 1.5rem; color: #ec4899;"></i>
+                <div>
+                    <strong>Ví điện tử MoMo (Mô phỏng)</strong>
+                    <div style="font-size: 0.8rem; color: var(--text-secondary);">Thanh toán nhanh qua ví điện tử liên kết</div>
+                </div>
+            </label>
+
+            <label style="display: flex; align-items: center; gap: 1rem; background: rgba(15, 23, 42, 0.6); padding: 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); cursor: pointer;">
+                <input type="radio" name="paymentMethod" value="BANK_TRANSFER" style="accent-color: var(--primary);">
+                <i class="fas fa-credit-card" style="font-size: 1.5rem; color: #10b981;"></i>
+                <div>
+                    <strong>Thẻ ATM / Thẻ ghi nợ Nội địa (Mô phỏng)</strong>
+                    <div style="font-size: 0.8rem; color: var(--text-secondary);">Xác thực mã OTP ngân hàng</div>
+                </div>
+            </label>
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="display: flex; gap: 1rem; flex-direction: column;">
+            <button type="button" id="btnPaySuccess" class="btn btn-success" style="padding: 1rem; font-size: 1.05rem;">
+                <i class="fas fa-check-circle"></i> Xác Nhận Thanh Toán Thành Công (Demo Success)
+            </button>
+
+            <button type="button" id="btnPayFailure" class="btn btn-danger" style="padding: 0.75rem; font-size: 0.95rem;">
+                <i class="fas fa-times-circle"></i> Mô Phỏng Thanh Toán Thất Bại / Hủy Vé (Demo Failure)
+            </button>
+        </div>
+    </div>
+</main>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const bookingId = '<%= booking.id %>';
+
+    async function handlePayment(action) {
+        const method = document.querySelector('input[name="paymentMethod"]:checked')?.value || 'VNPAY_MOCK';
+        const btnSuccess = document.getElementById('btnPaySuccess');
+        const btnFailure = document.getElementById('btnPayFailure');
+
+        btnSuccess.disabled = true;
+        btnFailure.disabled = true;
+
+        try {
+            const res = await fetch(`/booking/payment/${bookingId}/process`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ paymentMethod: method, paymentAction: action })
+            });
+
+            const data = await res.json();
+            if (data.redirectUrl) {
+                window.location.href = data.redirectUrl;
+            } else {
+                alert(data.message || 'Lỗi xử lý giao dịch');
+            }
+        } catch (e) {
+            alert('Lỗi kết nối máy chủ thanh toán!');
+            btnSuccess.disabled = false;
+            btnFailure.disabled = false;
+        }
+    }
+
+    document.getElementById('btnPaySuccess').addEventListener('click', () => handlePayment('simulate_success'));
+    document.getElementById('btnPayFailure').addEventListener('click', () => handlePayment('simulate_failure'));
+});
+</script>
+
+<%- include('../partials/footer') %>
