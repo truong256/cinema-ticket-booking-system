@@ -592,7 +592,7 @@ def generate_docx(output_path):
     doc.add_heading("PHỤ LỤC. THÔNG TIN REPOSITORY VÀ HƯỚNG DẪN DEMO", level=1)
     p = doc.add_paragraph(
         "1. Thông tin GitHub Repository:\n"
-        "   - Đường dẫn: https://github.com/truong256/h-th-ng-t-v-xem-phim-s-ki-n.git\n"
+        "   - Đường dẫn: https://github.com/truong256/cinema-ticket-booking-system.git\n"
         "   - Nhánh chính: main\n"
         "   - Tác giả: Nguyễn Duy Trường (truong256) - Mã sinh viên: DTC245200120 - Lớp: CNTTK23E\n\n"
         "2. Danh sách 3 Commit bắt buộc theo đề bài:\n"
@@ -865,7 +865,7 @@ def generate_pdf(output_path):
     # CHƯƠNG 9 & PHỤ LỤC
     story.append(Paragraph("CHƯƠNG 9. KẾT LUẬN VÀ PHỤ LỤC DEMO", h1_style))
     story.append(Paragraph("<b>9.1. Kết luận:</b> Dự án đã hoàn thành toàn diện tất cả các yêu cầu kỹ thuật và bảo mật của Đề 11.", body_style))
-    story.append(Paragraph("<b>9.2. Thông tin GitHub:</b> https://github.com/truong256/h-th-ng-t-v-xem-phim-s-ki-n.git", body_style))
+    story.append(Paragraph("<b>9.2. Thông tin GitHub:</b> https://github.com/truong256/cinema-ticket-booking-system.git", body_style))
     story.append(Paragraph("<b>9.3. Hướng dẫn khởi chạy hệ thống:</b>", h2_style))
     story.append(Paragraph("<code>docker compose up -d --build</code>", body_style))
     story.append(Paragraph("• Website chính: http://localhost<br/>• phpMyAdmin: http://localhost:8080<br/>• Grafana: http://localhost:3001<br/>• Prometheus: http://localhost:9090", body_style))

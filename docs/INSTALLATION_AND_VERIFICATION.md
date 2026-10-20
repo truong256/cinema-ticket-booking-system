@@ -6,7 +6,7 @@
 > **Mã sinh viên:** DTC245200120  
 > **Lớp:** CNTTK23E  
 > **Hệ điều hành máy chủ:** Windows 11 / Windows 10 Home (Build 26200, 64-bit)  
-> **Repository:** [https://github.com/truong256/h-th-ng-t-v-xem-phim-s-ki-n.git](https://github.com/truong256/h-th-ng-t-v-xem-phim-s-ki-n.git)  
+> **Repository:** [https://github.com/truong256/cinema-ticket-booking-system.git](https://github.com/truong256/cinema-ticket-booking-system.git)  
 > **Nhánh làm việc:** `fix/windows-devops-environment`
 
 ---
