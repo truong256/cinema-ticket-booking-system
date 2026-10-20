@@ -122,7 +122,7 @@ services:
       app:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost/ || exit 1"]
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1/ || exit 1"]
       interval: 15s
       timeout: 5s
       retries: 3
@@ -218,7 +218,7 @@ services:
       - "3100:3100"
     volumes:
       - ./logging/loki/loki-config.yml:/etc/loki/local-config.yaml:ro
-      - loki_data:/tmp/loki
+      - loki_data:/loki
     command: -config.file=/etc/loki/local-config.yaml
     networks:
       - monitor_net

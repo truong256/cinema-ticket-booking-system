@@ -1,0 +1,51 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<main class="main-content">
+    <div class="container">
+        <div class="page-header" style="margin-bottom: 2rem;">
+            <h1 class="page-title"><i class="fas fa-calendar-alt" style="color: var(--primary);"></i> Lịch Chiếu Phim Toàn Quốc</h1>
+            <p class="page-subtitle">Cập nhật các suất chiếu phim bom tấn mới nhất tại tất cả các cụm rạp CineStar và Galaxy Cinema</p>
+        </div>
+
+        <% if (locals.error) { %>
+            <div class="alert alert-danger"><%= error %></div>
+        <% } %>
+
+        <% if (!showtimes || showtimes.length === 0) { %>
+            <div class="empty-state">
+                <i class="fas fa-film fa-3x" style="color: var(--text-muted); margin-bottom: 1rem;"></i>
+                <p>Hiện chưa có suất chiếu nào được lên lịch.</p>
+            </div>
+        <% } else { %>
+            <div class="showtimes-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem;">
+                <% showtimes.forEach(st => { %>
+                    <div class="card showtime-card" style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; padding: 1.25rem;">
+                        <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                            <img src="<%= st.poster_url %>" alt="<%= st.movie_title %>" style="width: 80px; height: 110px; object-fit: cover; border-radius: 8px;">
+                            <div>
+                                <span class="badge" style="background: var(--primary); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem;"><%= st.age_rating %></span>
+                                <span class="badge" style="background: var(--secondary); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem;"><%= st.room_type %></span>
+                                <h3 style="font-size: 1.1rem; margin: 0.5rem 0 0.25rem 0; color: var(--text-primary);"><%= st.movie_title %></h3>
+                                <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0;"><i class="fas fa-clock"></i> <%= st.duration_minutes %> phút</p>
+                            </div>
+                        </div>
+
+                        <div style="border-top: 1px solid var(--border); padding-top: 0.75rem; margin-bottom: 1rem; font-size: 0.9rem;">
+                            <p style="margin: 0.25rem 0;"><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> <strong><%= st.cinema_name %></strong></p>
+                            <p style="margin: 0.25rem 0; color: var(--text-secondary);"><i class="fas fa-door-open"></i> <%= st.room_name %></p>
+                            <p style="margin: 0.25rem 0; color: var(--accent);"><i class="fas fa-calendar-day"></i> <strong><%= new Date(st.start_time).toLocaleString('vi-VN', { dateStyle: 'short', timeStyle: 'short' }) %></strong></p>
+                            <p style="margin: 0.25rem 0; color: var(--text-muted);">Giá từ: <strong style="color: #10b981;"><%= Number(st.price_regular).toLocaleString('vi-VN') %> đ</strong></p>
+                        </div>
+
+                        <a href="/booking/showtime/<%= st.id %>" class="btn btn-primary" style="width: 100%; text-align: center; display: block; border-radius: 8px; padding: 0.6rem;">
+                            <i class="fas fa-ticket-alt"></i> Chọn Ghế Ngồi
+                        </a>
+                    </div>
+                <% }); %>
+            </div>
+        <% } %>
+    </div>
+</main>
+
+<%- include('../partials/footer') %>

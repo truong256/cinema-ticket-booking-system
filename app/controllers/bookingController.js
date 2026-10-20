@@ -164,9 +164,28 @@ const bookingController = {
             const showtime = showtimes[0];
 
             const [seatsInfo] = await connection.query(
-                'SELECT id, row_label, seat_number, seat_type FROM seats WHERE id IN (?)',
+                'SELECT id, row_label, seat_number, seat_type, room_id, is_active FROM seats WHERE id IN (?)',
                 [numericSeatIds]
             );
+
+            // Kiểm tra ghế không tồn tại
+            if (seatsInfo.length !== numericSeatIds.length) {
+                await connection.rollback();
+                return res.status(400).json({
+                    success: false,
+                    message: 'Một hoặc nhiều ghế được chọn không tồn tại trong hệ thống'
+                });
+            }
+
+            // Kiểm tra ghế phải thuộc đúng phòng chiếu của suất chiếu
+            const invalidRoomSeats = seatsInfo.filter(s => s.room_id !== showtime.room_id || !s.is_active);
+            if (invalidRoomSeats.length > 0) {
+                await connection.rollback();
+                return res.status(400).json({
+                    success: false,
+                    message: 'Ghế được chọn không thuộc phòng chiếu của suất chiếu này hoặc đang tạm ngưng phục vụ'
+                });
+            }
 
             // Tính tổng tiền theo loại ghế
             let totalAmount = 0;
@@ -220,12 +239,12 @@ const bookingController = {
         } catch (error) {
             await connection.rollback();
             logger.error(`Booking transaction failed: ${error.message}`);
-            // Xử lý lỗi trùng khoá ER_DUP_ENTRY nếu có xung đột vi mô
-            if (error.code === 'ER_DUP_ENTRY') {
+            // Xử lý lỗi trùng khoá ER_DUP_ENTRY hoặc DEADLOCK/TIMEOUT khi 2 khách hàng cùng đặt 1 ghế đồng thời
+            if (error.code === 'ER_DUP_ENTRY' || error.code === 'ER_LOCK_DEADLOCK' || error.errno === 1213 || error.code === 'ER_LOCK_WAIT_TIMEOUT' || error.errno === 1205) {
                 return res.status(409).json({
                     success: false,
                     conflict: true,
-                    message: 'Ghế đã được đặt bởi khách hàng khác trong lúc xử lý. Vui lòng chọn ghế khác.'
+                    message: 'Ghế đã được đặt bởi khách hàng khác trong lúc xử lý (xung đột đồng thời). Vui lòng chọn ghế khác.'
                 });
             }
             res.status(500).json({
@@ -301,6 +320,25 @@ const bookingController = {
                 return res.status(404).json({ success: false, message: 'Đơn đặt vé không tồn tại' });
             }
             const booking = bookings[0];
+
+            // 1. Chống cập nhật thanh toán nhiều lần sai nghiệp vụ
+            if (booking.payment_status === 'completed') {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Đơn đặt vé này đã được thanh toán hoàn tất trước đó'
+                });
+            }
+
+            // 2. Không cho thanh toán đơn của người khác trái phép
+            if (booking.user_id && req.session && req.session.user) {
+                if (req.session.user.id !== booking.user_id && req.session.user.role !== 'admin') {
+                    logger.warn(`Unauthorized payment attempt by user ${req.session.user.id} for booking ${bookingId}`);
+                    return res.status(403).json({
+                        success: false,
+                        message: 'Bạn không có quyền thanh toán đơn đặt vé của người khác'
+                    });
+                }
+            }
 
             const txnId = `TXN-${paymentMethod || 'VNPAY'}-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 

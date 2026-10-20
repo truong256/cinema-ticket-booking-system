@@ -91,6 +91,7 @@ app.get('/healthz', async (req, res) => {
 // APPLICATION ROUTES
 // -------------------------------------------------------------
 app.get('/', movieController.getHome);
+app.get('/showtimes', movieController.getShowtimes);
 app.use('/auth', authRoutes);
 app.use('/movies', movieRoutes);
 app.use('/booking', bookingRoutes);

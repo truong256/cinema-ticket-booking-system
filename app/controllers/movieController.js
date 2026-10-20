@@ -119,6 +119,35 @@ const movieController = {
                 message: 'Không thể tải thông tin chi tiết phim'
             });
         }
+    },
+
+    getShowtimes: async (req, res) => {
+        try {
+            const showtimes = await db.query(`
+                SELECT s.id, s.start_time, s.end_time, s.price_regular, s.price_vip, s.price_couple,
+                       m.id as movie_id, m.title as movie_title, m.poster_url, m.duration_minutes, m.age_rating,
+                       r.name as room_name, r.room_type,
+                       c.name as cinema_name, c.address as cinema_address
+                FROM showtimes s
+                JOIN movies m ON s.movie_id = m.id
+                JOIN rooms r ON s.room_id = r.id
+                JOIN cinemas c ON r.cinema_id = c.id
+                WHERE s.status = 'scheduled' AND s.start_time >= NOW()
+                ORDER BY s.start_time ASC
+            `);
+
+            res.render('showtimes/list', {
+                title: 'Lịch chiếu phim - Hệ thống rạp toàn quốc',
+                showtimes
+            });
+        } catch (error) {
+            logger.error(`Error loading showtimes: ${error.message}`);
+            res.render('showtimes/list', {
+                title: 'Lịch chiếu',
+                showtimes: [],
+                error: 'Không thể tải lịch chiếu lúc này'
+            });
+        }
     }
 };
 
