@@ -41,13 +41,8 @@ const authController = {
 
             const user = users[0];
             const isMatch = await bcrypt.compare(password, user.password_hash);
-            
-            // Hỗ trợ kiểm tra hash mẫu nếu là tài khoản demo
-            const isDemoMatch = (password === 'Admin@123456' && user.username === 'admin') ||
-                                (password === 'User@123456' && user.username === 'customer1') ||
-                                (password === 'Truong@2026!' && user.username === 'truong256');
 
-            if (!isMatch && !isDemoMatch) {
+            if (!isMatch) {
                 logger.warn(`Invalid password for user: ${username}`);
                 return res.render('auth/login', {
                     title: 'Đăng nhập',

@@ -7,10 +7,10 @@ USE cinema_db;
 -- Hash của 'Admin@123456': $2a$10$vI8aWBnW3fID.ZQ4/zo1G.q1lR5eK5f1E6fTfL0O8m5K5f1E6fTfL (hoặc chuỗi bcrypt tương đương)
 -- Chúng ta dùng hash bcrypt chuẩn:
 INSERT INTO users (username, email, password_hash, full_name, phone, role) VALUES
-('admin', 'admin@cinema.local', '$2a$10$Wq3pZ7wQ5Cq/bY0174YlX.y5s0rC34PzL28j3xYQxHkKkX8qK8nO.', 'Quản Trị Viên Hệ Thống', '0987654321', 'admin'),
-('truong256', 'nguyenduytruong25102006@gmail.com', '$2a$10$Wq3pZ7wQ5Cq/bY0174YlX.y5s0rC34PzL28j3xYQxHkKkX8qK8nO.', 'Nguyễn Duy Trường', '0912345678', 'customer'),
-('customer1', 'khachhang1@gmail.com', '$2a$10$Wq3pZ7wQ5Cq/bY0174YlX.y5s0rC34PzL28j3xYQxHkKkX8qK8nO.', 'Trần Văn Nam', '0933221100', 'customer')
-ON DUPLICATE KEY UPDATE full_name=VALUES(full_name);
+('admin', 'admin@cinema.local', '$2a$10$lZrbfQTGwucH5rACOdsCfuxAH2VZLNl4WnMl33YVUTD4C3vgnesmi', 'Quản Trị Viên Hệ Thống', '0987654321', 'admin'),
+('truong256', 'nguyenduytruong25102006@gmail.com', '$2a$10$lZrbfQTGwucH5rACOdsCfuFnvPcR/7Ep8Etqopz4iOtHdO9EmkFu.', 'Nguyễn Duy Trường', '0912345678', 'customer'),
+('customer1', 'khachhang1@gmail.com', '$2a$10$lZrbfQTGwucH5rACOdsCfuLWC66y2FhLp/2Mb2caDBwxNDhsY/oJu', 'Trần Văn Nam', '0933221100', 'customer')
+ON DUPLICATE KEY UPDATE password_hash=VALUES(password_hash), full_name=VALUES(full_name);
 
 -- 2. Cinemas
 INSERT INTO cinemas (id, name, address, city, phone) VALUES

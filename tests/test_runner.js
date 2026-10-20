@@ -33,10 +33,10 @@ async function runAllTests() {
     const composePath = path.join(rootDir, 'docker-compose.yml');
     if (fs.existsSync(composePath)) {
         const composeContent = fs.readFileSync(composePath, 'utf8');
-        const requiredServices = ['app', 'mysql', 'phpmyadmin', 'nginx', 'prometheus', 'grafana', 'loki', 'promtail', 'mysql-exporter'];
+        const requiredServices = ['app', 'mysql', 'phpmyadmin', 'nginx', 'prometheus', 'grafana', 'loki', 'promtail', 'mysql-exporter', 'cadvisor'];
         const missing = requiredServices.filter(s => !composeContent.includes(`${s}:`));
         if (missing.length === 0) {
-            recordResult('Docker Compose Services', 'Docker', 'PASS', `Đầy đủ 9/9 services: ${requiredServices.join(', ')}`);
+            recordResult('Docker Compose Services', 'Docker', 'PASS', `Đầy đủ 10/10 services: ${requiredServices.join(', ')}`);
         } else {
             recordResult('Docker Compose Services', 'Docker', 'FAIL', `Thiếu services: ${missing.join(', ')}`);
         }

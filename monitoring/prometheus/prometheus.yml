@@ -26,3 +26,11 @@ scrape_configs:
         labels:
           service: 'mysql-database'
           cluster: 'cinema-mysql'
+
+  # 4. Giám sát Tài nguyên Container (CPU/RAM/Network) qua cAdvisor
+  - job_name: 'cadvisor'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['cadvisor:8080']
+        labels:
+          service: 'container-metrics'

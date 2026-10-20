@@ -44,7 +44,7 @@ graph TD
 
 ---
 
-## 3. DANH SÁCH 9 DỊCH VỤ DOCKER COMPOSE
+## 3. DANH SÁCH 10 DỊCH VỤ DOCKER COMPOSE
 
 | STT | Tên Service | Image Docker | Cổng Host | Vai trò trong hệ thống |
 |:---:|---|---|:---:|---|
@@ -52,11 +52,12 @@ graph TD
 | 2 | **mysql** | `mysql:8.0` | **Không map ra host** | Lưu trữ CSDL, Transaction ACID, chống đặt trùng ghế (`uq_showtime_seat`) |
 | 3 | **phpmyadmin** | `phpmyadmin/phpmyadmin` | `8080:80` | Quản trị CSDL MySQL trực quan |
 | 4 | **nginx** | `nginx:1.25-alpine` | `80:80`, `443:443` | Reverse Proxy, SSL tự ký, kiểm soát Security Headers |
-| 5 | **mysql-exporter**| `prom/mysqld-exporter:v0.15.1`| Nội bộ (9104) | Thu thập metrics hiệu năng CSDL MySQL |
-| 6 | **prometheus** | `prom/prometheus:v2.51.0` | `9090:9090` | Thu thập và lưu trữ time-series metrics |
-| 7 | **grafana** | `grafana/grafana:10.4.1` | `3001:3000` | Dashboard trực quan hóa trạng thái Web/DB/Container |
-| 8 | **loki** | `grafana/loki:2.9.6` | `3100:3100` | Lưu trữ và đánh chỉ mục log tập trung |
-| 9 | **promtail** | `grafana/promtail:2.9.6` | Nội bộ | Thu thập file log từ Volume chia sẻ của App và Nginx chuyển tới Loki |
+| 5 | **mysql-exporter**| `prom/mysqld-exporter:v0.15.1`| Nội bộ (9104) | Thu thập metrics hiệu năng CSDL MySQL qua file cấu hình `.my.cnf` |
+| 6 | **cadvisor** | `gcr.io/cadvisor/cadvisor:v0.49.1` | `8081:8080` | Giám sát tài nguyên CPU, RAM, Network I/O của toàn bộ Containers |
+| 7 | **prometheus** | `prom/prometheus:v2.51.0` | `9090:9090` | Thu thập và lưu trữ time-series metrics |
+| 8 | **grafana** | `grafana/grafana:10.4.1` | `3001:3000` | Dashboard trực quan hóa trạng thái Web/DB/Container/Logs |
+| 9 | **loki** | `grafana/loki:2.9.6` | `3100:3100` | Lưu trữ và đánh chỉ mục log tập trung |
+| 10 | **promtail** | `grafana/promtail:2.9.6` | Nội bộ | Thu thập file log từ Volume chia sẻ của App và Nginx chuyển tới Loki |
 
 ---
 

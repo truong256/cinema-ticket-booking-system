@@ -130,13 +130,16 @@ services:
 
   # -------------------------------------------------------------
   # DỊCH VỤ 5: PROMETHEUS MYSQLD EXPORTER (Giám sát Database)
+  # Cấu hình hiện đại qua file .my.cnf theo khuyến nghị v0.15.1
   # -------------------------------------------------------------
   mysql-exporter:
     image: prom/mysqld-exporter:v0.15.1
     container_name: cinema-mysql-exporter
     restart: unless-stopped
-    environment:
-      DATA_SOURCE_NAME: "exporter:${MYSQL_EXPORTER_PASSWORD:-ExporterSecurePass2026!}@(mysql:3306)/"
+    command:
+      - '--config.my-cnf=/etc/my.cnf'
+    volumes:
+      - ./monitoring/mysql-exporter/.my.cnf:/etc/my.cnf:ro
     networks:
       - backend_net
       - monitor_net
@@ -145,7 +148,25 @@ services:
         condition: service_healthy
 
   # -------------------------------------------------------------
-  # DỊCH VỤ 6: PROMETHEUS METRICS SERVER
+  # DỊCH VỤ 6: CADVISOR (Giám sát tài nguyên CPU/RAM Container)
+  # -------------------------------------------------------------
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.49.1
+    container_name: cinema-cadvisor
+    restart: unless-stopped
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    ports:
+      - "8081:8080"
+    networks:
+      - monitor_net
+
+  # -------------------------------------------------------------
+  # DỊCH VỤ 7: PROMETHEUS METRICS SERVER
   # -------------------------------------------------------------
   prometheus:
     image: prom/prometheus:v2.51.0
@@ -165,7 +186,7 @@ services:
       - monitor_net
 
   # -------------------------------------------------------------
-  # DỊCH VỤ 7: GRAFANA MONITORING & LOGGING DASHBOARD
+  # DỊCH VỤ 8: GRAFANA MONITORING & LOGGING DASHBOARD
   # -------------------------------------------------------------
   grafana:
     image: grafana/grafana:10.4.1
@@ -187,7 +208,7 @@ services:
       - prometheus
 
   # -------------------------------------------------------------
-  # DỊCH VỤ 8: LOKI (Hệ thống lưu trữ log tập trung)
+  # DỊCH VỤ 9: LOKI (Hệ thống lưu trữ log tập trung)
   # -------------------------------------------------------------
   loki:
     image: grafana/loki:2.9.6
@@ -203,7 +224,7 @@ services:
       - monitor_net
 
   # -------------------------------------------------------------
-  # DỊCH VỤ 9: PROMTAIL (Log Shipper thu thập file log từ Volume)
+  # DỊCH VỤ 10: PROMTAIL (Log Shipper thu thập file log từ Volume)
   # -------------------------------------------------------------
   promtail:
     image: grafana/promtail:2.9.6
