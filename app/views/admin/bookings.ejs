@@ -4,69 +4,90 @@
 <main class="main-wrapper">
     <div class="section-header">
         <div>
-            <a href="/admin" style="color: var(--primary); font-size: 0.85rem;"><i class="fas fa-chevron-left"></i> Quay lại Dashboard</a>
-            <h1 class="section-title" style="margin-top: 0.25rem;"><i class="fas fa-ticket"></i> Danh Sách Đơn Đặt Vé Toàn Hệ Thống</h1>
+            <a href="/admin" style="color: var(--color-primary); font-size: 0.85rem; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem; margin-bottom: 0.4rem;">
+                <i class="fas fa-chevron-left"></i> Quay lại Dashboard
+            </a>
+            <h1 class="section-title"><i class="fas fa-ticket"></i> Danh Sách Đơn Đặt Vé Toàn Hệ Thống</h1>
+            <p class="section-subtitle">Theo dõi các giao dịch đặt vé, trạng thái thanh toán và thông tin khách hàng thời gian thực</p>
         </div>
     </div>
 
-    <div class="card" style="padding: 0; overflow: hidden; margin-bottom: 2rem;">
-        <div style="overflow-x: auto;">
-            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+    <div class="card" style="padding: 0; overflow: hidden; margin-bottom: 2.5rem;">
+        <div class="table-responsive">
+            <table class="cinema-table">
                 <thead>
-                    <tr style="background: rgba(15, 23, 42, 0.8); border-bottom: 1px solid var(--border-color); color: var(--text-muted); text-transform: uppercase; font-size: 0.75rem;">
-                        <th style="padding: 1rem;">Mã Đơn</th>
-                        <th style="padding: 1rem;">Khách Hàng</th>
-                        <th style="padding: 1rem;">Liên Hệ</th>
-                        <th style="padding: 1rem;">Phim & Phòng</th>
-                        <th style="padding: 1rem;">Số Ghế</th>
-                        <th style="padding: 1rem;">Tổng Tiền</th>
-                        <th style="padding: 1rem;">Thanh Toán</th>
-                        <th style="padding: 1rem;">Thời Gian Đặt</th>
+                    <tr>
+                        <th>Mã Đơn</th>
+                        <th>Khách Hàng</th>
+                        <th>Thông Tin Liên Hệ</th>
+                        <th>Tác Phẩm & Phòng Chiếu</th>
+                        <th>Số Lượng Ghế</th>
+                        <th>Tổng Doanh Thu</th>
+                        <th>Trạng Thái</th>
+                        <th>Thời Gian Đặt</th>
                     </tr>
                 </thead>
                 <tbody>
                     <% if (bookings && bookings.length > 0) { %>
                         <% bookings.forEach(b => { %>
-                            <tr style="border-bottom: 1px solid var(--border-color);">
-                                <td style="padding: 1rem; font-weight: 700; color: #a5b4fc;"><%= b.booking_code %></td>
-                                <td style="padding: 1rem; font-weight: 600; color: #fff;"><%= b.customer_name %></td>
-                                <td style="padding: 1rem; color: var(--text-secondary); font-size: 0.85rem;">
-                                    <div><%= b.customer_email %></div>
-                                    <div><%= b.customer_phone %></div>
+                            <tr>
+                                <td>
+                                    <span style="font-family: monospace; font-size: 0.95rem; font-weight: 700; color: #ffffff; background: rgba(255,255,255,0.06); padding: 0.25rem 0.5rem; border-radius: 4px; border: 1px solid var(--border-color);">
+                                        <%= b.booking_code %>
+                                    </span>
                                 </td>
-                                <td style="padding: 1rem;">
-                                    <div style="color: #fff; font-weight: 600;"><%= b.movie_title %></div>
-                                    <div style="font-size: 0.8rem; color: var(--text-secondary);"><%= b.room_name %></div>
+                                <td>
+                                    <div style="font-weight: 700; color: #ffffff; font-size: 0.95rem;"><%= b.customer_name %></div>
                                 </td>
-                                <td style="padding: 1rem; font-weight: 600;">
-                                    <span class="selected-seat-tag"><%= b.seat_count %> ghế</span>
+                                <td>
+                                    <div style="color: var(--text-secondary); font-size: 0.85rem;"><i class="far fa-envelope" style="color: var(--text-muted); width: 14px;"></i> <%= b.customer_email %></div>
+                                    <div style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.15rem;"><i class="fas fa-phone-alt" style="color: var(--text-muted); width: 14px;"></i> <%= b.customer_phone %></div>
                                 </td>
-                                <td style="padding: 1rem; font-weight: 700; color: var(--accent);">
-                                    <%= new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(b.total_amount) %>
+                                <td>
+                                    <div style="color: #ffffff; font-weight: 700; font-size: 0.92rem;"><%= b.movie_title %></div>
+                                    <div style="font-size: 0.8rem; color: var(--color-gold); font-weight: 600;"><i class="fas fa-door-open"></i> <%= b.room_name %></div>
                                 </td>
-                                <td style="padding: 1rem;">
+                                <td>
+                                    <span class="selected-seat-tag">
+                                        <i class="fas fa-couch"></i> <%= b.seat_count %> ghế
+                                    </span>
+                                </td>
+                                <td>
+                                    <span style="font-weight: 800; color: var(--color-gold); font-size: 1rem;">
+                                        <%= new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(b.total_amount) %>
+                                    </span>
+                                </td>
+                                <td>
                                     <% if (b.payment_status === 'completed') { %>
-                                        <span style="background: rgba(16, 185, 129, 0.2); color: #6ee7b7; padding: 0.25rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700;">
+                                        <span class="badge badge-green">
                                             <i class="fas fa-check-circle"></i> ĐÃ THANH TOÁN
                                         </span>
                                     <% } else if (b.payment_status === 'failed') { %>
-                                        <span style="background: rgba(239, 68, 68, 0.2); color: #fca5a5; padding: 0.25rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700;">
+                                        <span class="badge badge-red">
                                             <i class="fas fa-times-circle"></i> THẤT BẠI / ĐÃ HỦY
                                         </span>
                                     <% } else { %>
-                                        <span style="background: rgba(245, 158, 11, 0.2); color: #fcd34d; padding: 0.25rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 700;">
+                                        <span class="badge badge-gold">
                                             <i class="fas fa-clock"></i> CHỜ XỬ LÝ
                                         </span>
                                     <% } %>
                                 </td>
-                                <td style="padding: 1rem; color: var(--text-muted); font-size: 0.8rem;">
-                                    <%= new Date(b.created_at).toLocaleString('vi-VN') %>
+                                <td>
+                                    <div style="font-size: 0.85rem; color: var(--text-primary); font-weight: 500;">
+                                        <%= new Date(b.created_at).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) %>
+                                    </div>
+                                    <div style="font-size: 0.78rem; color: var(--text-muted);">
+                                        <%= new Date(b.created_at).toLocaleDateString('vi-VN') %>
+                                    </div>
                                 </td>
                             </tr>
                         <% }); %>
                     <% } else { %>
                         <tr>
-                            <td colspan="8" style="text-align: center; padding: 2rem; color: var(--text-muted);">Chưa có đơn đặt vé nào</td>
+                            <td colspan="8" style="text-align: center; padding: 3rem 1rem; color: var(--text-muted);">
+                                <i class="fas fa-ticket-alt" style="font-size: 2.5rem; color: var(--border-color); display: block; margin-bottom: 0.75rem;"></i>
+                                Hệ thống chưa ghi nhận đơn đặt vé nào.
+                            </td>
                         </tr>
                     <% } %>
                 </tbody>

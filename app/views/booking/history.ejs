@@ -2,66 +2,80 @@
 <%- include('../partials/navbar') %>
 
 <main class="main-wrapper">
+    <!-- Header -->
     <div class="section-header">
         <div>
-            <h1 class="section-title"><i class="fas fa-history"></i> Lịch Sử Đặt Vé Của Tôi</h1>
-            <p style="color: var(--text-secondary); font-size: 0.95rem;">Quản lý và tra cứu các vé xem phim bạn đã đặt</p>
+            <span class="brand-badge gold" style="margin-bottom: 0.5rem;">QUẢN LÝ VÉ CỦA TÔI</span>
+            <h1 class="section-title">
+                <i class="fas fa-history"></i> Lịch Sử Đặt Vé & Hóa Đơn
+            </h1>
+            <p class="section-subtitle">Tra cứu toàn bộ thông tin các đơn vé xem phim bạn đã đặt trên hệ thống CineVibe</p>
         </div>
+        <a href="/movies" class="btn btn-primary btn-sm">
+            <i class="fas fa-ticket"></i> Đặt vé mới
+        </a>
     </div>
 
-    <div class="card" style="padding: 0; overflow: hidden;">
+    <div class="card" style="padding: 0; overflow: hidden; background: var(--bg-secondary); border-color: var(--border-color);">
         <% if (bookings && bookings.length > 0) { %>
             <div style="overflow-x: auto;">
-                <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.92rem;">
                     <thead>
-                        <tr style="background: rgba(15, 23, 42, 0.8); border-bottom: 1px solid var(--border-color); color: var(--text-muted); text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.5px;">
-                            <th style="padding: 1rem 1.25rem;">Mã Đặt Vé</th>
-                            <th style="padding: 1rem 1.25rem;">Phim & Rạp</th>
-                            <th style="padding: 1rem 1.25rem;">Thời gian chiếu</th>
-                            <th style="padding: 1rem 1.25rem;">Tổng tiền</th>
-                            <th style="padding: 1rem 1.25rem;">Trạng thái</th>
-                            <th style="padding: 1rem 1.25rem; text-align: right;">Hành động</th>
+                        <tr style="background: var(--bg-surface); border-bottom: 1px solid var(--border-color); color: var(--text-muted); text-transform: uppercase; font-size: 0.78rem; letter-spacing: 0.8px;">
+                            <th style="padding: 1.15rem 1.5rem;">Mã Đơn Vé</th>
+                            <th style="padding: 1.15rem 1.5rem;">Bộ Phim & Rạp</th>
+                            <th style="padding: 1.15rem 1.5rem;">Suất Chiếu</th>
+                            <th style="padding: 1.15rem 1.5rem;">Tổng Tiền</th>
+                            <th style="padding: 1.15rem 1.5rem;">Trạng Thái</th>
+                            <th style="padding: 1.15rem 1.5rem; text-align: right;">Hành Động</th>
                         </tr>
                     </thead>
                     <tbody>
                         <% bookings.forEach(b => { %>
-                            <tr style="border-bottom: 1px solid var(--border-color); transition: var(--transition);">
-                                <td style="padding: 1rem 1.25rem; font-weight: 700; color: #a5b4fc;">
+                            <tr style="border-bottom: 1px solid var(--border-color); transition: var(--transition);" class="table-row-hover">
+                                <td style="padding: 1.15rem 1.5rem; font-weight: 700; color: #fff; letter-spacing: 0.5px;">
                                     <%= b.booking_code %>
                                 </td>
-                                <td style="padding: 1rem 1.25rem;">
-                                    <div style="font-weight: 600; color: #fff;"><%= b.movie_title %></div>
-                                    <div style="font-size: 0.8rem; color: var(--text-secondary);"><%= b.cinema_name %> - <%= b.room_name %></div>
+                                <td style="padding: 1.15rem 1.5rem;">
+                                    <div style="font-weight: 700; color: #fff; font-size: 1rem;"><%= b.movie_title %></div>
+                                    <div style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 0.15rem;">
+                                        <i class="fas fa-location-dot" style="color: var(--color-gold);"></i> <%= b.cinema_name %> &bull; <%= b.room_name %>
+                                    </div>
                                 </td>
-                                <td style="padding: 1rem 1.25rem; color: var(--text-secondary);">
-                                    <%= new Date(b.start_time).toLocaleString('vi-VN') %>
+                                <td style="padding: 1.15rem 1.5rem; color: var(--text-secondary);">
+                                    <div style="font-weight: 600; color: #fff;"><%= new Date(b.start_time).toLocaleDateString('vi-VN') %></div>
+                                    <div style="font-size: 0.82rem; color: var(--color-gold);"><%= new Date(b.start_time).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) %></div>
                                 </td>
-                                <td style="padding: 1rem 1.25rem; font-weight: 700; color: var(--accent);">
+                                <td style="padding: 1.15rem 1.5rem; font-weight: 800; color: var(--color-gold); font-size: 1.05rem;">
                                     <%= new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(b.total_amount) %>
                                 </td>
-                                <td style="padding: 1rem 1.25rem;">
+                                <td style="padding: 1.15rem 1.5rem;">
                                     <% if (b.payment_status === 'completed') { %>
-                                        <span style="background: rgba(16, 185, 129, 0.2); color: #6ee7b7; padding: 0.25rem 0.6rem; border-radius: 4px; font-size: 0.8rem; font-weight: 600;">
-                                            <i class="fas fa-check"></i> Đã thanh toán
+                                        <span class="badge badge-green">
+                                            <i class="fas fa-circle-check"></i> Đã thanh toán
                                         </span>
                                     <% } else if (b.payment_status === 'failed') { %>
-                                        <span style="background: rgba(239, 68, 68, 0.2); color: #fca5a5; padding: 0.25rem 0.6rem; border-radius: 4px; font-size: 0.8rem; font-weight: 600;">
-                                            <i class="fas fa-times"></i> Đã hủy
+                                        <span class="badge badge-red">
+                                            <i class="fas fa-circle-xmark"></i> Đã hủy
                                         </span>
                                     <% } else { %>
-                                        <span style="background: rgba(245, 158, 11, 0.2); color: #fcd34d; padding: 0.25rem 0.6rem; border-radius: 4px; font-size: 0.8rem; font-weight: 600;">
+                                        <span class="badge badge-gold">
                                             <i class="fas fa-clock"></i> Chờ thanh toán
                                         </span>
                                     <% } %>
                                 </td>
-                                <td style="padding: 1rem 1.25rem; text-align: right;">
+                                <td style="padding: 1.15rem 1.5rem; text-align: right;">
                                     <% if (b.payment_status === 'completed') { %>
-                                        <a href="/booking/success/<%= b.id %>" class="btn btn-secondary btn-sm">
+                                        <a href="/booking/success/<%= b.id %>" class="btn btn-secondary btn-sm" title="Xem vé điện tử chi tiết">
                                             <i class="fas fa-ticket"></i> Xem vé
                                         </a>
                                     <% } else if (b.payment_status === 'pending') { %>
-                                        <a href="/booking/payment/<%= b.id %>" class="btn btn-primary btn-sm">
-                                            Thanh toán
+                                        <a href="/booking/payment/<%= b.id %>" class="btn btn-primary btn-sm" title="Tiếp tục thanh toán đơn">
+                                            <i class="fas fa-credit-card"></i> Thanh toán
+                                        </a>
+                                    <% } else { %>
+                                        <a href="/movies" class="btn btn-secondary btn-sm" title="Đặt vé mới">
+                                            <i class="fas fa-redo"></i> Đặt lại
                                         </a>
                                     <% } %>
                                 </td>
@@ -71,13 +85,23 @@
                 </table>
             </div>
         <% } else { %>
-            <div style="text-align: center; padding: 3rem;">
-                <i class="fas fa-ticket" style="font-size: 2.5rem; color: var(--text-muted); margin-bottom: 1rem;"></i>
-                <p style="color: var(--text-secondary);">Bạn chưa có lịch sử đặt vé nào.</p>
-                <a href="/movies" class="btn btn-primary btn-sm" style="margin-top: 1rem;">Đặt vé ngay</a>
+            <!-- Empty State -->
+            <div style="text-align: center; padding: 4rem 2rem;">
+                <div style="width: 72px; height: 72px; border-radius: 50%; background: var(--bg-surface); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; color: var(--text-muted); font-size: 2rem;">
+                    <i class="fas fa-ticket-simple"></i>
+                </div>
+                <h3 style="font-family: var(--font-heading); font-size: 1.3rem; color: #fff; margin-bottom: 0.5rem;">Bạn chưa có đơn đặt vé nào</h3>
+                <p style="color: var(--text-secondary); max-width: 420px; margin: 0 auto 1.75rem;">Hãy khám phá các tác phẩm điện ảnh bom tấn và trải nghiệm đặt vé với sơ đồ ghế VIP trực quan.</p>
+                <a href="/movies" class="btn btn-primary"><i class="fas fa-film"></i> Khám phá danh mục phim</a>
             </div>
         <% } %>
     </div>
 </main>
+
+<style>
+.table-row-hover:hover {
+    background: rgba(31, 41, 61, 0.6) !important;
+}
+</style>
 
 <%- include('../partials/footer') %>

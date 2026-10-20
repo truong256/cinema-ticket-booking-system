@@ -1,71 +1,89 @@
 <%- include('../partials/header') %>
 <%- include('../partials/navbar') %>
 
-<main class="main-wrapper" style="max-width: 480px; padding-top: 3rem;">
-    <div class="card" style="padding: 2.5rem 2rem;">
-        <div style="text-align: center; margin-bottom: 2rem;">
-            <div class="brand-logo" style="justify-content: center; margin-bottom: 0.5rem;">
-                <i class="fas fa-film" style="color: var(--primary);"></i>
-                <span>CINE<span style="color: var(--primary);">VIBE</span></span>
+<main class="main-wrapper" style="max-width: 500px; padding-top: 3.5rem; padding-bottom: 3.5rem;">
+    <div class="card" style="padding: 2.75rem 2.25rem; background: var(--bg-secondary); border-color: var(--border-color); box-shadow: var(--shadow-elevated);">
+        <!-- Form Header -->
+        <div style="text-align: center; margin-bottom: 2.25rem;">
+            <div class="brand-logo" style="justify-content: center; margin-bottom: 0.75rem;">
+                <i class="fas fa-film" style="color: var(--color-primary);"></i>
+                <span>CINE<span style="color: var(--color-primary);">VIBE</span></span>
             </div>
-            <h1 style="font-family: var(--font-heading); font-size: 1.6rem; color: #fff;">Đăng Nhập Tài Khoản</h1>
-            <p style="color: var(--text-secondary); font-size: 0.9rem;">Truy cập để quản lý vé và đặt chỗ nhanh chóng</p>
+            <h1 style="font-family: var(--font-heading); font-size: 1.75rem; font-weight: 800; color: #fff; letter-spacing: -0.5px;">
+                Đăng Nhập Tài Khoản
+            </h1>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.25rem;">
+                Truy cập hệ thống để đặt vé VIP và quản lý vé điện tử
+            </p>
         </div>
 
+        <!-- Feedback Alerts -->
         <% if (error) { %>
             <div class="alert alert-danger">
-                <i class="fas fa-exclamation-circle"></i> <%= error %>
+                <i class="fas fa-triangle-exclamation"></i>
+                <div><%= error %></div>
             </div>
         <% } %>
 
         <% if (success) { %>
             <div class="alert alert-success">
-                <i class="fas fa-check-circle"></i> <%= success %>
+                <i class="fas fa-circle-check"></i>
+                <div><%= success %></div>
             </div>
         <% } %>
 
+        <!-- Login Form -->
         <form action="/auth/login" method="POST">
             <div class="form-group">
-                <label class="form-label" for="username">Tên đăng nhập hoặc Email</label>
+                <label class="form-label" for="username">
+                    <i class="fas fa-user" style="color: var(--color-gold); margin-right: 0.35rem;"></i> Tên đăng nhập hoặc Email *
+                </label>
                 <input type="text" id="username" name="username" class="form-control" required placeholder="admin / customer1 / truong256">
             </div>
 
             <div class="form-group">
-                <label class="form-label" for="password">Mật khẩu</label>
+                <label class="form-label" for="password">
+                    <i class="fas fa-lock" style="color: var(--color-gold); margin-right: 0.35rem;"></i> Mật khẩu bảo mật *
+                </label>
                 <input type="password" id="password" name="password" class="form-control" required placeholder="••••••••">
             </div>
 
-            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
-                <i class="fas fa-sign-in-alt"></i> Đăng nhập
+            <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; margin-top: 1rem;">
+                <i class="fas fa-arrow-right-to-bracket"></i> Đăng nhập ngay
             </button>
         </form>
 
-        <!-- Quick Login Demo Buttons -->
-        <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color); text-align: center;">
-            <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem;">ĐĂNG NHẬP NHANH CHO GIẢNG VIÊN / DEMO:</div>
-            <div style="display: flex; gap: 0.5rem; flex-direction: column;">
-                <button type="button" class="btn btn-secondary btn-sm" onclick="fillLogin('admin', 'Admin@123456')">
-                    <i class="fas fa-shield-alt" style="color: #f59e0b;"></i> Tài khoản Quản trị: admin / Admin@123456
+        <!-- Quick Login Demo Buttons (For Examiner & Presentations) -->
+        <div style="margin-top: 2rem; padding-top: 1.75rem; border-top: 1px solid var(--border-color); text-align: center;">
+            <div style="font-size: 0.8rem; font-weight: 700; color: var(--color-gold); text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 0.85rem;">
+                <i class="fas fa-bolt"></i> Đăng nhập nhanh cho Giảng viên / Demo:
+            </div>
+            <div style="display: flex; gap: 0.6rem; flex-direction: column;">
+                <button type="button" class="btn btn-secondary btn-sm" onclick="fillLogin('admin', 'Admin@123456')" style="justify-content: flex-start; text-align: left;">
+                    <i class="fas fa-shield-halved" style="color: var(--color-gold); width: 20px;"></i>
+                    <span><strong>Quản trị viên:</strong> admin / Admin@123456</span>
                 </button>
-                <button type="button" class="btn btn-secondary btn-sm" onclick="fillLogin('truong256', 'Truong@2026!')">
-                    <i class="fas fa-user-graduate" style="color: #6366f1;"></i> Sinh viên: truong256 / Truong@2026!
+                <button type="button" class="btn btn-secondary btn-sm" onclick="fillLogin('truong256', 'Truong@2026!')" style="justify-content: flex-start; text-align: left;">
+                    <i class="fas fa-user-graduate" style="color: var(--color-primary); width: 20px;"></i>
+                    <span><strong>Sinh viên:</strong> truong256 / Truong@2026!</span>
                 </button>
-                <button type="button" class="btn btn-secondary btn-sm" onclick="fillLogin('customer1', 'User@123456')">
-                    <i class="fas fa-user" style="color: #10b981;"></i> Khách hàng: customer1 / User@123456
+                <button type="button" class="btn btn-secondary btn-sm" onclick="fillLogin('customer1', 'User@123456')" style="justify-content: flex-start; text-align: left;">
+                    <i class="fas fa-user" style="color: #10b981; width: 20px;"></i>
+                    <span><strong>Khách hàng:</strong> customer1 / User@123456</span>
                 </button>
             </div>
         </div>
 
-        <div style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem; color: var(--text-secondary);">
-            Chưa có tài khoản? <a href="/auth/register" style="color: var(--primary); font-weight: 600;">Đăng ký ngay</a>
+        <div style="text-align: center; margin-top: 1.75rem; font-size: 0.92rem; color: var(--text-secondary);">
+            Chưa có tài khoản? <a href="/auth/register" style="color: var(--color-primary); font-weight: 700;">Đăng ký thành viên ngay</a>
         </div>
     </div>
 </main>
 
 <script>
-function fillLogin(u, p) {
-    document.getElementById('username').value = u;
-    document.getElementById('password').value = p;
+function fillLogin(user, pass) {
+    document.getElementById('username').value = user;
+    document.getElementById('password').value = pass;
 }
 </script>
 

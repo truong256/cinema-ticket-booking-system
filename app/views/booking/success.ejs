@@ -1,106 +1,161 @@
 <%- include('../partials/header') %>
 <%- include('../partials/navbar') %>
 
-<main class="main-wrapper" style="max-width: 720px;">
+<main class="main-wrapper" style="max-width: 760px;">
     <!-- Alert Success -->
-    <div class="alert alert-success" style="margin-bottom: 2rem;">
-        <i class="fas fa-check-circle" style="font-size: 1.5rem;"></i>
+    <div class="alert alert-success" style="margin-bottom: 2.5rem; padding: 1.25rem 1.5rem;">
+        <i class="fas fa-circle-check" style="font-size: 1.8rem; color: #10b981;"></i>
         <div>
-            <strong>Đặt vé & Thanh toán thành công!</strong>
-            <div style="font-size: 0.85rem;">Thông tin vé đã được lưu vào hệ thống và gửi xác nhận qua email của bạn.</div>
+            <strong style="font-size: 1.1rem; color: #fff;">Thanh toán thành công! Chúc bạn có trải nghiệm xem phim tuyệt vời!</strong>
+            <div style="font-size: 0.88rem; color: var(--text-secondary); margin-top: 0.2rem;">
+                Vé điện tử đã được kích hoạt trên hệ thống CineVibe và lưu vào tài khoản của bạn.
+            </div>
         </div>
     </div>
 
-    <!-- Electronic Ticket Layout -->
-    <div class="card" id="eTicket" style="background: #111827; border: 2px dashed #4338ca; border-radius: var(--radius-lg); padding: 2.5rem; position: relative; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.6);">
-        <!-- Top ticket branding -->
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem; margin-bottom: 1.5rem;">
+    <!-- Premium Cinema Electronic Ticket -->
+    <div class="card" id="eTicket" style="background: #0f1624; border: 2px dashed var(--border-color); border-radius: var(--radius-card); padding: 2.5rem; position: relative; overflow: hidden; box-shadow: var(--shadow-elevated);">
+        <!-- Perforation Cutout Decorations -->
+        <div style="position: absolute; top: 110px; left: -14px; width: 28px; height: 28px; background: var(--bg-primary); border-radius: 50%; border-right: 2px dashed var(--border-color);"></div>
+        <div style="position: absolute; top: 110px; right: -14px; width: 28px; height: 28px; background: var(--bg-primary); border-radius: 50%; border-left: 2px dashed var(--border-color);"></div>
+
+        <!-- Top Ticket Header -->
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem; margin-bottom: 1.75rem;">
             <div class="brand-logo">
-                <i class="fas fa-film" style="color: var(--primary);"></i>
-                <span>CINE<span style="color: var(--primary);">VIBE</span></span>
+                <i class="fas fa-film" style="color: var(--color-primary);"></i>
+                <span>CINE<span style="color: var(--color-primary);">VIBE</span></span>
+                <span class="brand-badge gold">E-TICKET</span>
             </div>
             <div style="text-align: right;">
-                <span class="brand-badge" style="background: #10b981;">VÉ ĐIỆN TỬ HỢP LỆ</span>
-                <div style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.25rem;">Mã vé: <strong><%= booking.booking_code %></strong></div>
+                <span class="badge badge-green"><i class="fas fa-check"></i> HỢP LỆ (CONFIRMED)</span>
+                <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.35rem;">
+                    Mã vé: <strong style="color: #fff; letter-spacing: 0.5px;"><%= booking.booking_code %></strong>
+                </div>
             </div>
         </div>
 
-        <!-- Ticket Body -->
-        <div style="display: grid; grid-template-columns: 1fr 140px; gap: 2rem; align-items: center; margin-bottom: 2rem;">
+        <!-- Ticket Body Details -->
+        <div style="display: grid; grid-template-columns: 1fr 160px; gap: 2rem; align-items: center; margin-bottom: 2rem;">
             <div>
-                <h2 style="font-family: var(--font-heading); font-size: 1.6rem; color: #fff; margin-bottom: 0.5rem;"><%= booking.movie_title %></h2>
-                <div style="font-size: 0.9rem; color: #a5b4fc; margin-bottom: 0.75rem;">
-                    <i class="fas fa-map-marker-alt"></i> <%= booking.cinema_name %> - <%= booking.room_name %>
+                <h2 style="font-family: var(--font-heading); font-size: 1.8rem; font-weight: 800; color: #fff; margin-bottom: 0.5rem; letter-spacing: -0.5px;">
+                    <%= booking.movie_title %>
+                </h2>
+                <div style="font-size: 0.95rem; color: var(--color-gold); font-weight: 600; margin-bottom: 1.25rem;">
+                    <i class="fas fa-location-dot"></i> <%= booking.cinema_name %> &bull; <%= booking.room_name %>
                 </div>
-                
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; font-size: 0.9rem;">
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.92rem;">
                     <div>
-                        <span style="color: var(--text-muted); display: block;">Thời gian chiếu:</span>
+                        <span style="color: var(--text-muted); display: block; font-size: 0.82rem;">Thời gian chiếu:</span>
                         <strong style="color: #fff;"><%= new Date(booking.start_time).toLocaleString('vi-VN') %></strong>
                     </div>
                     <div>
-                        <span style="color: var(--text-muted); display: block;">Khách hàng:</span>
+                        <span style="color: var(--text-muted); display: block; font-size: 0.82rem;">Khách hàng:</span>
                         <strong style="color: #fff;"><%= booking.customer_name %></strong>
+                    </div>
+                    <div>
+                        <span style="color: var(--text-muted); display: block; font-size: 0.82rem;">Số điện thoại:</span>
+                        <strong style="color: #fff;"><%= booking.customer_phone %></strong>
+                    </div>
+                    <div>
+                        <span style="color: var(--text-muted); display: block; font-size: 0.82rem;">Email nhận vé:</span>
+                        <strong style="color: #fff;"><%= booking.customer_email %></strong>
                     </div>
                 </div>
             </div>
 
-            <!-- Simulated QR Code -->
-            <div style="background: #fff; padding: 0.75rem; border-radius: var(--radius-sm); text-align: center;">
+            <!-- QR Code Simulation -->
+            <div style="background: #ffffff; padding: 0.85rem; border-radius: var(--radius-sm); text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.5);">
                 <svg viewBox="0 0 100 100" width="100%" height="100%">
                     <rect width="100" height="100" fill="#fff" />
-                    <rect x="10" y="10" width="25" height="25" fill="#000" />
-                    <rect x="15" y="15" width="15" height="15" fill="#fff" />
-                    <rect x="19" y="19" width="7" height="7" fill="#000" />
+                    <!-- Corner Squares -->
+                    <rect x="10" y="10" width="24" height="24" fill="#0b0f19" />
+                    <rect x="15" y="15" width="14" height="14" fill="#fff" />
+                    <rect x="19" y="19" width="6" height="6" fill="#E50914" />
                     
-                    <rect x="65" y="10" width="25" height="25" fill="#000" />
-                    <rect x="70" y="15" width="15" height="15" fill="#fff" />
-                    <rect x="74" y="19" width="7" height="7" fill="#000" />
+                    <rect x="66" y="10" width="24" height="24" fill="#0b0f19" />
+                    <rect x="71" y="15" width="14" height="14" fill="#fff" />
+                    <rect x="75" y="19" width="6" height="6" fill="#E50914" />
                     
-                    <rect x="10" y="65" width="25" height="25" fill="#000" />
-                    <rect x="15" y="70" width="15" height="15" fill="#fff" />
-                    <rect x="19" y="74" width="7" height="7" fill="#000" />
+                    <rect x="10" y="66" width="24" height="24" fill="#0b0f19" />
+                    <rect x="15" y="71" width="14" height="14" fill="#fff" />
+                    <rect x="19" y="75" width="6" height="6" fill="#E50914" />
                     
-                    <rect x="42" y="15" width="10" height="10" fill="#000" />
-                    <rect x="42" y="35" width="15" height="10" fill="#000" />
-                    <rect x="60" y="45" width="25" height="10" fill="#000" />
-                    <rect x="42" y="65" width="15" height="15" fill="#000" />
-                    <rect x="65" y="70" width="20" height="15" fill="#000" />
+                    <!-- Decorative QR pixels -->
+                    <rect x="42" y="15" width="6" height="6" fill="#0b0f19" />
+                    <rect x="52" y="22" width="6" height="6" fill="#0b0f19" />
+                    <rect x="42" y="42" width="16" height="16" fill="#0b0f19" rx="2" />
+                    <rect x="46" y="46" width="8" height="8" fill="#F5C451" />
+                    <rect x="15" y="45" width="6" height="12" fill="#0b0f19" />
+                    <rect x="75" y="45" width="12" height="6" fill="#0b0f19" />
+                    <rect x="66" y="66" width="8" height="8" fill="#0b0f19" />
+                    <rect x="78" y="78" width="8" height="8" fill="#0b0f19" />
                 </svg>
-                <div style="font-size: 0.65rem; color: #1e293b; font-weight: 700; margin-top: 0.2rem;">SCAN AT GATE</div>
+                <div style="font-size: 0.65rem; color: #475569; font-weight: 700; margin-top: 0.35rem; text-transform: uppercase;">
+                    Quét tại rạp (Demo)
+                </div>
             </div>
         </div>
 
-        <!-- Seats list -->
-        <div style="border-top: 1px dashed var(--border-color); padding-top: 1.5rem; margin-bottom: 1.5rem;">
-            <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem;">VỊ TRÍ GHẾ NGỒI ĐÃ XÁC NHẬN:</div>
-            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                <% seats.forEach(s => { %>
-                    <span class="selected-seat-tag" style="background: rgba(16, 185, 129, 0.2); border-color: rgba(16, 185, 129, 0.4); color: #6ee7b7; font-size: 0.9rem; padding: 0.3rem 0.75rem;">
-                        <i class="fas fa-couch"></i> Hàng <%= s.row_label %> - Số <%= s.seat_number %> (<%= s.seat_type %>)
-                    </span>
-                <% }); %>
+        <!-- Seats and Payment Confirmation -->
+        <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 1.25rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: gap; gap: 1rem;">
+            <div>
+                <span style="font-size: 0.82rem; color: var(--text-muted); display: block; margin-bottom: 0.35rem;">Ghế đã thanh toán:</span>
+                <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+                    <% if (typeof seats !== 'undefined' && seats.length > 0) { %>
+                        <% seats.forEach(s => { %>
+                            <span class="selected-seat-tag">
+                                <%= s.row_label %><%= s.seat_number %> (<%= s.seat_type %>)
+                            </span>
+                        <% }); %>
+                    <% } else { %>
+                        <span class="selected-seat-tag"><%= booking.booking_code %></span>
+                    <% } %>
+                </div>
             </div>
-        </div>
 
-        <!-- Payment details -->
-        <div style="background: rgba(15, 23, 42, 0.7); border-radius: var(--radius-sm); padding: 1rem; display: flex; justify-content: space-between; align-items: center;">
-            <div style="font-size: 0.85rem;">
-                <div style="color: var(--text-secondary);">Mã giao dịch: <code><%= booking.transaction_id || 'TXN-MOCK-SUCCESS' %></code></div>
-                <div style="color: var(--text-muted);">Phương thức: <%= booking.payment_method || 'VNPAY_MOCK' %></div>
-            </div>
             <div style="text-align: right;">
-                <div style="font-size: 0.75rem; color: var(--text-muted);">ĐÃ THANH TOÁN</div>
-                <div class="total-price" style="font-size: 1.4rem;"><%= new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(booking.total_amount) %></div>
+                <span style="font-size: 0.82rem; color: var(--text-muted); display: block;">Tổng tiền đã trả:</span>
+                <span class="total-price" style="font-size: 1.6rem;">
+                    <%= new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(booking.total_amount) %>
+                </span>
             </div>
         </div>
     </div>
 
-    <!-- Actions -->
-    <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem;">
-        <button onclick="window.print()" class="btn btn-secondary"><i class="fas fa-print"></i> In vé điện tử</button>
-        <a href="/" class="btn btn-primary"><i class="fas fa-home"></i> Về trang chủ</a>
+    <!-- Action Toolbar -->
+    <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; flex-wrap: wrap;">
+        <button type="button" onclick="window.print()" class="btn btn-secondary">
+            <i class="fas fa-print"></i> In vé điện tử
+        </button>
+        <a href="/booking/history" class="btn btn-secondary">
+            <i class="fas fa-clock-rotate-left"></i> Xem lịch sử đặt vé
+        </a>
+        <a href="/movies" class="btn btn-primary">
+            <i class="fas fa-ticket"></i> Tiếp tục đặt phim khác
+        </a>
     </div>
 </main>
+
+<style>
+@media print {
+    .navbar, .footer, .btn, .alert {
+        display: none !important;
+    }
+    body, .main-wrapper {
+        background: #fff !important;
+        color: #000 !important;
+    }
+    #eTicket {
+        border: 2px solid #000 !important;
+        box-shadow: none !important;
+        background: #fff !important;
+        color: #000 !important;
+    }
+    #eTicket * {
+        color: #000 !important;
+    }
+}
+</style>
 
 <%- include('../partials/footer') %>

@@ -1,55 +1,101 @@
 /* ====================================================================
-   HỆ THỐNG ĐẶT VÉ XEM PHIM / SỰ KIỆN - DESIGN SYSTEM & STYLES
+   CINEVIBE - DARK CINEMA PREMIUM DESIGN SYSTEM
    Author: Nguyễn Duy Trường - DTC245200120 - CNTTK23E
+   Học phần: Triển khai và Quản trị Hệ thống Phần mềm
    ==================================================================== */
 
 :root {
-    --bg-dark: #0b0f19;
-    --bg-card: rgba(22, 30, 49, 0.75);
-    --bg-card-hover: rgba(30, 41, 67, 0.9);
-    --border-color: rgba(255, 255, 255, 0.08);
-    --border-accent: rgba(99, 102, 241, 0.3);
-    
-    --primary: #6366f1;
-    --primary-hover: #4f46e5;
-    --primary-glow: rgba(99, 102, 241, 0.35);
-    
-    --secondary: #ec4899;
-    --accent: #f59e0b;
-    --success: #10b981;
-    --danger: #ef4444;
-    --info: #06b6d4;
+    color-scheme: dark;
 
-    --text-primary: #f8fafc;
-    --text-secondary: #94a3b8;
-    --text-muted: #64748b;
+    /* 4.1 MANDATORY COLOR PALETTE */
+    --bg-primary: #0B0F19;
+    --bg-secondary: #171E2B;
+    --bg-elevated: #1F293D;
+    --bg-surface: #121824;
+    --bg-overlay: rgba(11, 15, 25, 0.9);
 
-    --font-heading: 'Outfit', sans-serif;
-    --font-body: 'Inter', sans-serif;
+    --color-primary: #E50914;
+    --color-primary-hover: #B20710;
+    --color-primary-glow: rgba(229, 9, 20, 0.35);
+
+    --color-gold: #F5C451;
+    --color-gold-hover: #D8A932;
+    --color-gold-glow: rgba(245, 196, 81, 0.3);
+
+    --text-primary: #F8FAFC;
+    --text-secondary: #94A3B8;
+    --text-muted: #64748B;
+
+    --border-color: #2A3446;
+    --border-light: rgba(255, 255, 255, 0.08);
+    --border-focus: #E50914;
+
+    /* System Status Colors */
+    --color-success: #10B981;
+    --color-danger: #EF4444;
+    --color-warning: #F59E0B;
+    --color-info: #06B6D4;
+
+    /* Geometry & Spacing Tokens */
+    --radius-card: 16px;
+    --radius-button: 10px;
+    --radius-input: 10px;
+    --radius-badge: 6px;
     --radius-sm: 8px;
     --radius-md: 14px;
     --radius-lg: 20px;
-    --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    --radius-full: 9999px;
+
+    /* Typography */
+    --font-primary: 'Be Vietnam Pro', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-heading: 'Be Vietnam Pro', 'Inter', sans-serif;
+    --font-body: 'Be Vietnam Pro', 'Inter', sans-serif;
+
+    /* Shadow & Depth */
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+    --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.7);
+    --shadow-elevated: 0 20px 40px -15px rgba(0, 0, 0, 0.85);
+    --shadow-glow-red: 0 0 25px rgba(229, 9, 20, 0.4);
+    --shadow-glow-gold: 0 0 20px rgba(245, 196, 81, 0.35);
+
+    /* Transitions */
+    --transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    --transition-smooth: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+
+    /* Backward compatibility aliases */
+    --primary: var(--color-primary);
+    --primary-hover: var(--color-primary-hover);
+    --primary-glow: var(--color-primary-glow);
+    --secondary: #1F293D;
+    --accent: var(--color-gold);
+    --bg-dark: var(--bg-primary);
+    --bg-card: var(--bg-secondary);
+    --bg-card-hover: var(--bg-elevated);
 }
 
+/* Base Reset & Typography */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-    background-color: var(--bg-dark);
+    background-color: var(--bg-primary);
     color: var(--text-primary);
-    font-family: var(--font-body);
+    font-family: var(--font-primary);
     line-height: 1.6;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     overflow-x: hidden;
+    position: relative;
     background-image: 
-        radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.12) 0%, transparent 40%),
-        radial-gradient(circle at 85% 85%, rgba(236, 72, 153, 0.08) 0%, transparent 45%);
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(229, 9, 20, 0.12), transparent 70%),
+        radial-gradient(circle at 90% 80%, rgba(245, 196, 81, 0.05), transparent 40%);
+    background-attachment: fixed;
 }
 
 a {
@@ -58,19 +104,51 @@ a {
     transition: var(--transition);
 }
 
-/* Header & Navbar */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Accessibility: Focus visible */
+:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+}
+::-webkit-scrollbar-thumb {
+    background: #1F293D;
+    border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #2A3446;
+}
+
+/* ====================================================================
+   HEADER & NAVBAR (DARK CINEMA LUXURY)
+   ==================================================================== */
 .navbar {
-    background: rgba(11, 15, 25, 0.85);
-    backdrop-filter: blur(16px);
+    background: var(--bg-overlay);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border-color);
     position: sticky;
     top: 0;
     z-index: 1000;
-    padding: 0.85rem 2rem;
+    padding: 0.9rem 2rem;
+    transition: var(--transition);
 }
 
 .nav-container {
-    max-width: 1300px;
+    max-width: 1360px;
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
@@ -80,27 +158,45 @@ a {
 .brand-logo {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.65rem;
     font-family: var(--font-heading);
-    font-size: 1.4rem;
-    font-weight: 700;
+    font-size: 1.45rem;
+    font-weight: 800;
     letter-spacing: -0.5px;
     color: #fff;
 }
 
+.brand-logo i {
+    color: var(--color-primary);
+    font-size: 1.35rem;
+}
+
 .brand-badge {
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    padding: 0.3rem 0.6rem;
-    border-radius: var(--radius-sm);
-    font-size: 0.75rem;
+    background: linear-gradient(135deg, var(--color-primary), #990000);
+    color: #fff;
+    padding: 0.25rem 0.6rem;
+    border-radius: var(--radius-badge);
+    font-size: 0.72rem;
     font-weight: 800;
+    letter-spacing: 0.5px;
     text-transform: uppercase;
+    box-shadow: 0 2px 8px rgba(229, 9, 20, 0.4);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.brand-badge.gold {
+    background: linear-gradient(135deg, var(--color-gold), #b45309);
+    color: #0b0f19;
+    font-weight: 800;
+    box-shadow: 0 2px 8px rgba(245, 196, 81, 0.3);
 }
 
 .nav-links {
     display: flex;
     align-items: center;
-    gap: 1.8rem;
+    gap: 2rem;
     list-style: none;
 }
 
@@ -108,10 +204,33 @@ a {
     color: var(--text-secondary);
     font-weight: 500;
     font-size: 0.95rem;
+    padding: 0.4rem 0.2rem;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    transition: var(--transition);
 }
 
-.nav-links a:hover, .nav-links a.active {
+.nav-links a:hover {
     color: #fff;
+}
+
+.nav-links a.active {
+    color: #fff;
+    font-weight: 600;
+}
+
+.nav-links a.active::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--color-primary);
+    border-radius: 2px;
+    box-shadow: 0 0 8px var(--color-primary-glow);
 }
 
 .nav-actions {
@@ -120,209 +239,341 @@ a {
     gap: 1rem;
 }
 
-/* Buttons */
+/* Mobile Hamburger Menu */
+.mobile-menu-btn {
+    display: none;
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: var(--transition);
+}
+
+.mobile-menu-btn:hover {
+    background: var(--bg-elevated);
+    color: var(--color-primary);
+}
+
+/* ====================================================================
+   BUTTONS (PRIMARY RED & CINEMA SECONDARY)
+   ==================================================================== */
 .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    padding: 0.65rem 1.35rem;
-    border-radius: var(--radius-sm);
+    padding: 0.7rem 1.45rem;
+    border-radius: var(--radius-button);
     font-weight: 600;
     font-size: 0.95rem;
     cursor: pointer;
-    border: none;
+    border: 1px solid transparent;
     outline: none;
     transition: var(--transition);
     text-align: center;
+    font-family: var(--font-primary);
+    user-select: none;
+    white-space: nowrap;
 }
 
+.btn:active {
+    transform: scale(0.98);
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+/* Primary Red CTA */
 .btn-primary {
-    background: linear-gradient(135deg, var(--primary), #4f46e5);
-    color: #fff;
-    box-shadow: 0 4px 14px var(--primary-glow);
+    background: var(--color-primary);
+    color: #ffffff;
+    box-shadow: 0 4px 14px var(--color-primary-glow);
+    border-color: rgba(255, 255, 255, 0.1);
 }
 
-.btn-primary:hover {
-    background: linear-gradient(135deg, #4f46e5, #4338ca);
+.btn-primary:hover:not(:disabled) {
+    background: var(--color-primary-hover);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+    box-shadow: 0 6px 20px var(--shadow-glow-red);
 }
 
+/* Secondary Button */
 .btn-secondary {
-    background: rgba(255, 255, 255, 0.08);
-    color: #fff;
-    border: 1px solid var(--border-color);
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    border-color: var(--border-color);
 }
 
-.btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.15);
+.btn-secondary:hover:not(:disabled) {
+    background: #27344c;
+    border-color: #3b4961;
+    color: #ffffff;
+    transform: translateY(-2px);
 }
 
+/* Gold Accent Button (VIP & Promotion) */
+.btn-gold {
+    background: linear-gradient(135deg, var(--color-gold), #d97706);
+    color: #0b0f19;
+    font-weight: 700;
+    box-shadow: 0 4px 14px var(--color-gold-glow);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.btn-gold:hover:not(:disabled) {
+    background: linear-gradient(135deg, #fbbf24, #b45309);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px var(--shadow-glow-gold);
+}
+
+/* Success Button */
 .btn-success {
-    background: linear-gradient(135deg, var(--success), #059669);
-    color: #fff;
+    background: #059669;
+    color: #ffffff;
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
 }
 
+.btn-success:hover:not(:disabled) {
+    background: #047857;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+/* Danger Button */
 .btn-danger {
-    background: linear-gradient(135deg, var(--danger), #dc2626);
-    color: #fff;
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+    border-color: rgba(239, 68, 68, 0.4);
 }
 
+.btn-danger:hover:not(:disabled) {
+    background: #ef4444;
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+/* Sizes */
 .btn-sm {
-    padding: 0.4rem 0.8rem;
+    padding: 0.45rem 0.95rem;
     font-size: 0.85rem;
+    border-radius: var(--radius-sm);
 }
 
-/* Main Container */
+.btn-lg {
+    padding: 0.9rem 2rem;
+    font-size: 1.05rem;
+    border-radius: var(--radius-button);
+}
+
+/* ====================================================================
+   CARDS & CONTAINERS
+   ==================================================================== */
 .main-wrapper {
-    flex: 1;
-    max-width: 1300px;
+    max-width: 1360px;
     width: 100%;
     margin: 0 auto;
-    padding: 2rem 1.5rem;
+    padding: 2.5rem 2rem;
+    flex: 1;
 }
 
-/* Cards */
 .card {
-    background: var(--bg-card);
+    background: var(--bg-secondary);
     border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    padding: 1.5rem;
-    backdrop-filter: blur(12px);
+    border-radius: var(--radius-card);
+    padding: 1.75rem;
+    box-shadow: var(--shadow-card);
     transition: var(--transition);
+    position: relative;
 }
 
-.card:hover {
-    border-color: var(--border-accent);
+.card-hover:hover {
+    border-color: #3b4961;
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-elevated);
 }
 
-/* Hero Section */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 2rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.section-title {
+    font-family: var(--font-heading);
+    font-size: 1.85rem;
+    font-weight: 800;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    letter-spacing: -0.5px;
+}
+
+.section-title i {
+    color: var(--color-primary);
+}
+
+.section-subtitle {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin-top: 0.3rem;
+}
+
+/* ====================================================================
+   CINEMATIC HERO SECTION
+   ==================================================================== */
 .hero-banner {
     position: relative;
-    border-radius: var(--radius-lg);
-    background: linear-gradient(135deg, rgba(30, 27, 75, 0.8), rgba(15, 23, 42, 0.9)), url('/images/banner.jpg') center/cover;
-    border: 1px solid var(--border-color);
-    padding: 4rem 3rem;
-    margin-bottom: 3rem;
+    border-radius: var(--radius-card);
     overflow: hidden;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    margin-bottom: 3.5rem;
+    min-height: 440px;
+    display: flex;
+    align-items: center;
+    padding: 3.5rem 3rem;
+    background: #0f1624;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-elevated);
+    background-image: 
+        linear-gradient(90deg, rgba(11, 15, 25, 0.96) 0%, rgba(11, 15, 25, 0.8) 50%, rgba(11, 15, 25, 0.4) 100%),
+        radial-gradient(circle at 80% 30%, rgba(229, 9, 20, 0.2) 0%, transparent 60%);
+    background-size: cover;
+    background-position: center;
 }
 
 .hero-content {
-    max-width: 650px;
-    position: relative;
+    max-width: 680px;
     z-index: 2;
+    position: relative;
 }
 
 .hero-tag {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    background: rgba(99, 102, 241, 0.2);
-    color: #818cf8;
+    background: rgba(229, 9, 20, 0.15);
+    border: 1px solid rgba(229, 9, 20, 0.35);
+    color: #fca5a5;
     padding: 0.35rem 0.85rem;
-    border-radius: 50px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: var(--radius-full);
+    font-size: 0.82rem;
+    font-weight: 700;
+    margin-bottom: 1.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.hero-tag.gold {
+    background: rgba(245, 196, 81, 0.15);
+    border-color: rgba(245, 196, 81, 0.4);
+    color: var(--color-gold);
 }
 
 .hero-title {
     font-family: var(--font-heading);
-    font-size: 2.8rem;
+    font-size: 3rem;
     font-weight: 800;
-    line-height: 1.2;
-    margin-bottom: 1rem;
-    background: linear-gradient(to right, #fff, #cbd5e1);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    line-height: 1.15;
+    margin-bottom: 1.25rem;
+    color: #ffffff;
+    letter-spacing: -1px;
 }
 
 .hero-desc {
     color: var(--text-secondary);
     font-size: 1.1rem;
+    line-height: 1.7;
     margin-bottom: 2rem;
 }
 
-/* Movie Grid */
-.section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 2rem;
-}
-
-.section-title {
-    font-family: var(--font-heading);
-    font-size: 1.8rem;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.section-title i {
-    color: var(--primary);
-}
-
+/* ====================================================================
+   MOVIE CARDS & GRID (2:3 POSTER RATIO)
+   ==================================================================== */
 .movies-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.75rem;
 }
 
 .movie-card {
-    background: var(--bg-card);
+    background: var(--bg-secondary);
     border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-card);
     overflow: hidden;
-    transition: var(--transition);
+    transition: var(--transition-smooth);
     display: flex;
     flex-direction: column;
+    position: relative;
+    box-shadow: var(--shadow-card);
 }
 
 .movie-card:hover {
     transform: translateY(-6px);
-    border-color: var(--border-accent);
-    box-shadow: 0 16px 30px rgba(0, 0, 0, 0.5);
+    border-color: #3b4961;
+    box-shadow: var(--shadow-elevated), 0 0 25px rgba(229, 9, 20, 0.15);
 }
 
 .movie-poster-wrap {
     position: relative;
-    aspect-ratio: 2/3;
+    width: 100%;
+    aspect-ratio: 2 / 3;
     overflow: hidden;
-    background: #1e293b;
+    background: #0f1624;
 }
 
 .movie-poster {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.4s ease;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .movie-card:hover .movie-poster {
     transform: scale(1.05);
 }
 
-.age-badge {
+.movie-poster-overlay {
     position: absolute;
-    top: 12px;
-    left: 12px;
-    padding: 0.25rem 0.55rem;
-    border-radius: var(--radius-sm);
-    font-size: 0.75rem;
-    font-weight: 800;
-    color: #fff;
-    backdrop-filter: blur(8px);
+    inset: 0;
+    background: linear-gradient(to top, rgba(23, 30, 43, 0.95) 0%, rgba(23, 30, 43, 0.2) 50%, transparent 100%);
+    opacity: 0.85;
+    transition: var(--transition);
 }
 
-.age-badge.P { background: rgba(16, 185, 129, 0.9); }
-.age-badge.K { background: rgba(59, 130, 246, 0.9); }
-.age-badge.T16 { background: rgba(245, 158, 11, 0.9); }
-.age-badge.T18 { background: rgba(239, 68, 68, 0.9); }
+.movie-card:hover .movie-poster-overlay {
+    opacity: 0.95;
+}
+
+/* Age Rating Badge */
+.age-badge {
+    position: absolute;
+    top: 0.85rem;
+    right: 0.85rem;
+    padding: 0.25rem 0.55rem;
+    border-radius: var(--radius-badge);
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    z-index: 3;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.age-badge.P { background: rgba(16, 185, 129, 0.85); color: #fff; }
+.age-badge.K { background: rgba(6, 182, 212, 0.85); color: #fff; }
+.age-badge.T13 { background: rgba(245, 158, 11, 0.85); color: #fff; }
+.age-badge.T16 { background: rgba(249, 115, 22, 0.85); color: #fff; }
+.age-badge.T18 { background: rgba(229, 9, 20, 0.85); color: #fff; }
 
 .movie-info {
     padding: 1.25rem;
@@ -332,10 +583,11 @@ a {
 }
 
 .movie-genre {
+    color: var(--color-gold);
     font-size: 0.8rem;
-    color: var(--text-muted);
+    font-weight: 700;
     text-transform: uppercase;
-    font-weight: 600;
+    letter-spacing: 0.5px;
     margin-bottom: 0.4rem;
 }
 
@@ -343,113 +595,400 @@ a {
     font-family: var(--font-heading);
     font-size: 1.15rem;
     font-weight: 700;
-    margin-bottom: 0.6rem;
-    line-height: 1.3;
+    color: #ffffff;
+    line-height: 1.35;
+    margin-bottom: 0.75rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .movie-meta {
+    margin-top: auto;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 1rem;
     font-size: 0.85rem;
     color: var(--text-secondary);
-    margin-top: auto;
-    padding-top: 1rem;
+    padding-top: 0.75rem;
     border-top: 1px solid var(--border-color);
 }
 
-/* Forms */
+/* ====================================================================
+   SHOWTIME CARDS & PILLS
+   ==================================================================== */
+.showtime-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 1rem 1.25rem;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.showtime-card:hover {
+    border-color: var(--color-primary);
+    background: var(--bg-elevated);
+    transform: translateY(-2px);
+}
+
+.showtime-time {
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #ffffff;
+}
+
+.showtime-badge {
+    background: rgba(245, 196, 81, 0.15);
+    border: 1px solid rgba(245, 196, 81, 0.3);
+    color: var(--color-gold);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+/* ====================================================================
+   FORMS & INPUTS (DARK CINEMA LUXURY)
+   ==================================================================== */
 .form-group {
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.35rem;
 }
 
 .form-label {
     display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
     font-size: 0.9rem;
-    color: var(--text-secondary);
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
 }
 
 .form-control {
     width: 100%;
-    padding: 0.75rem 1rem;
-    background: rgba(15, 23, 42, 0.6);
+    background: var(--bg-surface);
     border: 1px solid var(--border-color);
-    border-radius: var(--radius-sm);
-    color: #fff;
+    border-radius: var(--radius-input);
+    padding: 0.75rem 1rem;
+    color: var(--text-primary);
     font-size: 0.95rem;
-    font-family: inherit;
+    font-family: var(--font-primary);
     transition: var(--transition);
 }
 
 .form-control:focus {
+    border-color: var(--color-primary);
+    background: #151d2c;
+    box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.2);
     outline: none;
-    border-color: var(--primary);
-    box-shadow: 0 0 0 3px var(--primary-glow);
+}
+
+.form-control::placeholder {
+    color: var(--text-muted);
 }
 
 /* Alerts */
 .alert {
     padding: 1rem 1.25rem;
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-button);
     margin-bottom: 1.5rem;
-    font-size: 0.95rem;
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    font-size: 0.92rem;
+    border: 1px solid transparent;
 }
 
 .alert-danger {
     background: rgba(239, 68, 68, 0.15);
-    border: 1px solid rgba(239, 68, 68, 0.3);
     color: #fca5a5;
+    border-color: rgba(239, 68, 68, 0.35);
 }
 
 .alert-success {
     background: rgba(16, 185, 129, 0.15);
-    border: 1px solid rgba(16, 185, 129, 0.3);
     color: #6ee7b7;
+    border-color: rgba(16, 185, 129, 0.35);
 }
 
-.alert-warning {
-    background: rgba(245, 158, 11, 0.15);
-    border: 1px solid rgba(245, 158, 11, 0.3);
-    color: #fcd34d;
+.alert-info {
+    background: rgba(6, 182, 212, 0.15);
+    color: #67e8f9;
+    border-color: rgba(6, 182, 212, 0.35);
 }
 
-/* Footer */
+/* Badges & Tags */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.3rem 0.65rem;
+    border-radius: var(--radius-badge);
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.badge-gold {
+    background: rgba(245, 196, 81, 0.15);
+    color: var(--color-gold);
+    border: 1px solid rgba(245, 196, 81, 0.35);
+}
+
+.badge-red {
+    background: rgba(229, 9, 20, 0.15);
+    color: #fca5a5;
+    border: 1px solid rgba(229, 9, 20, 0.35);
+}
+
+.badge-green {
+    background: rgba(16, 185, 129, 0.15);
+    color: #6ee7b7;
+    border: 1px solid rgba(16, 185, 129, 0.35);
+}
+
+.selected-seat-tag {
+    background: rgba(229, 9, 20, 0.18);
+    color: #fca5a5;
+    border: 1px solid rgba(229, 9, 20, 0.4);
+    padding: 0.3rem 0.75rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.82rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+/* ====================================================================
+   DATA TABLES (DARK CINEMA LUXURY)
+   ==================================================================== */
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: var(--radius-card);
+}
+
+.cinema-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.9rem;
+}
+
+.cinema-table thead tr {
+    background: #0d121c;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+}
+
+.cinema-table th {
+    padding: 1.1rem 1.25rem;
+}
+
+.cinema-table tbody tr {
+    border-bottom: 1px solid var(--border-color);
+    transition: var(--transition-fast);
+}
+
+.cinema-table tbody tr:hover {
+    background: rgba(23, 30, 43, 0.65);
+}
+
+.cinema-table td {
+    padding: 1rem 1.25rem;
+    vertical-align: middle;
+}
+
+/* ====================================================================
+   MODAL COMPONENT (DARK CINEMA)
+   ==================================================================== */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(4, 7, 13, 0.82);
+    backdrop-filter: blur(8px);
+    z-index: 2000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    overflow-y: auto;
+}
+
+.modal-content-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-card);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+    width: 100%;
+    max-width: 620px;
+    padding: 2rem;
+    position: relative;
+    animation: modalFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+
+/* ====================================================================
+   FOOTER (DARK CINEMA PREMIUM)
+   ==================================================================== */
 .footer {
-    background: rgba(11, 15, 25, 0.95);
+    background: #070a11;
     border-top: 1px solid var(--border-color);
-    padding: 3rem 2rem 1.5rem;
-    margin-top: 4rem;
+    padding: 4rem 2rem 2rem;
+    margin-top: auto;
 }
 
 .footer-container {
-    max-width: 1300px;
+    max-width: 1360px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr 1.5fr;
     gap: 3rem;
+    margin-bottom: 3rem;
 }
 
 .footer-bottom {
-    max-width: 1300px;
-    margin: 2rem auto 0;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--border-color);
+    max-width: 1360px;
+    margin: 0 auto;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
     display: flex;
     justify-content: space-between;
     align-items: center;
     color: var(--text-muted);
     font-size: 0.85rem;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
-@media (max-width: 768px) {
-    .nav-links { display: none; }
-    .hero-banner { padding: 2.5rem 1.5rem; }
-    .hero-title { font-size: 2rem; }
-    .footer-container { grid-template-columns: 1fr; gap: 2rem; }
-    .footer-bottom { flex-direction: column; gap: 0.5rem; text-align: center; }
+/* ====================================================================
+   RESPONSIVE BREAKPOINTS (WCAG & MOBILE OPTIMIZED)
+   ==================================================================== */
+
+/* Laptop / Small Desktop (1024px - 1280px) */
+@media (max-width: 1200px) {
+    .movies-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+    }
+    .hero-title {
+        font-size: 2.5rem;
+    }
+}
+
+/* Tablet (768px - 1023px) */
+@media (max-width: 1023px) {
+    .navbar {
+        padding: 0.75rem 1.5rem;
+    }
+    .movies-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .footer-container {
+        grid-template-columns: 1fr 1fr;
+    }
+    .hero-banner {
+        padding: 2.5rem 2rem;
+        min-height: 380px;
+    }
+    .hero-title {
+        font-size: 2.2rem;
+    }
+}
+
+/* Mobile (Under 768px) */
+@media (max-width: 767px) {
+    .main-wrapper {
+        padding: 1.5rem 1rem;
+    }
+    .mobile-menu-btn {
+        display: block;
+    }
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--bg-secondary);
+        flex-direction: column;
+        padding: 1.5rem 1.25rem;
+        gap: 1rem;
+        border-bottom: 1px solid var(--border-color);
+        box-shadow: var(--shadow-elevated);
+    }
+    .nav-links.show {
+        display: flex;
+    }
+    .nav-links a {
+        width: 100%;
+        padding: 0.6rem 0.5rem;
+    }
+    .nav-actions {
+        display: none;
+    }
+    .movies-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+    .hero-banner {
+        padding: 2rem 1.25rem;
+        min-height: 320px;
+    }
+    .hero-title {
+        font-size: 1.8rem;
+    }
+    .hero-desc {
+        font-size: 0.95rem;
+    }
+    .footer-container {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+/* Small Mobile (360px - 480px) */
+@media (max-width: 480px) {
+    .movies-grid {
+        grid-template-columns: 1fr;
+    }
+    .section-title {
+        font-size: 1.45rem;
+    }
+    .btn {
+        width: 100%;
+    }
+}
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
 }
