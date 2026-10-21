@@ -5,10 +5,10 @@ const adminController = {
     // 1. Dashboard tổng quan
     getDashboard: async (req, res) => {
         try {
-            const [moviesCount] = await db.query('SELECT COUNT(*) as total FROM movies WHERE is_active = TRUE');
-            const [showtimesCount] = await db.query('SELECT COUNT(*) as total FROM showtimes WHERE status = "scheduled"');
-            const [ticketsSold] = await db.query('SELECT COUNT(*) as total FROM booking_seats bs JOIN bookings b ON bs.booking_id = b.id WHERE b.payment_status = "completed"');
-            const [revenue] = await db.query('SELECT COALESCE(SUM(total_amount), 0) as total FROM bookings WHERE payment_status = "completed"');
+            const moviesCount = await db.query('SELECT COUNT(*) as total FROM movies WHERE is_active = TRUE');
+            const showtimesCount = await db.query('SELECT COUNT(*) as total FROM showtimes WHERE status = "scheduled"');
+            const ticketsSold = await db.query('SELECT COUNT(*) as total FROM booking_seats bs JOIN bookings b ON bs.booking_id = b.id WHERE b.payment_status = "completed"');
+            const revenue = await db.query('SELECT COALESCE(SUM(total_amount), 0) as total FROM bookings WHERE payment_status = "completed"');
             
             // Danh sách 5 đơn đặt vé mới nhất
             const recentBookings = await db.query(`
@@ -88,8 +88,8 @@ const adminController = {
         const movieId = req.params.id;
         try {
             // Kiểm tra ràng buộc: Nếu phim đã có suất chiếu, không được phép xóa làm mất dữ liệu lịch sử
-            const [showtimes] = await db.query('SELECT COUNT(*) as count FROM showtimes WHERE movie_id = ?', [movieId]);
-            if (showtimes[0].count > 0) {
+            const showtimesCount = await db.query('SELECT COUNT(*) as count FROM showtimes WHERE movie_id = ?', [movieId]);
+            if (showtimesCount[0]?.count > 0) {
                 return res.redirect('/admin/movies?error=' + encodeURIComponent('Không thể xóa phim này vì đã có suất chiếu hoặc lịch sử đặt vé liên kết! Hãy chọn tắt trạng thái hiển thị.'));
             }
 

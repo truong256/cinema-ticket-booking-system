@@ -3,36 +3,34 @@
 
 <main class="main-wrapper">
     <!-- Hero Banner (Cinematic Featured Film - Ref: Lumière Cinema) -->
-    <section class="hero-banner">
+    <% const featuredMovie = (movies && movies.length > 0) ? movies[0] : null; %>
+    <section class="hero-banner" style="<%= featuredMovie && featuredMovie.poster_url ? `background-image: linear-gradient(90deg, #0B0F19 0%, rgba(11, 15, 25, 0.94) 52%, rgba(11, 15, 25, 0.4) 100%), url('${featuredMovie.poster_url === '/images/dune2.jpg' ? '/images/dune2_backdrop.jpg' : featuredMovie.poster_url}');` : '' %>">
         <div class="hero-content">
             <div class="hero-tag gold">
                 <i class="fas fa-crown"></i> BOM TẤN CHIẾU RẠP ĐỘC QUYỀN &bull; CINEVIBE EXCLUSIVE
             </div>
             
             <h1 class="hero-title">
-                Dune: Part Two<br>
-                <span style="font-size: 1.8rem; font-weight: 500; color: var(--text-secondary); display: block; margin-top: 0.35rem; letter-spacing: -0.5px;">
-                    Hành Tinh Cát — Phần Hai
-                </span>
+                <%= featuredMovie ? featuredMovie.title : 'Dune: Part Two (Hành Tinh Cát 2)' %>
             </h1>
 
             <div style="display: flex; gap: 0.75rem; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap;">
                 <span class="badge badge-gold"><i class="fas fa-star"></i> 8.6/10 IMDb</span>
-                <span class="age-badge T16" style="position: static; box-shadow: none;">T16</span>
-                <span style="color: var(--text-secondary); font-size: 0.9rem;"><i class="far fa-clock"></i> 166 phút</span>
-                <span style="color: var(--text-secondary); font-size: 0.9rem;"><i class="fas fa-film"></i> Khoa học viễn tưởng, Hành động</span>
+                <span class="age-badge <%= featuredMovie ? featuredMovie.age_rating : 'T16' %>" style="position: static; box-shadow: none;"><%= featuredMovie ? featuredMovie.age_rating : 'T16' %></span>
+                <span style="color: var(--text-secondary); font-size: 0.9rem;"><i class="far fa-clock"></i> <%= featuredMovie ? featuredMovie.duration_minutes : 166 %> phút</span>
+                <span style="color: var(--text-secondary); font-size: 0.9rem;"><i class="fas fa-film"></i> <%= featuredMovie ? featuredMovie.genre : 'Khoa học viễn tưởng, Hành động' %></span>
                 <span class="brand-badge gold" style="font-size: 0.7rem; padding: 0.2rem 0.5rem;"><i class="fas fa-video"></i> IMAX Laser</span>
             </div>
 
             <p class="hero-desc">
-                Paul Atreides hợp lực cùng Chani và tộc người Fremen để trả thù những kẻ đã hủy hoại gia đình mình, đứng trước sự lựa chọn định mệnh giữa tình yêu sâu đậm và số phận của toàn vũ trụ.
+                <%= featuredMovie ? featuredMovie.description : 'Paul Atreides hợp lực cùng Chani và tộc người Fremen để trả thù những kẻ đã hủy hoại gia đình mình, đứng trước sự lựa chọn định mệnh giữa tình yêu sâu đậm và số phận của toàn vũ trụ.' %>
             </p>
 
             <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
-                <a href="/movies/1" class="btn btn-primary btn-lg">
+                <a href="/movies/<%= featuredMovie ? featuredMovie.id : 1 %>" class="btn btn-primary btn-lg">
                     <i class="fas fa-ticket"></i> Đặt vé ngay
                 </a>
-                <a href="https://www.youtube.com/watch?v=Way9Dexny3w" target="_blank" class="btn btn-secondary btn-lg" title="Xem trailer trên YouTube">
+                <a href="<%= featuredMovie && featuredMovie.trailer_url ? featuredMovie.trailer_url : 'https://www.youtube.com/watch?v=Way9Dexny3w' %>" target="_blank" class="btn btn-secondary btn-lg" title="Xem trailer trên YouTube">
                     <i class="fab fa-youtube" style="color: var(--color-primary); font-size: 1.15rem;"></i> Xem Trailer
                 </a>
                 <a href="/movies" class="btn btn-secondary btn-lg">
@@ -96,7 +94,7 @@
                 <% movies.forEach(movie => { %>
                     <div class="movie-card" data-genre="<%= movie.genre %>">
                         <div class="movie-poster-wrap">
-                            <img src="<%= movie.poster_url %>" alt="<%= movie.title %>" class="movie-poster" loading="lazy" onerror="this.onerror=null; this.src='/images/default_poster.jpg';">
+                            <img src="<%= movie.poster_url %>" alt="<%= movie.title %>" class="movie-poster" loading="eager" onerror="this.onerror=null; this.src='/images/default_poster.jpg';">
                             <div class="movie-poster-overlay"></div>
                             <span class="age-badge <%= movie.age_rating %>"><%= movie.age_rating %></span>
                         </div>

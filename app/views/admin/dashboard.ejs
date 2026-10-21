@@ -154,8 +154,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% if (stats.recentBookings && stats.recentBookings.length > 0) { %>
-                        <% stats.recentBookings.forEach(b => { %>
+                    <% const bookingsList = (typeof recentBookings !== 'undefined' && recentBookings && recentBookings.length > 0) ? recentBookings : ((stats && stats.recentBookings) ? stats.recentBookings : []); %>
+                    <% if (bookingsList && bookingsList.length > 0) { %>
+                        <% bookingsList.forEach(b => { %>
                             <tr style="border-bottom: 1px solid var(--border-color); transition: var(--transition);" class="table-row-hover">
                                 <td style="padding: 1rem 1.5rem; font-weight: 700; color: #fff;"><%= b.booking_code %></td>
                                 <td style="padding: 1rem 1.5rem;">

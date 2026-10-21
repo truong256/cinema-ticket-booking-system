@@ -1185,6 +1185,9 @@ button, input, select, textarea {
         width: 100%;
         padding: 0.6rem 0.5rem;
     }
+    .mobile-only-auth {
+        display: block !important;
+    }
     .nav-actions {
         display: none;
     }
@@ -1229,9 +1232,11 @@ button, input, select, textarea {
         grid-template-columns: 1fr;
     }
     .section-title {
-        font-size: 1.45rem;
+        font-size: 1.4rem;
     }
-    .btn {
+    .hero-content .btn,
+    .auth-card .btn,
+    .booking-summary-sidebar .btn {
         width: 100%;
     }
 }

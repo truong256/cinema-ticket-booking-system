@@ -43,6 +43,21 @@
                     <i class="fas fa-circle-info"></i> Giới thiệu
                 </a>
             </li>
+            <li class="mobile-only-auth" style="display: none; border-top: 1px solid var(--border-color); padding-top: 0.75rem; margin-top: 0.5rem;">
+                <% if (typeof currentUser !== 'undefined' && currentUser) { %>
+                    <div style="margin-bottom: 0.6rem; color: var(--color-gold); font-size: 0.9rem; font-weight: 600;">
+                        <i class="fas fa-user-circle"></i> <%= currentUser.full_name || currentUser.username %>
+                    </div>
+                    <a href="/auth/logout" class="btn btn-secondary btn-sm" style="width: 100%; display: flex; justify-content: center; align-items: center; gap: 0.35rem;">
+                        <i class="fas fa-arrow-right-from-bracket"></i> Đăng xuất
+                    </a>
+                <% } else { %>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <a href="/auth/login" class="btn btn-secondary btn-sm" style="flex: 1; text-align: center;">Đăng nhập</a>
+                        <a href="/auth/register" class="btn btn-primary btn-sm" style="flex: 1; text-align: center;">Đăng ký</a>
+                    </div>
+                <% } %>
+            </li>
         </ul>
 
         <!-- Right Side: Auth / User Profile -->

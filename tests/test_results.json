@@ -1,0 +1,241 @@
+{
+  "timestamp": "2026-10-21T12:34:40.167Z",
+  "passCount": 39,
+  "failCount": 0,
+  "results": [
+    {
+      "suite": "Responsive Visual Verification",
+      "test": "01_home @ 1440px (desktop)",
+      "status": "PASS",
+      "details": "HTTP 200, Viewport 1440x900, Screenshot: 01_home_1440px.png"
+    },
+    {
+      "suite": "Responsive Visual Verification",
+      "test": "01_home @ 768px (tablet)",
+      "status": "PASS",
+      "details": "HTTP 200, Viewport 768x1024, Screenshot: 01_home_768px.png"
+    },
+    {
+      "suite": "Responsive Visual Verification",
+      "test": "01_home @ 375px (mobile)",
+      "status": "PASS",
+      "details": "HTTP 200, Viewport 375x812, Screenshot: 01_home_375px.png"
+    },
+    {
+      "suite": "Responsive Visual Verification",
+      "test": "02_movies_catalog @ 1440px (desktop)",
+      "status": "PASS",
+      "details": "HTTP 200, Viewport 1440x900, Screenshot: 02_movies_catalog_1440px.png"
+    },
+    {
+      "suite": "Responsive Visual Verification",
+      "test": "02_movies_catalog @ 768px (tablet)",
+      "status": "PASS",
+      "details": "HTTP 200, Viewport 768x1024, Screenshot: 02_movies_catalog_768px.png"
+    },
+    {
+      "suite": "Responsive Visual Verification",
+      "test": "02_movies_catalog @ 375px (mobile)",
+      "status": "PASS",
+      "details": "HTTP 200, Viewport 375x812, Screenshot: 02_movies_catalog_375px.png"
+    },
+    {
+      "suite": "Responsive Visual Verification",
+      "test": "03_movie_detail @ 1440px (desktop)",
+      "status": "PASS",
+      "details": "HTTP 200, Viewport 1440x900, Screenshot: 03_movie_detail_1440px.png"
+    },
+    {
+      "suite": "Responsive Visual Verification",
+      "test": "03_movie_detail @ 768px (tablet)",
+      "status": "PASS",
+      "details": "HTTP 200, Viewport 768x1024, Screenshot: 03_movie_detail_768px.png"
+    },
+    {
+      "suite": "Responsive Visual Verification",
+      "test": "03_movie_detail @ 375px (mobile)",
+      "status": "PASS",
+      "details": "HTTP 200, Viewport 375x812, Screenshot: 03_movie_detail_375px.png"
+    },
+    {
+      "suite": "Responsive Visual Verification",
+      "test": "04_showtimes_list @ 1440px (desktop)",
+      "status": "PASS",
+      "details": "HTTP 200, Viewport 1440x900, Screenshot: 04_showtimes_list_1440px.png"
+    },
+    {
+      "suite": "Responsive Visual Verification",
+      "test": "04_showtimes_list @ 768px (tablet)",
+      "status": "PASS",
+      "details": "HTTP 200, Viewport 768x1024, Screenshot: 04_showtimes_list_768px.png"
+    },
+    {
+      "suite": "Responsive Visual Verification",
+      "test": "04_showtimes_list @ 375px (mobile)",
+      "status": "PASS",
+      "details": "HTTP 200, Viewport 375x812, Screenshot: 04_showtimes_list_375px.png"
+    },
+    {
+      "suite": "Responsive Visual Verification",
+      "test": "05_seat_selection @ 1440px (desktop)",
+      "status": "PASS",
+      "details": "HTTP 200, Viewport 1440x900, Screenshot: 05_seat_selection_1440px.png"
+    },
+    {
+      "suite": "Responsive Visual Verification",
+      "test": "05_seat_selection @ 768px (tablet)",
+      "status": "PASS",
+      "details": "HTTP 200, Viewport 768x1024, Screenshot: 05_seat_selection_768px.png"
+    },
+    {
+      "suite": "Responsive Visual Verification",
+      "test": "05_seat_selection @ 375px (mobile)",
+      "status": "PASS",
+      "details": "HTTP 200, Viewport 375x812, Screenshot: 05_seat_selection_375px.png"
+    },
+    {
+      "suite": "Responsive Visual Verification",
+      "test": "06_login @ 1440px (desktop)",
+      "status": "PASS",
+      "details": "HTTP 200, Viewport 1440x900, Screenshot: 06_login_1440px.png"
+    },
+    {
+      "suite": "Responsive Visual Verification",
+      "test": "06_login @ 768px (tablet)",
+      "status": "PASS",
+      "details": "HTTP 200, Viewport 768x1024, Screenshot: 06_login_768px.png"
+    },
+    {
+      "suite": "Responsive Visual Verification",
+      "test": "06_login @ 375px (mobile)",
+      "status": "PASS",
+      "details": "HTTP 200, Viewport 375x812, Screenshot: 06_login_375px.png"
+    },
+    {
+      "suite": "Responsive Visual Verification",
+      "test": "07_register @ 1440px (desktop)",
+      "status": "PASS",
+      "details": "HTTP 200, Viewport 1440x900, Screenshot: 07_register_1440px.png"
+    },
+    {
+      "suite": "Responsive Visual Verification",
+      "test": "07_register @ 768px (tablet)",
+      "status": "PASS",
+      "details": "HTTP 200, Viewport 768x1024, Screenshot: 07_register_768px.png"
+    },
+    {
+      "suite": "Responsive Visual Verification",
+      "test": "07_register @ 375px (mobile)",
+      "status": "PASS",
+      "details": "HTTP 200, Viewport 375x812, Screenshot: 07_register_375px.png"
+    },
+    {
+      "suite": "Interactive UX",
+      "test": "Lọc thể loại \"Hành động\" trên Trang chủ",
+      "status": "PASS",
+      "details": "Lọc thành công: 2 phim hiển thị"
+    },
+    {
+      "suite": "Interactive UX",
+      "test": "Tìm kiếm phim \"Dune\" thời gian thực",
+      "status": "PASS",
+      "details": "Hiển thị chính xác 1 phim khớp từ khóa"
+    },
+    {
+      "suite": "Interactive UX",
+      "test": "Chọn ghế & Tính tổng tiền động",
+      "status": "PASS",
+      "details": "Badge: 2 ghế, Tổng tiền: 180.000 ₫, Nút tiếp tục enabled"
+    },
+    {
+      "suite": "Interactive UX",
+      "test": "Đặt vé thành công & Điều hướng thanh toán",
+      "status": "PASS",
+      "details": "URL: http://localhost/booking/payment/38"
+    },
+    {
+      "suite": "Interactive UX",
+      "test": "Thanh toán giả lập & Xuất vé điện tử E-Ticket",
+      "status": "PASS",
+      "details": "Xác nhận vé thành công: http://localhost/booking/success/38"
+    },
+    {
+      "suite": "Responsive UX",
+      "test": "Mobile Hamburger Menu toggle (375px)",
+      "status": "PASS",
+      "details": "Menu hiển thị điều hướng và nút Đăng nhập / Đăng ký di động"
+    },
+    {
+      "suite": "Admin Dark Cinema Design",
+      "test": "14_admin_dashboard @ 1440px (desktop)",
+      "status": "PASS",
+      "details": "HTTP 200, Viewport 1440x900, Screenshot: 14_admin_dashboard_1440px.png"
+    },
+    {
+      "suite": "Admin Dark Cinema Design",
+      "test": "14_admin_dashboard @ 768px (tablet)",
+      "status": "PASS",
+      "details": "HTTP 200, Viewport 768x1024, Screenshot: 14_admin_dashboard_768px.png"
+    },
+    {
+      "suite": "Admin Dark Cinema Design",
+      "test": "14_admin_dashboard @ 375px (mobile)",
+      "status": "PASS",
+      "details": "HTTP 200, Viewport 375x812, Screenshot: 14_admin_dashboard_375px.png"
+    },
+    {
+      "suite": "Admin Dark Cinema Design",
+      "test": "15_admin_movies @ 1440px (desktop)",
+      "status": "PASS",
+      "details": "HTTP 200, Viewport 1440x900, Screenshot: 15_admin_movies_1440px.png"
+    },
+    {
+      "suite": "Admin Dark Cinema Design",
+      "test": "15_admin_movies @ 768px (tablet)",
+      "status": "PASS",
+      "details": "HTTP 200, Viewport 768x1024, Screenshot: 15_admin_movies_768px.png"
+    },
+    {
+      "suite": "Admin Dark Cinema Design",
+      "test": "15_admin_movies @ 375px (mobile)",
+      "status": "PASS",
+      "details": "HTTP 200, Viewport 375x812, Screenshot: 15_admin_movies_375px.png"
+    },
+    {
+      "suite": "Admin Dark Cinema Design",
+      "test": "16_admin_showtimes @ 1440px (desktop)",
+      "status": "PASS",
+      "details": "HTTP 200, Viewport 1440x900, Screenshot: 16_admin_showtimes_1440px.png"
+    },
+    {
+      "suite": "Admin Dark Cinema Design",
+      "test": "16_admin_showtimes @ 768px (tablet)",
+      "status": "PASS",
+      "details": "HTTP 200, Viewport 768x1024, Screenshot: 16_admin_showtimes_768px.png"
+    },
+    {
+      "suite": "Admin Dark Cinema Design",
+      "test": "16_admin_showtimes @ 375px (mobile)",
+      "status": "PASS",
+      "details": "HTTP 200, Viewport 375x812, Screenshot: 16_admin_showtimes_375px.png"
+    },
+    {
+      "suite": "Admin Dark Cinema Design",
+      "test": "17_admin_bookings @ 1440px (desktop)",
+      "status": "PASS",
+      "details": "HTTP 200, Viewport 1440x900, Screenshot: 17_admin_bookings_1440px.png"
+    },
+    {
+      "suite": "Admin Dark Cinema Design",
+      "test": "17_admin_bookings @ 768px (tablet)",
+      "status": "PASS",
+      "details": "HTTP 200, Viewport 768x1024, Screenshot: 17_admin_bookings_768px.png"
+    },
+    {
+      "suite": "Admin Dark Cinema Design",
+      "test": "17_admin_bookings @ 375px (mobile)",
+      "status": "PASS",
+      "details": "HTTP 200, Viewport 375x812, Screenshot: 17_admin_bookings_375px.png"
+    }
+  ]
+}
