@@ -1,30 +1,31 @@
 /* ==========================================================================
-   CINEVIBE CINEMA CITY AUTHENTICATION DESIGN SYSTEM
+   CINEVIBE CINEMA CITY AUTHENTICATION DESIGN SYSTEM (POLISHED)
    Theme: Dark Cinematic Authentication (Cinema City Aesthetic)
    ========================================================================== */
 
-/* Scope container */
+/* Page container: natural vertical centering without huge empty space */
 .auth-page {
     position: relative;
     width: 100%;
-    min-height: calc(100vh - 80px);
+    min-height: calc(100vh - 72px - 220px);
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 3rem 1.5rem 5rem;
+    padding: 2.25rem 1.5rem 3.5rem;
     background-color: var(--bg-main, #0B0F19);
     overflow-x: hidden;
+    box-sizing: border-box;
 }
 
-/* Background cinema lighting */
+/* Atmospheric subtle cinema ambient light */
 .auth-page::before {
     content: '';
     position: absolute;
-    top: 10%;
-    left: 5%;
-    width: 450px;
-    height: 450px;
-    background: radial-gradient(circle, rgba(229, 9, 20, 0.12) 0%, transparent 70%);
+    top: 15%;
+    left: 8%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(229, 9, 20, 0.10) 0%, transparent 70%);
     filter: blur(80px);
     pointer-events: none;
     z-index: 0;
@@ -33,44 +34,46 @@
 .auth-page::after {
     content: '';
     position: absolute;
-    bottom: 10%;
-    right: 5%;
-    width: 550px;
-    height: 550px;
-    background: radial-gradient(circle, rgba(245, 196, 81, 0.08) 0%, transparent 70%);
-    filter: blur(100px);
+    bottom: 12%;
+    right: 8%;
+    width: 450px;
+    height: 450px;
+    background: radial-gradient(circle, rgba(245, 196, 81, 0.06) 0%, transparent 70%);
+    filter: blur(90px);
     pointer-events: none;
     z-index: 0;
 }
 
 .auth-container {
     width: 100%;
-    max-width: 1280px;
+    max-width: 1140px;
     margin: 0 auto;
     position: relative;
     z-index: 1;
 }
 
-/* Split-Screen Grid Layout */
+/* ==========================================================================
+   SPLIT-SCREEN GRID LAYOUT (45% FORM - 55% POSTER GALLERY)
+   ========================================================================== */
 .auth-split-layout {
     display: grid;
-    grid-template-columns: 46% 54%;
-    gap: 3.5rem;
+    grid-template-columns: 45% 55%;
+    gap: 3.5rem; /* 56px - within the 48px to 64px range */
     align-items: center;
-    background: rgba(23, 30, 43, 0.65);
+    background: rgba(23, 30, 43, 0.72);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--border-color, #2A3446);
-    border-radius: 24px;
-    padding: 3rem;
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 1px rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 2.25rem 2.5rem;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65), 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
-/* Wider register layout for 2-column fields */
+/* Register layout: balanced 48% / 52% */
 .auth-split-layout.is-register {
-    grid-template-columns: 50% 50%;
+    grid-template-columns: 48% 52%;
     gap: 3rem;
-    padding: 2.75rem;
+    padding: 2rem 2.5rem;
 }
 
 /* ==========================================================================
@@ -82,91 +85,92 @@
     width: 100%;
 }
 
+/* Friendly badge: THÀNH VIÊN CINEVIBE */
 .auth-brand-badge {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.35rem 0.85rem;
+    gap: 0.45rem;
+    padding: 0.3rem 0.8rem;
     background: rgba(229, 9, 20, 0.12);
-    border: 1px solid rgba(229, 9, 20, 0.3);
+    border: 1px solid rgba(229, 9, 20, 0.35);
     border-radius: 9999px;
     color: var(--color-primary, #E50914);
-    font-size: 0.78rem;
+    font-size: 0.75rem;
     font-weight: 700;
-    letter-spacing: 1px;
+    letter-spacing: 0.8px;
     text-transform: uppercase;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem; /* 12px */
     align-self: flex-start;
 }
 
 .auth-brand-badge i {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: var(--color-gold, #F5C451);
 }
 
 .auth-form-header {
-    margin-bottom: 1.75rem;
+    margin-bottom: 1.5rem; /* 24px */
 }
 
 .auth-form-header h1 {
     font-family: var(--font-heading, 'Be Vietnam Pro', sans-serif);
-    font-size: 2.1rem;
+    font-size: 1.85rem;
     font-weight: 800;
     color: var(--text-primary, #F8FAFC);
     letter-spacing: -0.5px;
     line-height: 1.25;
-    margin-bottom: 0.5rem;
+    margin: 0 0 0.5rem 0; /* 8px */
 }
 
 .auth-form-header p {
     color: var(--text-secondary, #94A3B8);
-    font-size: 0.95rem;
+    font-size: 0.92rem;
     line-height: 1.5;
     margin: 0;
 }
 
-/* Alerts */
+/* Feedback Alerts */
 .auth-alert {
     display: flex;
     align-items: center;
-    gap: 0.85rem;
-    padding: 0.95rem 1.15rem;
-    border-radius: 12px;
-    font-size: 0.9rem;
+    gap: 0.75rem;
+    padding: 0.85rem 1rem;
+    border-radius: 10px;
+    font-size: 0.88rem;
     line-height: 1.45;
-    margin-bottom: 1.5rem;
-    animation: authFadeIn 0.3s ease;
+    margin-bottom: 1.25rem;
+    animation: authFadeIn 0.25s ease;
 }
 
 .auth-alert-danger {
-    background: rgba(229, 9, 20, 0.12);
-    border: 1px solid rgba(229, 9, 20, 0.4);
+    background: rgba(229, 9, 20, 0.14);
+    border: 1px solid rgba(229, 9, 20, 0.45);
     color: #FCA5A5;
 }
 
 .auth-alert-danger i {
     color: var(--color-primary, #E50914);
-    font-size: 1.15rem;
+    font-size: 1.1rem;
     flex-shrink: 0;
 }
 
 .auth-alert-success {
-    background: rgba(16, 185, 129, 0.12);
-    border: 1px solid rgba(16, 185, 129, 0.4);
+    background: rgba(16, 185, 129, 0.14);
+    border: 1px solid rgba(16, 185, 129, 0.45);
     color: #6EE7B7;
 }
 
 .auth-alert-success i {
     color: #10B981;
-    font-size: 1.15rem;
+    font-size: 1.1rem;
     flex-shrink: 0;
 }
 
-/* Form Groups & Inputs */
+/* Form structure */
 .auth-form {
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    gap: 1.15rem; /* 18px-20px */
     width: 100%;
 }
 
@@ -180,7 +184,7 @@
 .auth-field-group {
     display: flex;
     flex-direction: column;
-    gap: 0.45rem;
+    gap: 0.4rem;
     position: relative;
 }
 
@@ -212,36 +216,49 @@
     width: 100%;
 }
 
+/* HIGH CONTRAST INPUT DESIGN */
 .auth-input {
     width: 100%;
-    height: 50px;
+    height: 48px;
     padding: 0 1rem 0 2.75rem;
-    background-color: var(--bg-surface, #171E2B);
-    border: 1px solid var(--border-color, #2A3446);
+    background-color: #131A26; /* Deep surface */
+    border: 1px solid #334155; /* Defined, crisp border */
     border-radius: 10px;
-    color: var(--text-primary, #F8FAFC);
+    color: #F8FAFC;
     font-family: inherit;
     font-size: 0.95rem;
     transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
     box-sizing: border-box;
 }
 
+/* Crisp readable placeholder */
 .auth-input::placeholder {
-    color: #64748B;
+    color: #94A3B8; /* High contrast placeholder */
     font-size: 0.88rem;
+    opacity: 1;
 }
 
 .auth-input:focus {
     outline: none;
     border-color: var(--color-primary, #E50914);
-    box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.2);
-    background-color: #1A2332;
+    box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.22);
+    background-color: #172030;
 }
 
+/* Autofill styling fix */
+.auth-input:-webkit-autofill,
+.auth-input:-webkit-autofill:hover, 
+.auth-input:-webkit-autofill:focus {
+    -webkit-text-fill-color: #F8FAFC;
+    -webkit-box-shadow: 0 0 0px 1000px #131A26 inset;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Clear icon visibility */
 .auth-input-icon {
     position: absolute;
     left: 1rem;
-    color: #64748B;
+    color: #94A3B8;
     font-size: 0.95rem;
     pointer-events: none;
     transition: color 0.2s ease;
@@ -253,13 +270,13 @@
     color: var(--color-gold, #F5C451);
 }
 
-/* Password Toggle Button */
+/* Password Toggle */
 .auth-password-toggle {
     position: absolute;
     right: 0.85rem;
     background: transparent;
     border: none;
-    color: #64748B;
+    color: #94A3B8;
     font-size: 1rem;
     padding: 0.4rem;
     cursor: pointer;
@@ -272,8 +289,8 @@
 }
 
 .auth-password-toggle:hover {
-    color: var(--text-primary, #F8FAFC);
-    background: rgba(255, 255, 255, 0.05);
+    color: #FFFFFF;
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .auth-password-toggle:focus {
@@ -283,14 +300,6 @@
 
 .auth-input.has-toggle {
     padding-right: 2.75rem;
-}
-
-/* Field helper & validation message */
-.auth-field-hint {
-    font-size: 0.78rem;
-    color: var(--text-muted, #64748B);
-    margin-top: 0.2rem;
-    line-height: 1.35;
 }
 
 .auth-field-error {
@@ -308,31 +317,31 @@
     justify-content: center;
     gap: 0.65rem;
     width: 100%;
-    height: 52px;
-    margin-top: 0.5rem;
+    height: 50px;
+    margin-top: 0.35rem; /* ~24px total gap from input */
     background-color: var(--color-primary, #E50914);
     color: #FFFFFF;
     border: none;
-    border-radius: 12px;
+    border-radius: 10px;
     font-family: inherit;
-    font-size: 1rem;
+    font-size: 0.98rem;
     font-weight: 700;
     letter-spacing: 0.3px;
     cursor: pointer;
-    box-shadow: 0 6px 20px rgba(229, 9, 20, 0.35);
+    box-shadow: 0 4px 16px rgba(229, 9, 20, 0.35);
     transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
     overflow: hidden;
 }
 
 .auth-submit-btn:hover:not(:disabled) {
     background-color: var(--color-primary-hover, #B20710);
-    box-shadow: 0 8px 25px rgba(229, 9, 20, 0.5);
+    box-shadow: 0 6px 20px rgba(229, 9, 20, 0.5);
     transform: translateY(-1px);
 }
 
 .auth-submit-btn:active:not(:disabled) {
     transform: translateY(1px);
-    box-shadow: 0 4px 12px rgba(229, 9, 20, 0.4);
+    box-shadow: 0 2px 10px rgba(229, 9, 20, 0.3);
 }
 
 .auth-submit-btn:disabled {
@@ -340,7 +349,6 @@
     cursor: not-allowed;
 }
 
-/* Loading state */
 .auth-btn-spinner {
     display: none;
     width: 18px;
@@ -359,15 +367,15 @@
     display: inline-block;
 }
 
-/* Security reassurance banner */
+/* Security notice */
 .auth-security-notice {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     font-size: 0.8rem;
-    color: var(--text-muted, #64748B);
-    margin-top: 0.75rem;
-    padding: 0.5rem 0.75rem;
+    color: var(--text-muted, #94A3B8);
+    margin: 0.2rem 0;
+    padding: 0.45rem 0.75rem;
     background: rgba(255, 255, 255, 0.02);
     border: 1px dashed rgba(255, 255, 255, 0.08);
     border-radius: 8px;
@@ -375,15 +383,15 @@
 
 .auth-security-notice i {
     color: #10B981;
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     flex-shrink: 0;
 }
 
 /* Switch link */
 .auth-switch-prompt {
     text-align: center;
-    margin-top: 1.75rem;
-    font-size: 0.92rem;
+    margin-top: 1.25rem; /* 20px */
+    font-size: 0.9rem;
     color: var(--text-secondary, #94A3B8);
 }
 
@@ -401,7 +409,7 @@
 }
 
 /* ==========================================================================
-   RIGHT PANEL: MOVIE POSTER GALLERY (CINEMA CITY STYLE)
+   RIGHT PANEL: MOVIE POSTER GALLERY (BALANCED WITH FORM)
    ========================================================================== */
 .auth-poster-gallery {
     position: relative;
@@ -410,50 +418,48 @@
     align-items: center;
     justify-content: center;
     width: 100%;
-    min-height: 480px;
-    padding: 2rem 1rem;
+    padding: 0;
     user-select: none;
 }
 
 /* Cinema atmospheric glow */
 .gallery-glow-backdrop {
     position: absolute;
-    width: 380px;
-    height: 380px;
-    background: radial-gradient(circle, rgba(229, 9, 20, 0.25) 0%, rgba(245, 196, 81, 0.08) 45%, transparent 70%);
-    filter: blur(50px);
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(circle, rgba(229, 9, 20, 0.22) 0%, rgba(245, 196, 81, 0.06) 45%, transparent 70%);
+    filter: blur(45px);
     pointer-events: none;
     z-index: 1;
 }
 
-/* Poster stack staging */
+/* Poster stack staging: proportional height */
 .poster-stack-container {
     position: relative;
     width: 100%;
-    max-width: 480px;
-    height: 380px;
+    max-width: 440px;
+    height: 300px;
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 2;
-    perspective: 1200px;
+    perspective: 1000px;
 }
 
 /* Tilted individual posters */
 .tilted-poster {
     position: absolute;
-    width: 180px;
-    height: 265px;
-    border-radius: 14px;
+    width: 155px;
+    height: 230px;
+    border-radius: 12px;
     overflow: hidden;
     background-color: #0F172A;
     border: 2px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.7);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.7);
     cursor: pointer;
-    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
-                box-shadow 0.35s ease, 
-                border-color 0.35s ease,
-                z-index 0s;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+                box-shadow 0.3s ease, 
+                border-color 0.3s ease;
     outline: none;
 }
 
@@ -462,77 +468,76 @@
     height: 100%;
     object-fit: cover;
     display: block;
-    transition: transform 0.4s ease;
+    transition: transform 0.35s ease;
 }
 
 .tilted-poster .poster-glass-gloss {
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.4) 100%);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.4) 100%);
     pointer-events: none;
 }
 
 .tilted-poster .poster-badge {
     position: absolute;
-    bottom: 10px;
-    left: 8px;
-    right: 8px;
-    padding: 0.3rem 0.6rem;
-    background: rgba(11, 15, 25, 0.88);
+    bottom: 8px;
+    left: 6px;
+    right: 6px;
+    padding: 0.25rem 0.5rem;
+    background: rgba(11, 15, 25, 0.9);
     backdrop-filter: blur(8px);
     border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 6px;
     color: #FFFFFF;
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     font-weight: 700;
     text-align: center;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
 }
 
-/* Specific angles & layering */
-/* Far Left: Godzilla x Kong (-18deg) */
+/* Layering & Angles */
 .tilted-poster.poster-far-left {
-    transform: translate(-130px, 20px) rotate(-18deg) scale(0.85);
+    width: 135px;
+    height: 200px;
+    transform: translate(-120px, 16px) rotate(-18deg) scale(0.85);
     z-index: 2;
-    filter: brightness(0.85);
+    filter: brightness(0.8);
 }
 
-/* Left: Mai (-10deg) */
 .tilted-poster.poster-left {
-    transform: translate(-70px, 8px) rotate(-10deg) scale(0.93);
+    transform: translate(-65px, 6px) rotate(-10deg) scale(0.94);
     z-index: 3;
 }
 
-/* Center: Dune 2 (0deg, Hero) */
 .tilted-poster.poster-center {
-    width: 195px;
-    height: 285px;
-    transform: translate(0, -10px) rotate(0deg) scale(1.05);
+    width: 172px;
+    height: 255px;
+    transform: translate(0, -6px) rotate(0deg) scale(1.04);
     z-index: 5;
-    border-color: rgba(245, 196, 81, 0.4);
-    box-shadow: 0 24px 50px rgba(0, 0, 0, 0.8), 0 0 25px rgba(229, 9, 20, 0.25);
+    border-color: rgba(245, 196, 81, 0.5);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.8), 0 0 20px rgba(229, 9, 20, 0.22);
 }
 
 .tilted-poster.poster-center .poster-badge {
-    background: rgba(229, 9, 20, 0.9);
-    border-color: rgba(245, 196, 81, 0.4);
+    background: rgba(229, 9, 20, 0.92);
+    border-color: rgba(245, 196, 81, 0.5);
     color: #FFFFFF;
 }
 
-/* Right: Oppenheimer (+10deg) */
 .tilted-poster.poster-right {
-    transform: translate(70px, 8px) rotate(10deg) scale(0.93);
+    transform: translate(65px, 6px) rotate(10deg) scale(0.94);
     z-index: 4;
 }
 
-/* Far Right: Inside Out 2 (+18deg) */
 .tilted-poster.poster-far-right {
-    transform: translate(130px, 20px) rotate(18deg) scale(0.85);
+    width: 135px;
+    height: 200px;
+    transform: translate(120px, 16px) rotate(18deg) scale(0.85);
     z-index: 2;
-    filter: brightness(0.85);
+    filter: brightness(0.8);
 }
 
 /* Hover effects */
@@ -540,73 +545,60 @@
 .tilted-poster:focus-visible {
     z-index: 10 !important;
     border-color: var(--color-primary, #E50914);
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.9), 0 0 35px rgba(229, 9, 20, 0.5) !important;
+    box-shadow: 0 24px 50px rgba(0, 0, 0, 0.9), 0 0 30px rgba(229, 9, 20, 0.45) !important;
     filter: brightness(1.05) !important;
 }
 
 .tilted-poster.poster-far-left:hover {
-    transform: translate(-130px, 0px) rotate(-10deg) scale(1);
+    transform: translate(-120px, 0px) rotate(-10deg) scale(0.96);
 }
 
 .tilted-poster.poster-left:hover {
-    transform: translate(-70px, -12px) rotate(-4deg) scale(1.05);
+    transform: translate(-65px, -10px) rotate(-4deg) scale(1.03);
 }
 
 .tilted-poster.poster-center:hover {
-    transform: translate(0, -20px) rotate(0deg) scale(1.12);
+    transform: translate(0, -16px) rotate(0deg) scale(1.1);
 }
 
 .tilted-poster.poster-right:hover {
-    transform: translate(70px, -12px) rotate(4deg) scale(1.05);
+    transform: translate(65px, -10px) rotate(4deg) scale(1.03);
 }
 
 .tilted-poster.poster-far-right:hover {
-    transform: translate(130px, 0px) rotate(10deg) scale(1);
+    transform: translate(120px, 0px) rotate(10deg) scale(0.96);
 }
 
 .tilted-poster:hover img {
-    transform: scale(1.04);
+    transform: scale(1.03);
 }
 
-/* Gallery text below posters */
+/* Unified Cinema City Slogan */
 .gallery-caption {
     text-align: center;
-    margin-top: 1.5rem;
+    margin-top: 1.15rem;
     z-index: 2;
-}
-
-.gallery-eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    color: var(--color-gold, #F5C451);
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 0.4rem;
 }
 
 .gallery-title {
     font-family: var(--font-heading, 'Be Vietnam Pro', sans-serif);
-    font-size: 1.5rem;
-    font-weight: 900;
+    font-size: 1.25rem;
+    font-weight: 800;
     color: #FFFFFF;
-    letter-spacing: -0.5px;
-    line-height: 1.25;
-    margin: 0 0 0.4rem 0;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    letter-spacing: 0.5px;
+    line-height: 1.3;
+    margin: 0 0 0.35rem 0;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
 }
 
 .gallery-desc {
     color: var(--text-secondary, #94A3B8);
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     margin: 0;
+    line-height: 1.4;
 }
 
-/* ==========================================================================
-   ANIMATIONS & REDUCED MOTION
-   ========================================================================== */
+/* Keyframes */
 @keyframes authSpin {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
@@ -615,7 +607,7 @@
 @keyframes authFadeIn {
     from {
         opacity: 0;
-        transform: translateY(-6px);
+        transform: translateY(-5px);
     }
     to {
         opacity: 1;
@@ -632,89 +624,35 @@
         animation: none !important;
         transform: none !important;
     }
-    .poster-stack-container {
-        display: flex;
-        gap: 1rem;
-        height: auto;
-    }
-    .tilted-poster {
-        position: static;
-        transform: none !important;
-    }
 }
 
 /* ==========================================================================
    RESPONSIVE BREAKPOINTS (Desktop, Laptop, Tablet, Mobile)
    ========================================================================== */
 
-/* Laptop / Desktop medium: 1024px to 1199px */
+/* Laptop: 1024px to 1199px */
 @media (max-width: 1199px) {
     .auth-split-layout {
+        grid-template-columns: 48% 52%;
+        gap: 2.25rem;
+        padding: 2rem;
+    }
+    .auth-split-layout.is-register {
         grid-template-columns: 50% 50%;
-        gap: 2.5rem;
-        padding: 2.5rem;
-    }
-    .auth-split-layout.is-register {
-        grid-template-columns: 52% 48%;
         gap: 2rem;
-    }
-    .tilted-poster {
-        width: 160px;
-        height: 235px;
-    }
-    .tilted-poster.poster-center {
-        width: 175px;
-        height: 255px;
-    }
-    .tilted-poster.poster-far-left,
-    .tilted-poster.poster-far-right {
-        display: none; /* Keep 3 main posters for cleaner look on laptop */
-    }
-    .tilted-poster.poster-left {
-        transform: translate(-55px, 6px) rotate(-10deg) scale(0.95);
-    }
-    .tilted-poster.poster-right {
-        transform: translate(55px, 6px) rotate(10deg) scale(0.95);
-    }
-    .gallery-title {
-        font-size: 1.35rem;
-    }
-}
-
-/* Tablet: 768px to 1023px */
-@media (max-width: 1023px) {
-    .auth-page {
-        padding: 2.5rem 1.25rem 4rem;
-    }
-    .auth-split-layout,
-    .auth-split-layout.is-register {
-        grid-template-columns: 1fr;
-        gap: 3rem;
-        padding: 2.25rem;
-        max-width: 640px;
-        margin: 0 auto;
-    }
-    /* Move gallery to top or bottom */
-    .auth-poster-gallery {
-        order: -1; /* Display gallery as cinematic hero showcase above form */
-        min-height: auto;
-        padding: 0.5rem 0 1.5rem;
-    }
-    .poster-stack-container {
-        height: 280px;
-        max-width: 420px;
-    }
-    .tilted-poster {
-        width: 140px;
-        height: 210px;
-    }
-    .tilted-poster.poster-center {
-        width: 155px;
-        height: 230px;
+        padding: 1.75rem 2rem;
     }
     .tilted-poster.poster-far-left,
     .tilted-poster.poster-far-right {
         display: none;
+    }
+    .tilted-poster {
+        width: 145px;
+        height: 215px;
+    }
+    .tilted-poster.poster-center {
+        width: 160px;
+        height: 235px;
     }
     .tilted-poster.poster-left {
         transform: translate(-50px, 4px) rotate(-8deg) scale(0.95);
@@ -723,82 +661,114 @@
         transform: translate(50px, 4px) rotate(8deg) scale(0.95);
     }
     .gallery-title {
-        font-size: 1.25rem;
-    }
-    .auth-form-header h1 {
-        font-size: 1.85rem;
+        font-size: 1.15rem;
     }
 }
 
-/* Mobile: below 768px (390px, 375px, 360px) */
-@media (max-width: 767px) {
+/* Tablet: 768px to 1023px */
+@media (max-width: 1023px) {
     .auth-page {
-        padding: 1.5rem 1rem 3.5rem;
+        padding: 2rem 1.25rem 3rem;
     }
     .auth-split-layout,
     .auth-split-layout.is-register {
         grid-template-columns: 1fr;
-        padding: 1.75rem 1.25rem;
-        border-radius: 18px;
-        gap: 1.75rem;
+        gap: 2.25rem;
+        padding: 2rem;
+        max-width: 580px;
+        margin: 0 auto;
     }
-    /* Mobile-first: Compact decorative gallery banner */
     .auth-poster-gallery {
         order: -1;
-        padding: 0.5rem 0 1rem;
-        min-height: auto;
+        padding: 0;
     }
     .poster-stack-container {
-        height: 220px;
-        max-width: 320px;
+        height: 240px;
+        max-width: 380px;
     }
     .tilted-poster {
-        width: 110px;
-        height: 165px;
-        border-radius: 10px;
+        width: 130px;
+        height: 195px;
     }
     .tilted-poster.poster-center {
-        width: 125px;
-        height: 185px;
+        width: 145px;
+        height: 215px;
     }
     .tilted-poster.poster-far-left,
     .tilted-poster.poster-far-right {
         display: none;
     }
     .tilted-poster.poster-left {
-        transform: translate(-38px, 4px) rotate(-7deg) scale(0.95);
+        transform: translate(-45px, 4px) rotate(-7deg) scale(0.95);
     }
     .tilted-poster.poster-right {
-        transform: translate(38px, 4px) rotate(7deg) scale(0.95);
+        transform: translate(45px, 4px) rotate(7deg) scale(0.95);
+    }
+}
+
+/* Mobile: below 768px (390px, 375px, 360px) */
+@media (max-width: 767px) {
+    .auth-page {
+        padding: 1.25rem 0.85rem 3rem;
+    }
+    .auth-split-layout,
+    .auth-split-layout.is-register {
+        grid-template-columns: 1fr;
+        padding: 1.5rem 1.15rem;
+        border-radius: 16px;
+        gap: 1.5rem;
+    }
+    .auth-poster-gallery {
+        order: -1;
+        padding: 0;
+    }
+    .poster-stack-container {
+        height: 190px;
+        max-width: 300px;
+    }
+    .tilted-poster {
+        width: 100px;
+        height: 150px;
+        border-radius: 8px;
+    }
+    .tilted-poster.poster-center {
+        width: 115px;
+        height: 170px;
+    }
+    .tilted-poster.poster-far-left,
+    .tilted-poster.poster-far-right {
+        display: none;
+    }
+    .tilted-poster.poster-left {
+        transform: translate(-32px, 3px) rotate(-6deg) scale(0.95);
+    }
+    .tilted-poster.poster-right {
+        transform: translate(32px, 3px) rotate(6deg) scale(0.95);
     }
     .tilted-poster .poster-badge {
-        font-size: 0.65rem;
-        padding: 0.2rem 0.4rem;
-        bottom: 6px;
+        font-size: 0.62rem;
+        padding: 0.15rem 0.35rem;
+        bottom: 5px;
     }
     .gallery-caption {
-        margin-top: 1rem;
-    }
-    .gallery-eyebrow {
-        font-size: 0.72rem;
-        letter-spacing: 1px;
+        margin-top: 0.85rem;
     }
     .gallery-title {
-        font-size: 1.15rem;
+        font-size: 1.05rem;
     }
     .gallery-desc {
-        font-size: 0.82rem;
+        font-size: 0.8rem;
     }
     .auth-form-header h1 {
-        font-size: 1.6rem;
+        font-size: 1.55rem;
     }
     .auth-form-header p {
-        font-size: 0.88rem;
+        font-size: 0.86rem;
     }
-    /* Register form fields: strictly 1 column on mobile */
+    /* Strictly 1 column on mobile */
     .auth-form-row {
         grid-template-columns: 1fr;
-        gap: 1.25rem;
+        gap: 1.15rem;
     }
     .auth-input {
         height: 48px;
@@ -814,23 +784,23 @@
 @media (max-width: 389px) {
     .auth-split-layout,
     .auth-split-layout.is-register {
-        padding: 1.5rem 1rem;
+        padding: 1.25rem 0.85rem;
     }
     .poster-stack-container {
-        height: 190px;
+        height: 170px;
     }
     .tilted-poster {
-        width: 95px;
-        height: 145px;
+        width: 90px;
+        height: 135px;
     }
     .tilted-poster.poster-center {
-        width: 110px;
-        height: 165px;
+        width: 102px;
+        height: 150px;
     }
     .tilted-poster.poster-left {
-        transform: translate(-30px, 2px) rotate(-6deg) scale(0.95);
+        transform: translate(-26px, 2px) rotate(-5deg) scale(0.95);
     }
     .tilted-poster.poster-right {
-        transform: translate(30px, 2px) rotate(6deg) scale(0.95);
+        transform: translate(26px, 2px) rotate(5deg) scale(0.95);
     }
 }

@@ -4,7 +4,6 @@
         <a href="/" class="brand-logo" title="CineVibe Cinema">
             <i class="fas fa-film"></i>
             <span>CINE<span style="color: var(--color-primary);">VIBE</span></span>
-            <span class="brand-badge gold" style="font-size: 0.65rem; padding: 0.15rem 0.45rem; margin-left: 0.15rem;">PREMIUM</span>
         </a>
 
         <!-- Desktop Navigation Links -->
@@ -53,8 +52,8 @@
                     </a>
                 <% } else { %>
                     <div style="display: flex; gap: 0.5rem;">
-                        <a href="/auth/login" class="btn btn-secondary btn-sm" style="flex: 1; text-align: center;">Đăng nhập</a>
-                        <a href="/auth/register" class="btn btn-primary btn-sm" style="flex: 1; text-align: center;">Đăng ký</a>
+                        <a href="/auth/login" class="btn <%= typeof currentPath !== 'undefined' && currentPath === '/auth/login' ? 'btn-primary' : 'btn-secondary' %> btn-sm" style="flex: 1; text-align: center;">Đăng nhập</a>
+                        <a href="/auth/register" class="btn <%= typeof currentPath !== 'undefined' && currentPath === '/auth/register' ? 'btn-primary' : 'btn-secondary' %> btn-sm" style="flex: 1; text-align: center;">Đăng ký</a>
                     </div>
                 <% } %>
             </li>
@@ -75,10 +74,10 @@
                     </a>
                 </div>
             <% } else { %>
-                <a href="/auth/login" class="btn btn-secondary btn-sm">
+                <a href="/auth/login" class="btn <%= typeof currentPath !== 'undefined' && currentPath === '/auth/login' ? 'btn-secondary active' : 'btn-secondary' %> btn-sm" style="<%= typeof currentPath !== 'undefined' && currentPath === '/auth/login' ? 'border-color: var(--color-primary); color: #FFFFFF;' : '' %>">
                     <i class="fas fa-arrow-right-to-bracket"></i> Đăng nhập
                 </a>
-                <a href="/auth/register" class="btn btn-primary btn-sm">
+                <a href="/auth/register" class="btn <%= typeof currentPath !== 'undefined' && (currentPath === '/auth/login' || currentPath === '/auth/register') ? 'btn-secondary' : 'btn-primary' %> btn-sm" style="<%= typeof currentPath !== 'undefined' && currentPath === '/auth/register' ? 'border-color: var(--color-primary); color: #FFFFFF;' : '' %>">
                     <i class="fas fa-user-plus"></i> Đăng ký
                 </a>
             <% } %>
