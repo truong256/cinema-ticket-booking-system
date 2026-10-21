@@ -36,10 +36,10 @@
     <!-- Responsive Movies Grid (4 columns desktop) -->
     <div class="movies-grid" id="moviesCatalogGrid">
         <% if (movies && movies.length > 0) { %>
-            <% movies.forEach(movie => { %>
+            <% movies.forEach((movie, idx) => { %>
                 <div class="movie-card" data-title="<%= movie.title.toLowerCase() %>" data-genre="<%= movie.genre.toLowerCase() %>">
                     <div class="movie-poster-wrap">
-                        <img src="<%= movie.poster_url %>" alt="<%= movie.title %>" class="movie-poster" loading="eager" onerror="this.onerror=null; this.src='/images/default_poster.jpg';">
+                        <img src="<%= movie.poster_url %>" alt="<%= movie.title %>" class="movie-poster" loading="<%= idx < 4 ? 'eager' : 'lazy' %>" onerror="this.onerror=null; this.src='/images/default_poster.jpg';">
                         <div class="movie-poster-overlay"></div>
                         <span class="age-badge <%= movie.age_rating %>"><%= movie.age_rating %></span>
                     </div>

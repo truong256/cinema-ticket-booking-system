@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-21T12:34:40.167Z",
+  "timestamp": "2026-10-21T13:30:20.223Z",
   "passCount": 39,
   "failCount": 0,
   "results": [
@@ -151,13 +151,13 @@
       "suite": "Interactive UX",
       "test": "Đặt vé thành công & Điều hướng thanh toán",
       "status": "PASS",
-      "details": "URL: http://localhost/booking/payment/38"
+      "details": "URL: http://localhost/booking/payment/45"
     },
     {
       "suite": "Interactive UX",
       "test": "Thanh toán giả lập & Xuất vé điện tử E-Ticket",
       "status": "PASS",
-      "details": "Xác nhận vé thành công: http://localhost/booking/success/38"
+      "details": "Xác nhận vé thành công: http://localhost/booking/success/45"
     },
     {
       "suite": "Responsive UX",

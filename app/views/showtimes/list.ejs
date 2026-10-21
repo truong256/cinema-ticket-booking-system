@@ -41,7 +41,7 @@
                 <div class="card card-hover showtime-item" data-room-type="<%= st.room_type %>" style="display: flex; flex-direction: column; justify-content: space-between; padding: 1.35rem;">
                     <div>
                         <div style="display: flex; gap: 1rem; margin-bottom: 1.25rem;">
-                            <img src="<%= st.poster_url %>" alt="<%= st.movie_title %>" style="width: 84px; height: 122px; object-fit: cover; border-radius: var(--radius-sm); flex-shrink: 0; box-shadow: var(--shadow-sm); border: 1px solid var(--border-color);" onerror="this.onerror=null; this.src='/images/default_poster.jpg';">
+                            <img src="<%= st.poster_url %>" alt="<%= st.movie_title %>" loading="lazy" style="width: 84px; height: 122px; object-fit: cover; border-radius: var(--radius-sm); flex-shrink: 0; box-shadow: var(--shadow-sm); border: 1px solid var(--border-color);" onerror="this.onerror=null; this.src='/images/default_poster.jpg';">
                             <div style="flex: 1; min-width: 0;">
                                 <div style="display: flex; gap: 0.4rem; margin-bottom: 0.4rem; flex-wrap: wrap;">
                                     <span class="age-badge <%= st.age_rating %>" style="position: static; font-size: 0.7rem; padding: 0.15rem 0.45rem; box-shadow: none;"><%= st.age_rating %></span>

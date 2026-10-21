@@ -4,25 +4,30 @@ const logger = require('../config/logger');
 const movieController = {
     getHome: async (req, res) => {
         try {
+            // Lấy danh sách phim theo thứ tự ưu tiên (id ASC: Dune 2 là bom tấn IMAX số 1)
             const movies = await db.query(
-                'SELECT * FROM movies WHERE is_active = TRUE ORDER BY release_date DESC LIMIT 8'
+                'SELECT * FROM movies WHERE is_active = TRUE ORDER BY id ASC LIMIT 8'
             );
 
-            // Suất chiếu hôm nay
+            // Phim tiêu điểm Hero Banner: chọn phim ưu tiên số 1 từ database
+            const featuredMovie = (movies && movies.length > 0) ? movies[0] : null;
+
+            // Suất chiếu đang mở bán
             const todayShowtimes = await db.query(`
                 SELECT s.id, s.start_time, s.price_regular, m.title as movie_title, m.poster_url, r.name as room_name, c.name as cinema_name
                 FROM showtimes s
                 JOIN movies m ON s.movie_id = m.id
                 JOIN rooms r ON s.room_id = r.id
                 JOIN cinemas c ON r.cinema_id = c.id
-                WHERE s.status = 'scheduled' AND s.start_time >= NOW()
-                ORDER BY s.start_time ASC
+                WHERE s.status = 'scheduled'
+                ORDER BY s.id ASC
                 LIMIT 6
             `);
 
             res.render('index', {
                 title: 'Trang chủ - Đặt vé Xem phim & Sự kiện Đề 11',
                 movies,
+                featuredMovie,
                 todayShowtimes
             });
         } catch (error) {
@@ -30,6 +35,7 @@ const movieController = {
             res.render('index', {
                 title: 'Trang chủ - Đặt vé Xem phim',
                 movies: [],
+                featuredMovie: null,
                 todayShowtimes: [],
                 error: 'Không thể tải danh sách phim lúc này'
             });
@@ -132,8 +138,8 @@ const movieController = {
                 JOIN movies m ON s.movie_id = m.id
                 JOIN rooms r ON s.room_id = r.id
                 JOIN cinemas c ON r.cinema_id = c.id
-                WHERE s.status = 'scheduled' AND s.start_time >= NOW()
-                ORDER BY s.start_time ASC
+                WHERE s.status = 'scheduled'
+                ORDER BY s.id ASC
             `);
 
             res.render('showtimes/list', {
