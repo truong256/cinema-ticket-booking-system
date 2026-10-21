@@ -1,117 +1,133 @@
 <%- include('../partials/header') %>
 <%- include('../partials/navbar') %>
 
-<div class="auth-page-container">
-    <div class="auth-card">
-        <!-- Form Header -->
-        <div style="text-align: center; margin-bottom: 2.25rem;">
-            <div class="brand-logo" style="justify-content: center; margin-bottom: 0.85rem;">
-                <i class="fas fa-film"></i>
-                <span>CINE<span style="color: var(--color-primary);">VIBE</span></span>
-            </div>
-            <h1 style="font-family: var(--font-heading); font-size: 1.85rem; font-weight: 800; color: #FFFFFF; letter-spacing: -0.5px; margin-bottom: 0.35rem;">
-                Đăng Nhập Tài Khoản
-            </h1>
-            <p style="color: var(--text-secondary); font-size: 0.92rem;">
-                Trải nghiệm đặt vé trực tuyến và quản lý rạp phim cao cấp
-            </p>
-        </div>
+<link rel="stylesheet" href="/css/auth.css">
 
-        <!-- Feedback Alerts -->
-        <% if (error) { %>
-            <div class="alert alert-danger" role="alert">
-                <i class="fas fa-triangle-exclamation" style="font-size: 1.1rem; flex-shrink: 0;"></i>
-                <div><%= error %></div>
-            </div>
-        <% } %>
-
-        <% if (success) { %>
-            <div class="alert alert-success" role="alert">
-                <i class="fas fa-circle-check" style="font-size: 1.1rem; flex-shrink: 0;"></i>
-                <div><%= success %></div>
-            </div>
-        <% } %>
-
-        <!-- Login Form -->
-        <form action="/auth/login" method="POST" id="loginForm" autocomplete="on">
-            <div class="form-group">
-                <label class="form-label" for="username">
-                    <i class="fas fa-user" style="color: var(--color-gold); margin-right: 0.4rem;"></i> Tên đăng nhập hoặc Email <span style="color: var(--color-primary);">*</span>
-                </label>
-                <input type="text" id="username" name="username" class="form-control" required placeholder="Nhập username hoặc địa chỉ email" autocomplete="username">
-            </div>
-
-            <div class="form-group">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                    <label class="form-label" for="password" style="margin-bottom: 0;">
-                        <i class="fas fa-lock" style="color: var(--color-gold); margin-right: 0.4rem;"></i> Mật khẩu bảo mật <span style="color: var(--color-primary);">*</span>
-                    </label>
+<main class="auth-page">
+    <div class="auth-container">
+        <div class="auth-split-layout">
+            <!-- Left Side: Login Form Panel -->
+            <div class="auth-form-panel">
+                <div class="auth-brand-badge">
+                    <i class="fas fa-film"></i>
+                    <span>CINEVIBE AUTHENTICATION</span>
                 </div>
-                <div class="password-input-group">
-                    <input type="password" id="password" name="password" class="form-control" required placeholder="Nhập mật khẩu" autocomplete="current-password">
-                    <button type="button" class="btn-toggle-password" onclick="togglePasswordVisibility('password', this)" title="Hiển thị/Ẩn mật khẩu" aria-label="Toggle password visibility">
-                        <i class="far fa-eye"></i>
+
+                <div class="auth-form-header">
+                    <h1>Chào mừng trở lại!</h1>
+                    <p>Đăng nhập để tiếp tục hành trình điện ảnh cùng CINEVIBE.</p>
+                </div>
+
+                <!-- Feedback Alerts -->
+                <% if (error) { %>
+                    <div class="auth-alert auth-alert-danger" role="alert">
+                        <i class="fas fa-circle-exclamation" aria-hidden="true"></i>
+                        <div><%= error %></div>
+                    </div>
+                <% } %>
+
+                <% if (success) { %>
+                    <div class="auth-alert auth-alert-success" role="alert">
+                        <i class="fas fa-circle-check" aria-hidden="true"></i>
+                        <div><%= success %></div>
+                    </div>
+                <% } %>
+
+                <!-- Login Form -->
+                <form action="/auth/login" method="POST" id="loginForm" class="auth-form" autocomplete="on">
+                    <!-- Username or Email Field -->
+                    <div class="auth-field-group">
+                        <label class="auth-label" for="username">
+                            <i class="fas fa-user" aria-hidden="true"></i> Tên đăng nhập hoặc Email <span class="required-star">*</span>
+                        </label>
+                        <div class="auth-input-wrapper">
+                            <input type="text" id="username" name="username" class="auth-input" required placeholder="Nhập username hoặc địa chỉ email" autocomplete="username">
+                            <i class="fas fa-user auth-input-icon" aria-hidden="true"></i>
+                        </div>
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="auth-field-group">
+                        <label class="auth-label" for="password">
+                            <i class="fas fa-lock" aria-hidden="true"></i> Mật khẩu <span class="required-star">*</span>
+                        </label>
+                        <div class="auth-input-wrapper">
+                            <input type="password" id="password" name="password" class="auth-input has-toggle" required placeholder="Nhập mật khẩu của bạn" autocomplete="current-password">
+                            <i class="fas fa-lock auth-input-icon" aria-hidden="true"></i>
+                            <button type="button" class="auth-password-toggle" onclick="togglePasswordVisibility('password', this)" title="Hiển thị mật khẩu" aria-label="Hiển thị mật khẩu">
+                                <i class="far fa-eye" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="auth-submit-btn">
+                        <span class="auth-btn-spinner" aria-hidden="true"></span>
+                        <i class="fas fa-arrow-right-to-bracket auth-btn-icon" aria-hidden="true"></i>
+                        <span class="auth-btn-text">Đăng nhập ngay</span>
                     </button>
+                </form>
+
+                <!-- Switch Link -->
+                <div class="auth-switch-prompt">
+                    Chưa có tài khoản?
+                    <a href="/auth/register" class="auth-switch-link">Đăng ký thành viên ngay</a>
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; margin-top: 1.25rem;">
-                <i class="fas fa-arrow-right-to-bracket"></i> Đăng nhập ngay
-            </button>
-        </form>
+            <!-- Right Side: Movie Poster Gallery (Cinema City Style) -->
+            <div class="auth-poster-gallery" aria-label="Bộ sưu tập phim chiếu rạp CineVibe">
+                <div class="gallery-glow-backdrop" aria-hidden="true"></div>
+                
+                <div class="poster-stack-container">
+                    <!-- Poster 1 (Far Left, -18deg) -->
+                    <div class="tilted-poster poster-far-left" tabindex="0" aria-label="Poster phim Godzilla x Kong">
+                        <img src="/images/godzilla_kong.jpg" alt="Poster Godzilla x Kong" loading="lazy" onerror="this.src='/images/default_poster.jpg'">
+                        <div class="poster-glass-gloss" aria-hidden="true"></div>
+                        <div class="poster-badge">Hành Động</div>
+                    </div>
 
-        <!-- Examiner & Demo Mode -->
-        <details class="demo-disclosure">
-            <summary>
-                <span><i class="fas fa-bolt" style="color: var(--color-gold); margin-right: 0.4rem;"></i> Tài khoản mẫu dùng thử / Chấm thi</span>
-            </summary>
-            <div class="demo-disclosure-content">
-                <p style="color: var(--text-muted); font-size: 0.78rem; margin: 0 0 0.4rem;">Nhấn vào nút bên dưới để tự động điền tài khoản kiểm thử:</p>
-                <button type="button" class="btn btn-secondary btn-sm" onclick="fillLogin('admin', 'Admin@123456')" style="justify-content: flex-start; text-align: left; padding: 0.5rem 0.75rem;">
-                    <i class="fas fa-shield-halved" style="color: var(--color-gold); width: 18px;"></i>
-                    <span><strong>Quản trị viên:</strong> admin (Quyền cao nhất)</span>
-                </button>
-                <button type="button" class="btn btn-secondary btn-sm" onclick="fillLogin('truong256', 'Truong@2026!')" style="justify-content: flex-start; text-align: left; padding: 0.5rem 0.75rem;">
-                    <i class="fas fa-user-graduate" style="color: var(--color-primary); width: 18px;"></i>
-                    <span><strong>Sinh viên:</strong> truong256</span>
-                </button>
-                <button type="button" class="btn btn-secondary btn-sm" onclick="fillLogin('customer1', 'User@123456')" style="justify-content: flex-start; text-align: left; padding: 0.5rem 0.75rem;">
-                    <i class="fas fa-user" style="color: #10B981; width: 18px;"></i>
-                    <span><strong>Khách hàng:</strong> customer1</span>
-                </button>
+                    <!-- Poster 2 (Left, -10deg) -->
+                    <div class="tilted-poster poster-left" tabindex="0" aria-label="Poster phim Mai">
+                        <img src="/images/mai.jpg" alt="Poster Mai" loading="lazy" onerror="this.src='/images/default_poster.jpg'">
+                        <div class="poster-glass-gloss" aria-hidden="true"></div>
+                        <div class="poster-badge">Tâm Lý &bull; Lãng Mạn</div>
+                    </div>
+
+                    <!-- Poster 3 (Center Hero, 0deg) -->
+                    <div class="tilted-poster poster-center" tabindex="0" aria-label="Poster phim Dune: Hành Tinh Cát 2">
+                        <img src="/images/dune2.jpg" alt="Poster Dune 2" loading="eager" onerror="this.src='/images/default_poster.jpg'">
+                        <div class="poster-glass-gloss" aria-hidden="true"></div>
+                        <div class="poster-badge"><i class="fas fa-crown" style="color: var(--color-gold);"></i> Dune: Part Two</div>
+                    </div>
+
+                    <!-- Poster 4 (Right, +10deg) -->
+                    <div class="tilted-poster poster-right" tabindex="0" aria-label="Poster phim Oppenheimer">
+                        <img src="/images/oppenheimer.jpg" alt="Poster Oppenheimer" loading="lazy" onerror="this.src='/images/default_poster.jpg'">
+                        <div class="poster-glass-gloss" aria-hidden="true"></div>
+                        <div class="poster-badge">Kịch Tính &bull; Lịch Sử</div>
+                    </div>
+
+                    <!-- Poster 5 (Far Right, +18deg) -->
+                    <div class="tilted-poster poster-far-right" tabindex="0" aria-label="Poster phim Inside Out 2">
+                        <img src="/images/inside_out2.jpg" alt="Poster Inside Out 2" loading="lazy" onerror="this.src='/images/default_poster.jpg'">
+                        <div class="poster-glass-gloss" aria-hidden="true"></div>
+                        <div class="poster-badge">Hoạt Hình</div>
+                    </div>
+                </div>
+
+                <div class="gallery-caption">
+                    <span class="gallery-eyebrow">
+                        <i class="fas fa-sparkles" aria-hidden="true"></i> WHERE MOVIES BEGIN
+                    </span>
+                    <h2 class="gallery-title">YOUR NEXT MOVIE STARTS HERE</h2>
+                    <p class="gallery-desc">Khám phá những câu chuyện đáng nhớ cùng CINEVIBE.</p>
+                </div>
             </div>
-        </details>
-
-        <div style="text-align: center; margin-top: 2rem; font-size: 0.92rem; color: var(--text-secondary);">
-            Chưa có tài khoản? <a href="/auth/register" style="color: var(--color-primary); font-weight: 700; text-decoration: none;">Đăng ký thành viên ngay</a>
         </div>
     </div>
-</div>
+</main>
 
-<script>
-function togglePasswordVisibility(fieldId, btn) {
-    const input = document.getElementById(fieldId);
-    const icon = btn.querySelector('i');
-    if (input.type === 'password') {
-        input.type = 'text';
-        icon.classList.remove('fa-eye');
-        icon.classList.add('fa-eye-slash');
-    } else {
-        input.type = 'password';
-        icon.classList.remove('fa-eye-slash');
-        icon.classList.add('fa-eye');
-    }
-}
-
-function fillLogin(u, p) {
-    document.getElementById('username').value = u;
-    document.getElementById('password').value = p;
-    // Highlight effect
-    const form = document.getElementById('loginForm');
-    form.style.transition = 'transform 0.2s';
-    form.style.transform = 'scale(1.01)';
-    setTimeout(() => { form.style.transform = 'scale(1)'; }, 200);
-}
-</script>
+<script src="/js/auth.js"></script>
 
 <%- include('../partials/footer') %>

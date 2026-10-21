@@ -1,0 +1,836 @@
+/* ==========================================================================
+   CINEVIBE CINEMA CITY AUTHENTICATION DESIGN SYSTEM
+   Theme: Dark Cinematic Authentication (Cinema City Aesthetic)
+   ========================================================================== */
+
+/* Scope container */
+.auth-page {
+    position: relative;
+    width: 100%;
+    min-height: calc(100vh - 80px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1.5rem 5rem;
+    background-color: var(--bg-main, #0B0F19);
+    overflow-x: hidden;
+}
+
+/* Background cinema lighting */
+.auth-page::before {
+    content: '';
+    position: absolute;
+    top: 10%;
+    left: 5%;
+    width: 450px;
+    height: 450px;
+    background: radial-gradient(circle, rgba(229, 9, 20, 0.12) 0%, transparent 70%);
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.auth-page::after {
+    content: '';
+    position: absolute;
+    bottom: 10%;
+    right: 5%;
+    width: 550px;
+    height: 550px;
+    background: radial-gradient(circle, rgba(245, 196, 81, 0.08) 0%, transparent 70%);
+    filter: blur(100px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.auth-container {
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+/* Split-Screen Grid Layout */
+.auth-split-layout {
+    display: grid;
+    grid-template-columns: 46% 54%;
+    gap: 3.5rem;
+    align-items: center;
+    background: rgba(23, 30, 43, 0.65);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-color, #2A3446);
+    border-radius: 24px;
+    padding: 3rem;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+/* Wider register layout for 2-column fields */
+.auth-split-layout.is-register {
+    grid-template-columns: 50% 50%;
+    gap: 3rem;
+    padding: 2.75rem;
+}
+
+/* ==========================================================================
+   LEFT PANEL: AUTH FORM PANEL
+   ========================================================================== */
+.auth-form-panel {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.auth-brand-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.35rem 0.85rem;
+    background: rgba(229, 9, 20, 0.12);
+    border: 1px solid rgba(229, 9, 20, 0.3);
+    border-radius: 9999px;
+    color: var(--color-primary, #E50914);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    align-self: flex-start;
+}
+
+.auth-brand-badge i {
+    font-size: 0.85rem;
+    color: var(--color-gold, #F5C451);
+}
+
+.auth-form-header {
+    margin-bottom: 1.75rem;
+}
+
+.auth-form-header h1 {
+    font-family: var(--font-heading, 'Be Vietnam Pro', sans-serif);
+    font-size: 2.1rem;
+    font-weight: 800;
+    color: var(--text-primary, #F8FAFC);
+    letter-spacing: -0.5px;
+    line-height: 1.25;
+    margin-bottom: 0.5rem;
+}
+
+.auth-form-header p {
+    color: var(--text-secondary, #94A3B8);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* Alerts */
+.auth-alert {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.95rem 1.15rem;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    line-height: 1.45;
+    margin-bottom: 1.5rem;
+    animation: authFadeIn 0.3s ease;
+}
+
+.auth-alert-danger {
+    background: rgba(229, 9, 20, 0.12);
+    border: 1px solid rgba(229, 9, 20, 0.4);
+    color: #FCA5A5;
+}
+
+.auth-alert-danger i {
+    color: var(--color-primary, #E50914);
+    font-size: 1.15rem;
+    flex-shrink: 0;
+}
+
+.auth-alert-success {
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.4);
+    color: #6EE7B7;
+}
+
+.auth-alert-success i {
+    color: #10B981;
+    font-size: 1.15rem;
+    flex-shrink: 0;
+}
+
+/* Form Groups & Inputs */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    width: 100%;
+}
+
+.auth-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    width: 100%;
+}
+
+.auth-field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    position: relative;
+}
+
+.auth-label {
+    display: flex;
+    align-items: center;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text-primary, #F8FAFC);
+    letter-spacing: 0.2px;
+}
+
+.auth-label i {
+    margin-right: 0.45rem;
+    font-size: 0.85rem;
+    color: var(--color-gold, #F5C451);
+}
+
+.auth-label .required-star {
+    color: var(--color-primary, #E50914);
+    margin-left: 0.25rem;
+    font-weight: 700;
+}
+
+.auth-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.auth-input {
+    width: 100%;
+    height: 50px;
+    padding: 0 1rem 0 2.75rem;
+    background-color: var(--bg-surface, #171E2B);
+    border: 1px solid var(--border-color, #2A3446);
+    border-radius: 10px;
+    color: var(--text-primary, #F8FAFC);
+    font-family: inherit;
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    box-sizing: border-box;
+}
+
+.auth-input::placeholder {
+    color: #64748B;
+    font-size: 0.88rem;
+}
+
+.auth-input:focus {
+    outline: none;
+    border-color: var(--color-primary, #E50914);
+    box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.2);
+    background-color: #1A2332;
+}
+
+.auth-input-icon {
+    position: absolute;
+    left: 1rem;
+    color: #64748B;
+    font-size: 0.95rem;
+    pointer-events: none;
+    transition: color 0.2s ease;
+    z-index: 2;
+}
+
+.auth-input:focus ~ .auth-input-icon,
+.auth-input:not(:placeholder-shown) ~ .auth-input-icon {
+    color: var(--color-gold, #F5C451);
+}
+
+/* Password Toggle Button */
+.auth-password-toggle {
+    position: absolute;
+    right: 0.85rem;
+    background: transparent;
+    border: none;
+    color: #64748B;
+    font-size: 1rem;
+    padding: 0.4rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition: color 0.2s ease, background 0.2s ease;
+    z-index: 2;
+}
+
+.auth-password-toggle:hover {
+    color: var(--text-primary, #F8FAFC);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.auth-password-toggle:focus {
+    outline: none;
+    color: var(--color-primary, #E50914);
+}
+
+.auth-input.has-toggle {
+    padding-right: 2.75rem;
+}
+
+/* Field helper & validation message */
+.auth-field-hint {
+    font-size: 0.78rem;
+    color: var(--text-muted, #64748B);
+    margin-top: 0.2rem;
+    line-height: 1.35;
+}
+
+.auth-field-error {
+    font-size: 0.78rem;
+    color: #F87171;
+    margin-top: 0.2rem;
+    display: none;
+}
+
+/* Submit Button */
+.auth-submit-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    width: 100%;
+    height: 52px;
+    margin-top: 0.5rem;
+    background-color: var(--color-primary, #E50914);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(229, 9, 20, 0.35);
+    transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    overflow: hidden;
+}
+
+.auth-submit-btn:hover:not(:disabled) {
+    background-color: var(--color-primary-hover, #B20710);
+    box-shadow: 0 8px 25px rgba(229, 9, 20, 0.5);
+    transform: translateY(-1px);
+}
+
+.auth-submit-btn:active:not(:disabled) {
+    transform: translateY(1px);
+    box-shadow: 0 4px 12px rgba(229, 9, 20, 0.4);
+}
+
+.auth-submit-btn:disabled {
+    opacity: 0.75;
+    cursor: not-allowed;
+}
+
+/* Loading state */
+.auth-btn-spinner {
+    display: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #FFFFFF;
+    border-radius: 50%;
+    animation: authSpin 0.75s linear infinite;
+}
+
+.auth-submit-btn.is-loading .auth-btn-icon {
+    display: none;
+}
+
+.auth-submit-btn.is-loading .auth-btn-spinner {
+    display: inline-block;
+}
+
+/* Security reassurance banner */
+.auth-security-notice {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--text-muted, #64748B);
+    margin-top: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px dashed rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+}
+
+.auth-security-notice i {
+    color: #10B981;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
+
+/* Switch link */
+.auth-switch-prompt {
+    text-align: center;
+    margin-top: 1.75rem;
+    font-size: 0.92rem;
+    color: var(--text-secondary, #94A3B8);
+}
+
+.auth-switch-link {
+    color: var(--color-primary, #E50914);
+    font-weight: 700;
+    text-decoration: none;
+    margin-left: 0.35rem;
+    transition: color 0.2s ease, text-decoration 0.2s ease;
+}
+
+.auth-switch-link:hover {
+    color: #FF4D58;
+    text-decoration: underline;
+}
+
+/* ==========================================================================
+   RIGHT PANEL: MOVIE POSTER GALLERY (CINEMA CITY STYLE)
+   ========================================================================== */
+.auth-poster-gallery {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 480px;
+    padding: 2rem 1rem;
+    user-select: none;
+}
+
+/* Cinema atmospheric glow */
+.gallery-glow-backdrop {
+    position: absolute;
+    width: 380px;
+    height: 380px;
+    background: radial-gradient(circle, rgba(229, 9, 20, 0.25) 0%, rgba(245, 196, 81, 0.08) 45%, transparent 70%);
+    filter: blur(50px);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Poster stack staging */
+.poster-stack-container {
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    height: 380px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    perspective: 1200px;
+}
+
+/* Tilted individual posters */
+.tilted-poster {
+    position: absolute;
+    width: 180px;
+    height: 265px;
+    border-radius: 14px;
+    overflow: hidden;
+    background-color: #0F172A;
+    border: 2px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.7);
+    cursor: pointer;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
+                box-shadow 0.35s ease, 
+                border-color 0.35s ease,
+                z-index 0s;
+    outline: none;
+}
+
+.tilted-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.tilted-poster .poster-glass-gloss {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.4) 100%);
+    pointer-events: none;
+}
+
+.tilted-poster .poster-badge {
+    position: absolute;
+    bottom: 10px;
+    left: 8px;
+    right: 8px;
+    padding: 0.3rem 0.6rem;
+    background: rgba(11, 15, 25, 0.88);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 6px;
+    color: #FFFFFF;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+/* Specific angles & layering */
+/* Far Left: Godzilla x Kong (-18deg) */
+.tilted-poster.poster-far-left {
+    transform: translate(-130px, 20px) rotate(-18deg) scale(0.85);
+    z-index: 2;
+    filter: brightness(0.85);
+}
+
+/* Left: Mai (-10deg) */
+.tilted-poster.poster-left {
+    transform: translate(-70px, 8px) rotate(-10deg) scale(0.93);
+    z-index: 3;
+}
+
+/* Center: Dune 2 (0deg, Hero) */
+.tilted-poster.poster-center {
+    width: 195px;
+    height: 285px;
+    transform: translate(0, -10px) rotate(0deg) scale(1.05);
+    z-index: 5;
+    border-color: rgba(245, 196, 81, 0.4);
+    box-shadow: 0 24px 50px rgba(0, 0, 0, 0.8), 0 0 25px rgba(229, 9, 20, 0.25);
+}
+
+.tilted-poster.poster-center .poster-badge {
+    background: rgba(229, 9, 20, 0.9);
+    border-color: rgba(245, 196, 81, 0.4);
+    color: #FFFFFF;
+}
+
+/* Right: Oppenheimer (+10deg) */
+.tilted-poster.poster-right {
+    transform: translate(70px, 8px) rotate(10deg) scale(0.93);
+    z-index: 4;
+}
+
+/* Far Right: Inside Out 2 (+18deg) */
+.tilted-poster.poster-far-right {
+    transform: translate(130px, 20px) rotate(18deg) scale(0.85);
+    z-index: 2;
+    filter: brightness(0.85);
+}
+
+/* Hover effects */
+.tilted-poster:hover,
+.tilted-poster:focus-visible {
+    z-index: 10 !important;
+    border-color: var(--color-primary, #E50914);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.9), 0 0 35px rgba(229, 9, 20, 0.5) !important;
+    filter: brightness(1.05) !important;
+}
+
+.tilted-poster.poster-far-left:hover {
+    transform: translate(-130px, 0px) rotate(-10deg) scale(1);
+}
+
+.tilted-poster.poster-left:hover {
+    transform: translate(-70px, -12px) rotate(-4deg) scale(1.05);
+}
+
+.tilted-poster.poster-center:hover {
+    transform: translate(0, -20px) rotate(0deg) scale(1.12);
+}
+
+.tilted-poster.poster-right:hover {
+    transform: translate(70px, -12px) rotate(4deg) scale(1.05);
+}
+
+.tilted-poster.poster-far-right:hover {
+    transform: translate(130px, 0px) rotate(10deg) scale(1);
+}
+
+.tilted-poster:hover img {
+    transform: scale(1.04);
+}
+
+/* Gallery text below posters */
+.gallery-caption {
+    text-align: center;
+    margin-top: 1.5rem;
+    z-index: 2;
+}
+
+.gallery-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--color-gold, #F5C451);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+}
+
+.gallery-title {
+    font-family: var(--font-heading, 'Be Vietnam Pro', sans-serif);
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #FFFFFF;
+    letter-spacing: -0.5px;
+    line-height: 1.25;
+    margin: 0 0 0.4rem 0;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.gallery-desc {
+    color: var(--text-secondary, #94A3B8);
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+/* ==========================================================================
+   ANIMATIONS & REDUCED MOTION
+   ========================================================================== */
+@keyframes authSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes authFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .tilted-poster,
+    .tilted-poster img,
+    .auth-submit-btn,
+    .auth-alert {
+        transition: none !important;
+        animation: none !important;
+        transform: none !important;
+    }
+    .poster-stack-container {
+        display: flex;
+        gap: 1rem;
+        height: auto;
+    }
+    .tilted-poster {
+        position: static;
+        transform: none !important;
+    }
+}
+
+/* ==========================================================================
+   RESPONSIVE BREAKPOINTS (Desktop, Laptop, Tablet, Mobile)
+   ========================================================================== */
+
+/* Laptop / Desktop medium: 1024px to 1199px */
+@media (max-width: 1199px) {
+    .auth-split-layout {
+        grid-template-columns: 50% 50%;
+        gap: 2.5rem;
+        padding: 2.5rem;
+    }
+    .auth-split-layout.is-register {
+        grid-template-columns: 52% 48%;
+        gap: 2rem;
+    }
+    .tilted-poster {
+        width: 160px;
+        height: 235px;
+    }
+    .tilted-poster.poster-center {
+        width: 175px;
+        height: 255px;
+    }
+    .tilted-poster.poster-far-left,
+    .tilted-poster.poster-far-right {
+        display: none; /* Keep 3 main posters for cleaner look on laptop */
+    }
+    .tilted-poster.poster-left {
+        transform: translate(-55px, 6px) rotate(-10deg) scale(0.95);
+    }
+    .tilted-poster.poster-right {
+        transform: translate(55px, 6px) rotate(10deg) scale(0.95);
+    }
+    .gallery-title {
+        font-size: 1.35rem;
+    }
+}
+
+/* Tablet: 768px to 1023px */
+@media (max-width: 1023px) {
+    .auth-page {
+        padding: 2.5rem 1.25rem 4rem;
+    }
+    .auth-split-layout,
+    .auth-split-layout.is-register {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+        padding: 2.25rem;
+        max-width: 640px;
+        margin: 0 auto;
+    }
+    /* Move gallery to top or bottom */
+    .auth-poster-gallery {
+        order: -1; /* Display gallery as cinematic hero showcase above form */
+        min-height: auto;
+        padding: 0.5rem 0 1.5rem;
+    }
+    .poster-stack-container {
+        height: 280px;
+        max-width: 420px;
+    }
+    .tilted-poster {
+        width: 140px;
+        height: 210px;
+    }
+    .tilted-poster.poster-center {
+        width: 155px;
+        height: 230px;
+    }
+    .tilted-poster.poster-far-left,
+    .tilted-poster.poster-far-right {
+        display: none;
+    }
+    .tilted-poster.poster-left {
+        transform: translate(-50px, 4px) rotate(-8deg) scale(0.95);
+    }
+    .tilted-poster.poster-right {
+        transform: translate(50px, 4px) rotate(8deg) scale(0.95);
+    }
+    .gallery-title {
+        font-size: 1.25rem;
+    }
+    .auth-form-header h1 {
+        font-size: 1.85rem;
+    }
+}
+
+/* Mobile: below 768px (390px, 375px, 360px) */
+@media (max-width: 767px) {
+    .auth-page {
+        padding: 1.5rem 1rem 3.5rem;
+    }
+    .auth-split-layout,
+    .auth-split-layout.is-register {
+        grid-template-columns: 1fr;
+        padding: 1.75rem 1.25rem;
+        border-radius: 18px;
+        gap: 1.75rem;
+    }
+    /* Mobile-first: Compact decorative gallery banner */
+    .auth-poster-gallery {
+        order: -1;
+        padding: 0.5rem 0 1rem;
+        min-height: auto;
+    }
+    .poster-stack-container {
+        height: 220px;
+        max-width: 320px;
+    }
+    .tilted-poster {
+        width: 110px;
+        height: 165px;
+        border-radius: 10px;
+    }
+    .tilted-poster.poster-center {
+        width: 125px;
+        height: 185px;
+    }
+    .tilted-poster.poster-far-left,
+    .tilted-poster.poster-far-right {
+        display: none;
+    }
+    .tilted-poster.poster-left {
+        transform: translate(-38px, 4px) rotate(-7deg) scale(0.95);
+    }
+    .tilted-poster.poster-right {
+        transform: translate(38px, 4px) rotate(7deg) scale(0.95);
+    }
+    .tilted-poster .poster-badge {
+        font-size: 0.65rem;
+        padding: 0.2rem 0.4rem;
+        bottom: 6px;
+    }
+    .gallery-caption {
+        margin-top: 1rem;
+    }
+    .gallery-eyebrow {
+        font-size: 0.72rem;
+        letter-spacing: 1px;
+    }
+    .gallery-title {
+        font-size: 1.15rem;
+    }
+    .gallery-desc {
+        font-size: 0.82rem;
+    }
+    .auth-form-header h1 {
+        font-size: 1.6rem;
+    }
+    .auth-form-header p {
+        font-size: 0.88rem;
+    }
+    /* Register form fields: strictly 1 column on mobile */
+    .auth-form-row {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+    .auth-input {
+        height: 48px;
+        font-size: 0.92rem;
+    }
+    .auth-submit-btn {
+        height: 48px;
+        font-size: 0.95rem;
+    }
+}
+
+/* Extra small mobile: below 390px */
+@media (max-width: 389px) {
+    .auth-split-layout,
+    .auth-split-layout.is-register {
+        padding: 1.5rem 1rem;
+    }
+    .poster-stack-container {
+        height: 190px;
+    }
+    .tilted-poster {
+        width: 95px;
+        height: 145px;
+    }
+    .tilted-poster.poster-center {
+        width: 110px;
+        height: 165px;
+    }
+    .tilted-poster.poster-left {
+        transform: translate(-30px, 2px) rotate(-6deg) scale(0.95);
+    }
+    .tilted-poster.poster-right {
+        transform: translate(30px, 2px) rotate(6deg) scale(0.95);
+    }
+}

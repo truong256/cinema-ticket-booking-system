@@ -8,9 +8,10 @@ const authController = {
             return res.redirect('/');
         }
         res.render('auth/login', {
-            title: 'Đăng nhập - Đặt vé xem phim',
+            title: 'Đăng nhập - CINEVIBE',
             error: req.query.error || null,
-            success: req.query.success || null
+            success: req.query.success || null,
+            extraCss: '/css/auth.css'
         });
     },
 
@@ -79,9 +80,10 @@ const authController = {
             return res.redirect('/');
         }
         res.render('auth/register', {
-            title: 'Đăng ký tài khoản',
+            title: 'Đăng ký thành viên - CINEVIBE',
             error: null,
-            formData: {}
+            formData: {},
+            extraCss: '/css/auth.css'
         });
     },
 

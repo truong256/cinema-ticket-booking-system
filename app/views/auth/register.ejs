@@ -1,115 +1,183 @@
 <%- include('../partials/header') %>
 <%- include('../partials/navbar') %>
 
-<div class="auth-page-container">
-    <div class="auth-card" style="max-width: 520px;">
-        <!-- Form Header -->
-        <div style="text-align: center; margin-bottom: 2.25rem;">
-            <div class="brand-logo" style="justify-content: center; margin-bottom: 0.85rem;">
-                <i class="fas fa-film"></i>
-                <span>CINE<span style="color: var(--color-primary);">VIBE</span></span>
-            </div>
-            <h1 style="font-family: var(--font-heading); font-size: 1.85rem; font-weight: 800; color: #FFFFFF; letter-spacing: -0.5px; margin-bottom: 0.35rem;">
-                Đăng Ký Thành Viên Mới
-            </h1>
-            <p style="color: var(--text-secondary); font-size: 0.92rem;">
-                Gia nhập CINEVIBE để nhận đặc quyền ghế VIP và đặt vé trực tuyến
-            </p>
-        </div>
+<link rel="stylesheet" href="/css/auth.css">
 
-        <!-- Feedback Alerts -->
-        <% if (error) { %>
-            <div class="alert alert-danger" role="alert">
-                <i class="fas fa-triangle-exclamation" style="font-size: 1.1rem; flex-shrink: 0;"></i>
-                <div><%= error %></div>
-            </div>
-        <% } %>
-
-        <form action="/auth/register" method="POST" id="registerForm" autocomplete="on">
-            <div class="form-group">
-                <label class="form-label" for="full_name">
-                    <i class="fas fa-id-card" style="color: var(--color-gold); margin-right: 0.4rem;"></i> Họ và tên người dùng <span style="color: var(--color-primary);">*</span>
-                </label>
-                <input type="text" id="full_name" name="full_name" class="form-control" required value="<%= typeof formData !== 'undefined' && formData?.full_name ? formData.full_name : '' %>" placeholder="Ví dụ: Nguyễn Văn A" autocomplete="name">
-            </div>
-
-            <div class="form-group">
-                <label class="form-label" for="username">
-                    <i class="fas fa-user" style="color: var(--color-gold); margin-right: 0.4rem;"></i> Tên đăng nhập <span style="color: var(--color-primary);">*</span>
-                </label>
-                <input type="text" id="username" name="username" class="form-control" required value="<%= typeof formData !== 'undefined' && formData?.username ? formData.username : '' %>" placeholder="Tối thiểu 3 ký tự (chữ hoặc số)" autocomplete="username">
-            </div>
-
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-                <div class="form-group">
-                    <label class="form-label" for="email">
-                        <i class="fas fa-envelope" style="color: var(--color-gold); margin-right: 0.4rem;"></i> Địa chỉ Email <span style="color: var(--color-primary);">*</span>
-                    </label>
-                    <input type="email" id="email" name="email" class="form-control" required value="<%= typeof formData !== 'undefined' && formData?.email ? formData.email : '' %>" placeholder="email@domain.com" autocomplete="email">
+<main class="auth-page">
+    <div class="auth-container">
+        <div class="auth-split-layout is-register">
+            <!-- Left Side: Register Form Panel -->
+            <div class="auth-form-panel">
+                <div class="auth-brand-badge">
+                    <i class="fas fa-ticket"></i>
+                    <span>CINEVIBE MEMBERSHIP</span>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label" for="phone">
-                        <i class="fas fa-phone" style="color: var(--color-gold); margin-right: 0.4rem;"></i> Số điện thoại
-                    </label>
-                    <input type="tel" id="phone" name="phone" class="form-control" value="<%= typeof formData !== 'undefined' && formData?.phone ? formData.phone : '' %>" placeholder="0912345678" autocomplete="tel">
+                <div class="auth-form-header">
+                    <h1>Gia nhập thế giới CINEVIBE</h1>
+                    <p>Tạo tài khoản để khám phá phim, lựa chọn ghế yêu thích và quản lý vé dễ dàng.</p>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <label class="form-label" for="password">
-                    <i class="fas fa-lock" style="color: var(--color-gold); margin-right: 0.4rem;"></i> Mật khẩu bảo vệ <span style="color: var(--color-primary);">*</span>
-                </label>
-                <div class="password-input-group">
-                    <input type="password" id="password" name="password" class="form-control" required placeholder="Tối thiểu 6 ký tự" autocomplete="new-password">
-                    <button type="button" class="btn-toggle-password" onclick="togglePasswordVisibility('password', this)" title="Hiển thị/Ẩn mật khẩu" aria-label="Toggle password visibility">
-                        <i class="far fa-eye"></i>
+                <!-- Feedback Alerts -->
+                <% if (error) { %>
+                    <div class="auth-alert auth-alert-danger" role="alert">
+                        <i class="fas fa-circle-exclamation" aria-hidden="true"></i>
+                        <div><%= error %></div>
+                    </div>
+                <% } %>
+
+                <!-- Register Form -->
+                <form action="/auth/register" method="POST" id="registerForm" class="auth-form" autocomplete="on">
+                    <!-- Row 1: Full Name & Username -->
+                    <div class="auth-form-row">
+                        <div class="auth-field-group">
+                            <label class="auth-label" for="full_name">
+                                <i class="fas fa-id-card" aria-hidden="true"></i> Họ và tên <span class="required-star">*</span>
+                            </label>
+                            <div class="auth-input-wrapper">
+                                <input type="text" id="full_name" name="full_name" class="auth-input" required value="<%= typeof formData !== 'undefined' && formData?.full_name ? formData.full_name : '' %>" placeholder="Ví dụ: Nguyễn Văn A" autocomplete="name">
+                                <i class="fas fa-id-card auth-input-icon" aria-hidden="true"></i>
+                            </div>
+                        </div>
+
+                        <div class="auth-field-group">
+                            <label class="auth-label" for="username">
+                                <i class="fas fa-user" aria-hidden="true"></i> Tên đăng nhập <span class="required-star">*</span>
+                            </label>
+                            <div class="auth-input-wrapper">
+                                <input type="text" id="username" name="username" class="auth-input" required value="<%= typeof formData !== 'undefined' && formData?.username ? formData.username : '' %>" placeholder="Tối thiểu 3 ký tự" autocomplete="username">
+                                <i class="fas fa-user auth-input-icon" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 2: Email & Phone -->
+                    <div class="auth-form-row">
+                        <div class="auth-field-group">
+                            <label class="auth-label" for="email">
+                                <i class="fas fa-envelope" aria-hidden="true"></i> Email <span class="required-star">*</span>
+                            </label>
+                            <div class="auth-input-wrapper">
+                                <input type="email" id="email" name="email" class="auth-input" required value="<%= typeof formData !== 'undefined' && formData?.email ? formData.email : '' %>" placeholder="email@domain.com" autocomplete="email">
+                                <i class="fas fa-envelope auth-input-icon" aria-hidden="true"></i>
+                            </div>
+                        </div>
+
+                        <div class="auth-field-group">
+                            <label class="auth-label" for="phone">
+                                <i class="fas fa-phone" aria-hidden="true"></i> Số điện thoại
+                            </label>
+                            <div class="auth-input-wrapper">
+                                <input type="tel" id="phone" name="phone" class="auth-input" value="<%= typeof formData !== 'undefined' && formData?.phone ? formData.phone : '' %>" placeholder="0912345678" autocomplete="tel">
+                                <i class="fas fa-phone auth-input-icon" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Row 3: Password & Confirm Password -->
+                    <div class="auth-form-row">
+                        <div class="auth-field-group">
+                            <label class="auth-label" for="password">
+                                <i class="fas fa-lock" aria-hidden="true"></i> Mật khẩu <span class="required-star">*</span>
+                            </label>
+                            <div class="auth-input-wrapper">
+                                <input type="password" id="password" name="password" class="auth-input has-toggle" required placeholder="Tối thiểu 6 ký tự" autocomplete="new-password">
+                                <i class="fas fa-lock auth-input-icon" aria-hidden="true"></i>
+                                <button type="button" class="auth-password-toggle" onclick="togglePasswordVisibility('password', this)" title="Hiển thị mật khẩu" aria-label="Hiển thị mật khẩu">
+                                <i class="far fa-eye" aria-hidden="true"></i>
+                            </button>
+                            </div>
+                        </div>
+
+                        <div class="auth-field-group">
+                            <label class="auth-label" for="confirm_password">
+                                <i class="fas fa-check-double" aria-hidden="true"></i> Xác nhận mật khẩu <span class="required-star">*</span>
+                            </label>
+                            <div class="auth-input-wrapper">
+                                <input type="password" id="confirm_password" name="confirm_password" class="auth-input has-toggle" required placeholder="Nhập lại mật khẩu" autocomplete="new-password">
+                                <i class="fas fa-check-double auth-input-icon" aria-hidden="true"></i>
+                                <button type="button" class="auth-password-toggle" onclick="togglePasswordVisibility('confirm_password', this)" title="Hiển thị mật khẩu" aria-label="Hiển thị mật khẩu">
+                                <i class="far fa-eye" aria-hidden="true"></i>
+                            </button>
+                            </div>
+                            <div id="passwordMatchError" class="auth-field-error" role="alert"></div>
+                        </div>
+                    </div>
+
+                    <!-- Security Notice -->
+                    <div class="auth-security-notice">
+                        <i class="fas fa-shield-halved" aria-hidden="true"></i>
+                        <span>Mật khẩu được mã hóa an toàn bằng thuật toán <strong>bcrypt (rounds 10)</strong>.</span>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="auth-submit-btn">
+                        <span class="auth-btn-spinner" aria-hidden="true"></span>
+                        <i class="fas fa-user-plus auth-btn-icon" aria-hidden="true"></i>
+                        <span class="auth-btn-text">Hoàn tất đăng ký thành viên</span>
                     </button>
+                </form>
+
+                <!-- Switch Link -->
+                <div class="auth-switch-prompt">
+                    Đã có tài khoản CineVibe?
+                    <a href="/auth/login" class="auth-switch-link">Đăng nhập ngay</a>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="form-label" for="confirm_password">
-                    <i class="fas fa-check-double" style="color: var(--color-gold); margin-right: 0.4rem;"></i> Xác nhận mật khẩu <span style="color: var(--color-primary);">*</span>
-                </label>
-                <div class="password-input-group">
-                    <input type="password" id="confirm_password" name="confirm_password" class="form-control" required placeholder="Nhập lại mật khẩu để xác thực" autocomplete="new-password">
-                    <button type="button" class="btn-toggle-password" onclick="togglePasswordVisibility('confirm_password', this)" title="Hiển thị/Ẩn mật khẩu" aria-label="Toggle password visibility">
-                        <i class="far fa-eye"></i>
-                    </button>
+            <!-- Right Side: Movie Poster Gallery (Cinema City Style) -->
+            <div class="auth-poster-gallery" aria-label="Bộ sưu tập phim chiếu rạp CineVibe">
+                <div class="gallery-glow-backdrop" aria-hidden="true"></div>
+                
+                <div class="poster-stack-container">
+                    <!-- Poster 1 (Far Left, -18deg) -->
+                    <div class="tilted-poster poster-far-left" tabindex="0" aria-label="Poster phim Godzilla x Kong">
+                        <img src="/images/godzilla_kong.jpg" alt="Poster Godzilla x Kong" loading="lazy" onerror="this.src='/images/default_poster.jpg'">
+                        <div class="poster-glass-gloss" aria-hidden="true"></div>
+                        <div class="poster-badge">Hành Động</div>
+                    </div>
+
+                    <!-- Poster 2 (Left, -10deg) -->
+                    <div class="tilted-poster poster-left" tabindex="0" aria-label="Poster phim Mai">
+                        <img src="/images/mai.jpg" alt="Poster Mai" loading="lazy" onerror="this.src='/images/default_poster.jpg'">
+                        <div class="poster-glass-gloss" aria-hidden="true"></div>
+                        <div class="poster-badge">Tâm Lý &bull; Lãng Mạn</div>
+                    </div>
+
+                    <!-- Poster 3 (Center Hero, 0deg) -->
+                    <div class="tilted-poster poster-center" tabindex="0" aria-label="Poster phim Dune: Hành Tinh Cát 2">
+                        <img src="/images/dune2.jpg" alt="Poster Dune 2" loading="eager" onerror="this.src='/images/default_poster.jpg'">
+                        <div class="poster-glass-gloss" aria-hidden="true"></div>
+                        <div class="poster-badge"><i class="fas fa-crown" style="color: var(--color-gold);"></i> Dune: Part Two</div>
+                    </div>
+
+                    <!-- Poster 4 (Right, +10deg) -->
+                    <div class="tilted-poster poster-right" tabindex="0" aria-label="Poster phim Oppenheimer">
+                        <img src="/images/oppenheimer.jpg" alt="Poster Oppenheimer" loading="lazy" onerror="this.src='/images/default_poster.jpg'">
+                        <div class="poster-glass-gloss" aria-hidden="true"></div>
+                        <div class="poster-badge">Kịch Tính &bull; Lịch Sử</div>
+                    </div>
+
+                    <!-- Poster 5 (Far Right, +18deg) -->
+                    <div class="tilted-poster poster-far-right" tabindex="0" aria-label="Poster phim Inside Out 2">
+                        <img src="/images/inside_out2.jpg" alt="Poster Inside Out 2" loading="lazy" onerror="this.src='/images/default_poster.jpg'">
+                        <div class="poster-glass-gloss" aria-hidden="true"></div>
+                        <div class="poster-badge">Hoạt Hình</div>
+                    </div>
+                </div>
+
+                <div class="gallery-caption">
+                    <span class="gallery-eyebrow">
+                        <i class="fas fa-sparkles" aria-hidden="true"></i> WHERE MOVIES BEGIN
+                    </span>
+                    <h2 class="gallery-title">YOUR NEXT MOVIE STARTS HERE</h2>
+                    <p class="gallery-desc">Khám phá những câu chuyện đáng nhớ cùng CINEVIBE.</p>
                 </div>
             </div>
-
-            <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.4rem;">
-                <i class="fas fa-shield-halved" style="color: #10B981;"></i>
-                Mật khẩu được mã hóa an toàn bằng thuật toán <strong>bcrypt (rounds 10)</strong>.
-            </div>
-
-            <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">
-                <i class="fas fa-user-plus"></i> Hoàn tất đăng ký thành viên
-            </button>
-        </form>
-
-        <div style="text-align: center; margin-top: 2rem; font-size: 0.92rem; color: var(--text-secondary);">
-            Đã có tài khoản CineVibe? <a href="/auth/login" style="color: var(--color-primary); font-weight: 700; text-decoration: none;">Đăng nhập ngay</a>
         </div>
     </div>
-</div>
+</main>
 
-<script>
-function togglePasswordVisibility(fieldId, btn) {
-    const input = document.getElementById(fieldId);
-    const icon = btn.querySelector('i');
-    if (input.type === 'password') {
-        input.type = 'text';
-        icon.classList.remove('fa-eye');
-        icon.classList.add('fa-eye-slash');
-    } else {
-        input.type = 'password';
-        icon.classList.remove('fa-eye-slash');
-        icon.classList.add('fa-eye');
-    }
-}
-</script>
+<script src="/js/auth.js"></script>
 
 <%- include('../partials/footer') %>
