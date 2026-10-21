@@ -151,15 +151,16 @@ CREATE TABLE IF NOT EXISTS payments (
 
 -- ====================================================================
 -- TÀI KHOẢN PHÂN QUYỀN VÀ BẢO MẬT (HARDENING LEAST PRIVILEGE)
--- Tạo user riêng cho app (không dùng root) và user riêng cho mysqld-exporter
+-- Phân quyền truy cập tối thiểu cho cinema_user (app) và exporter (Prometheus)
+-- Mật khẩu được nạp an toàn từ biến môi trường (.env), không lưu vào git
 -- ====================================================================
 
--- 1. App user
-CREATE USER IF NOT EXISTS 'cinema_user'@'%' IDENTIFIED BY 'CinemaSecurePass2026!';
+-- 1. App user (quản lý qua MYSQL_USER và MYSQL_PASSWORD trong .env)
+CREATE USER IF NOT EXISTS 'cinema_user'@'%';
 GRANT SELECT, INSERT, UPDATE, DELETE ON cinema_db.* TO 'cinema_user'@'%';
 
--- 2. Prometheus mysqld-exporter user
-CREATE USER IF NOT EXISTS 'exporter'@'%' IDENTIFIED BY 'ExporterSecurePass2026!';
+-- 2. Prometheus mysqld-exporter user (quản lý qua MYSQL_EXPORTER_PASSWORD trong .env)
+CREATE USER IF NOT EXISTS 'exporter'@'%';
 GRANT PROCESS, REPLICATION CLIENT, SELECT ON *.* TO 'exporter'@'%';
 
 FLUSH PRIVILEGES;

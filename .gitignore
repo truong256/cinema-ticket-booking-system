@@ -3,6 +3,10 @@
 .env.local
 *.env
 
+# Database & Exporter credentials
+monitoring/mysql-exporter/.my.cnf
+*.my.cnf
+
 # Dependencies
 node_modules/
 npm-debug.log*

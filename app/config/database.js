@@ -5,7 +5,7 @@ const dbConfig = {
     host: process.env.DB_HOST || 'mysql',
     port: parseInt(process.env.DB_PORT || '3306', 10),
     user: process.env.DB_USER || 'cinema_user',
-    password: process.env.DB_PASSWORD || 'CinemaSecurePass2026!',
+    password: process.env.DB_PASSWORD || process.env.MYSQL_PASSWORD || '',
     database: process.env.DB_NAME || 'cinema_db',
     waitForConnections: true,
     connectionLimit: parseInt(process.env.DB_CONNECTION_LIMIT || '20', 10),

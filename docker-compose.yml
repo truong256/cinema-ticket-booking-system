@@ -27,7 +27,7 @@ services:
       DB_HOST: mysql
       DB_PORT: 3306
       DB_USER: ${MYSQL_USER:-cinema_user}
-      DB_PASSWORD: ${MYSQL_PASSWORD:-CinemaSecurePass2026!}
+      DB_PASSWORD: ${DB_PASSWORD:-${MYSQL_PASSWORD}}
       DB_NAME: ${MYSQL_DATABASE:-cinema_db}
       SESSION_SECRET: ${SESSION_SECRET:-CinemaSuperSecretKey2026_DTC245200120}
       LOG_DIR: /var/log/app
@@ -60,14 +60,15 @@ services:
     env_file:
       - .env
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-RootSuperSecure2026!}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE:-cinema_db}
       MYSQL_USER: ${MYSQL_USER:-cinema_user}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-CinemaSecurePass2026!}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - mysql_data:/var/lib/mysql
       - ./database/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
       - ./database/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
+      - ./database/01-exporter-user.sh:/docker-entrypoint-initdb.d/03-exporter-user.sh:ro
     networks:
       - backend_net
     healthcheck:
@@ -90,7 +91,7 @@ services:
       PMA_HOST: mysql
       PMA_PORT: 3306
       PMA_USER: root
-      PMA_PASSWORD: ${MYSQL_ROOT_PASSWORD:-RootSuperSecure2026!}
+      PMA_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       UPLOAD_LIMIT: 64M
     networks:
       - backend_net
@@ -140,6 +141,8 @@ services:
       - '--config.my-cnf=/etc/my.cnf'
     volumes:
       - ./monitoring/mysql-exporter/.my.cnf:/etc/my.cnf:ro
+    environment:
+      - DATA_SOURCE_NAME=${MYSQL_EXPORTER_USER:-exporter}:${MYSQL_EXPORTER_PASSWORD}@(mysql:3306)/
     networks:
       - backend_net
       - monitor_net

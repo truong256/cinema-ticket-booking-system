@@ -1,0 +1,14 @@
+# ====================================================================
+# GITLEAKS CONFIGURATION (.gitleaks.toml)
+# Cấu hình quét mã nguồn và kiểm soát rò rỉ thông tin xác thực
+# ====================================================================
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Bỏ qua chứng chỉ SSL tự ký dùng cho môi trường demo localhost"
+paths = [
+    '''nginx/ssl/cinema\.key''',
+    '''docs/.*'''
+]
