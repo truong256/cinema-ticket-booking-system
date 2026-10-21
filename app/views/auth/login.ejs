@@ -9,7 +9,7 @@
                 <i class="fas fa-film"></i>
                 <span>CINE<span style="color: var(--color-primary);">VIBE</span></span>
             </div>
-            <h1 style="font-family: var(--font-heading); font-size: 1.85rem; font-weight: 800; color: #ffffff; letter-spacing: -0.5px; margin-bottom: 0.35rem;">
+            <h1 style="font-family: var(--font-heading); font-size: 1.85rem; font-weight: 800; color: #FFFFFF; letter-spacing: -0.5px; margin-bottom: 0.35rem;">
                 Đăng Nhập Tài Khoản
             </h1>
             <p style="color: var(--text-secondary); font-size: 0.92rem;">
@@ -60,13 +60,13 @@
             </button>
         </form>
 
-        <!-- Examiner & Demo Mode (Discreetly protected, not exposing plain text by default) -->
+        <!-- Examiner & Demo Mode -->
         <details class="demo-disclosure">
             <summary>
                 <span><i class="fas fa-bolt" style="color: var(--color-gold); margin-right: 0.4rem;"></i> Tài khoản mẫu dùng thử / Chấm thi</span>
             </summary>
             <div class="demo-disclosure-content">
-                <p style="color: var(--text-muted); font-size: 0.78rem; margin: 0 0 0.4rem;">Nhấn vào để tự động điền thông tin đăng nhập kiểm thử:</p>
+                <p style="color: var(--text-muted); font-size: 0.78rem; margin: 0 0 0.4rem;">Nhấn vào nút bên dưới để tự động điền tài khoản kiểm thử:</p>
                 <button type="button" class="btn btn-secondary btn-sm" onclick="fillLogin('admin', 'Admin@123456')" style="justify-content: flex-start; text-align: left; padding: 0.5rem 0.75rem;">
                     <i class="fas fa-shield-halved" style="color: var(--color-gold); width: 18px;"></i>
                     <span><strong>Quản trị viên:</strong> admin (Quyền cao nhất)</span>
@@ -76,7 +76,7 @@
                     <span><strong>Sinh viên:</strong> truong256</span>
                 </button>
                 <button type="button" class="btn btn-secondary btn-sm" onclick="fillLogin('customer1', 'User@123456')" style="justify-content: flex-start; text-align: left; padding: 0.5rem 0.75rem;">
-                    <i class="fas fa-user" style="color: #10b981; width: 18px;"></i>
+                    <i class="fas fa-user" style="color: #10B981; width: 18px;"></i>
                     <span><strong>Khách hàng:</strong> customer1</span>
                 </button>
             </div>
@@ -103,9 +103,14 @@ function togglePasswordVisibility(fieldId, btn) {
     }
 }
 
-function fillLogin(user, pass) {
-    document.getElementById('username').value = user;
-    document.getElementById('password').value = pass;
+function fillLogin(u, p) {
+    document.getElementById('username').value = u;
+    document.getElementById('password').value = p;
+    // Highlight effect
+    const form = document.getElementById('loginForm');
+    form.style.transition = 'transform 0.2s';
+    form.style.transform = 'scale(1.01)';
+    setTimeout(() => { form.style.transform = 'scale(1)'; }, 200);
 }
 </script>
 

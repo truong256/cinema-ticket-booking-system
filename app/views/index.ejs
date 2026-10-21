@@ -2,57 +2,99 @@
 <%- include('partials/navbar') %>
 
 <main class="main-wrapper">
-    <!-- Hero Banner (Cinematic Featured Film) -->
+    <!-- Hero Banner (Cinematic Featured Film - Ref: Lumière Cinema) -->
     <section class="hero-banner">
         <div class="hero-content">
-            <div class="hero-tag">
-                <i class="fas fa-crown" style="color: var(--color-gold);"></i> BOM TẤN CHIẾU RẠP ĐỘC QUYỀN
+            <div class="hero-tag gold">
+                <i class="fas fa-crown"></i> BOM TẤN CHIẾU RẠP ĐỘC QUYỀN &bull; CINEVIBE EXCLUSIVE
             </div>
+            
             <h1 class="hero-title">
-                Dune: Part Two <br>
-                <span style="font-size: 1.8rem; font-weight: 500; color: var(--text-secondary); display: block; margin-top: 0.25rem;">Hành Tinh Cát - Phần Hai</span>
+                Dune: Part Two<br>
+                <span style="font-size: 1.8rem; font-weight: 500; color: var(--text-secondary); display: block; margin-top: 0.35rem; letter-spacing: -0.5px;">
+                    Hành Tinh Cát — Phần Hai
+                </span>
             </h1>
-            <div style="display: flex; gap: 0.85rem; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap;">
+
+            <div style="display: flex; gap: 0.75rem; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap;">
                 <span class="badge badge-gold"><i class="fas fa-star"></i> 8.6/10 IMDb</span>
-                <span class="age-badge T16" style="position: static;">T16</span>
+                <span class="age-badge T16" style="position: static; box-shadow: none;">T16</span>
                 <span style="color: var(--text-secondary); font-size: 0.9rem;"><i class="far fa-clock"></i> 166 phút</span>
-                <span style="color: var(--text-secondary); font-size: 0.9rem;"><i class="fas fa-clapperboard"></i> Khoa học viễn tưởng, Hành động</span>
+                <span style="color: var(--text-secondary); font-size: 0.9rem;"><i class="fas fa-film"></i> Khoa học viễn tưởng, Hành động</span>
+                <span class="brand-badge gold" style="font-size: 0.7rem; padding: 0.2rem 0.5rem;"><i class="fas fa-video"></i> IMAX Laser</span>
             </div>
+
             <p class="hero-desc">
-                Paul Atreides hợp lực cùng Chani và tộc người Fremen để trả thù những kẻ đã hủy hoại gia đình mình, đứng trước sự lựa chọn định mệnh giữa tình yêu và số phận của toàn vũ trụ.
+                Paul Atreides hợp lực cùng Chani và tộc người Fremen để trả thù những kẻ đã hủy hoại gia đình mình, đứng trước sự lựa chọn định mệnh giữa tình yêu sâu đậm và số phận của toàn vũ trụ.
             </p>
-            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
                 <a href="/movies/1" class="btn btn-primary btn-lg">
                     <i class="fas fa-ticket"></i> Đặt vé ngay
                 </a>
-                <a href="/movies/1" class="btn btn-secondary btn-lg">
-                    <i class="fas fa-circle-info"></i> Xem chi tiết
+                <a href="https://www.youtube.com/watch?v=Way9Dexny3w" target="_blank" class="btn btn-secondary btn-lg" title="Xem trailer trên YouTube">
+                    <i class="fab fa-youtube" style="color: var(--color-primary); font-size: 1.15rem;"></i> Xem Trailer
                 </a>
                 <a href="/movies" class="btn btn-secondary btn-lg">
-                    <i class="fas fa-film"></i> Toàn bộ phim
+                    <i class="fas fa-clapperboard"></i> Toàn bộ phim
                 </a>
+            </div>
+
+            <!-- Stats Bar inspired by Lumière Cinema -->
+            <div class="hero-stats-bar">
+                <div class="hero-stat-item">
+                    <span class="hero-stat-number"><%= movies ? movies.length : 6 %></span>
+                    <span class="hero-stat-label">Phim Chiếu Rạp</span>
+                </div>
+                <div class="hero-stat-divider"></div>
+                <div class="hero-stat-item">
+                    <span class="hero-stat-number">3</span>
+                    <span class="hero-stat-label">Phòng IMAX & VIP</span>
+                </div>
+                <div class="hero-stat-divider"></div>
+                <div class="hero-stat-item">
+                    <span class="hero-stat-number" style="color: var(--color-gold);">100%</span>
+                    <span class="hero-stat-label">Anti-Double Booking</span>
+                </div>
             </div>
         </div>
     </section>
 
+    <!-- Genre Filter Quick Bar -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+        <div style="display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: center;">
+            <span style="font-size: 0.88rem; font-weight: 700; color: var(--text-muted); margin-right: 0.35rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                <i class="fas fa-filter" style="color: var(--color-gold);"></i> Thể loại:
+            </span>
+            <button type="button" class="btn btn-sm btn-primary filter-tab active" data-genre="all">Tất cả</button>
+            <button type="button" class="btn btn-sm btn-secondary filter-tab" data-genre="Hành động">Hành động</button>
+            <button type="button" class="btn btn-sm btn-secondary filter-tab" data-genre="Khoa học viễn tưởng">Khoa học viễn tưởng</button>
+            <button type="button" class="btn btn-sm btn-secondary filter-tab" data-genre="Tâm lý">Tâm lý</button>
+            <button type="button" class="btn btn-sm btn-secondary filter-tab" data-genre="Hoạt hình">Hoạt hình</button>
+            <button type="button" class="btn btn-sm btn-secondary filter-tab" data-genre="Gia đình">Gia đình</button>
+        </div>
+
+        <a href="/movies" class="btn btn-secondary btn-sm">
+            Xem toàn bộ danh mục <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
+
     <!-- Phim Đang Chiếu Nổi Bật -->
-    <section style="margin-bottom: 4rem;">
+    <section style="margin-bottom: 4.5rem;">
         <div class="section-header">
             <div>
+                <span class="brand-badge gold" style="margin-bottom: 0.4rem;">NOW SHOWING</span>
                 <h2 class="section-title">
                     <i class="fas fa-film"></i> Phim Đang Chiếu Nổi Bật
                 </h2>
-                <p class="section-subtitle">Lựa chọn phim bom tấn để xem lịch chiếu và vị trí ghế VIP</p>
+                <p class="section-subtitle">Lựa chọn phim bom tấn để xem lịch chiếu thời gian thực và đặt vị trí ghế VIP</p>
             </div>
-            <a href="/movies" class="btn btn-secondary btn-sm">
-                Xem tất cả 6 phim <i class="fas fa-arrow-right"></i>
-            </a>
         </div>
 
-        <div class="movies-grid">
+        <div class="movies-grid" id="homeMoviesGrid">
             <% if (movies && movies.length > 0) { %>
                 <% movies.forEach(movie => { %>
-                    <div class="movie-card">
+                    <div class="movie-card" data-genre="<%= movie.genre %>">
                         <div class="movie-poster-wrap">
                             <img src="<%= movie.poster_url %>" alt="<%= movie.title %>" class="movie-poster" loading="lazy" onerror="this.onerror=null; this.src='/images/default_poster.jpg';">
                             <div class="movie-poster-overlay"></div>
@@ -71,20 +113,23 @@
                     </div>
                 <% }); %>
             <% } else { %>
-                <p style="color: var(--text-muted);">Hiện chưa có phim nào trong danh mục.</p>
+                <div class="card" style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
+                    <p style="color: var(--text-muted);">Hiện chưa có phim nào trong danh mục.</p>
+                </div>
             <% } %>
         </div>
     </section>
 
-    <!-- Suất Chiếu Hôm Nay -->
+    <!-- Suất Chiếu Sắp Diễn Ra Hôm Nay -->
     <% if (todayShowtimes && todayShowtimes.length > 0) { %>
-    <section style="margin-bottom: 4rem;">
+    <section style="margin-bottom: 4.5rem;">
         <div class="section-header">
             <div>
+                <span class="brand-badge" style="margin-bottom: 0.4rem;">LỊCH CHIẾU TRỰC TUYẾN</span>
                 <h2 class="section-title">
                     <i class="fas fa-calendar-day"></i> Suất Chiếu Sắp Diễn Ra Hôm Nay
                 </h2>
-                <p class="section-subtitle">Đặt chỗ nhanh với sơ đồ ghế thời gian thực</p>
+                <p class="section-subtitle">Đặt chỗ tức thì với sơ đồ ghế thời gian thực và khóa giao dịch ACID</p>
             </div>
             <a href="/showtimes" class="btn btn-secondary btn-sm">
                 Toàn bộ lịch chiếu <i class="fas fa-arrow-right"></i>
@@ -93,20 +138,20 @@
 
         <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem;">
             <% todayShowtimes.forEach(st => { %>
-                <div class="card card-hover" style="display: flex; gap: 1.25rem; align-items: center;">
-                    <img src="<%= st.poster_url %>" alt="<%= st.movie_title %>" style="width: 75px; height: 110px; border-radius: var(--radius-sm); object-fit: cover; flex-shrink: 0; box-shadow: var(--shadow-sm);" onerror="this.onerror=null; this.src='/images/default_poster.jpg';">
+                <div class="card card-hover" style="display: flex; gap: 1.25rem; align-items: center; padding: 1.25rem;">
+                    <img src="<%= st.poster_url %>" alt="<%= st.movie_title %>" style="width: 78px; height: 114px; border-radius: var(--radius-sm); object-fit: cover; flex-shrink: 0; box-shadow: var(--shadow-sm); border: 1px solid var(--border-color);" onerror="this.onerror=null; this.src='/images/default_poster.jpg';">
                     <div style="flex: 1; min-width: 0;">
-                        <h4 style="font-family: var(--font-heading); font-size: 1.05rem; font-weight: 700; color: #fff; margin-bottom: 0.35rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="<%= st.movie_title %>">
+                        <h4 style="font-family: var(--font-heading); font-size: 1.05rem; font-weight: 700; color: #FFFFFF; margin-bottom: 0.35rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="<%= st.movie_title %>">
                             <%= st.movie_title %>
                         </h4>
-                        <div style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 0.25rem;">
+                        <div style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 0.2rem;">
                             <i class="fas fa-location-dot" style="color: var(--color-gold);"></i> <%= st.cinema_name %>
                         </div>
-                        <div style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.6rem;">
+                        <div style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.65rem;">
                             <i class="fas fa-door-open"></i> <%= st.room_name %>
                         </div>
                         <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <span style="font-size: 0.95rem; color: var(--color-gold); font-weight: 800;">
+                            <span style="font-size: 1rem; color: var(--color-gold); font-weight: 800; font-family: var(--font-heading);">
                                 <i class="far fa-clock"></i> <%= new Date(st.start_time).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) %>
                             </span>
                             <a href="/booking/showtime/<%= st.id %>" class="btn btn-primary btn-sm">
@@ -120,44 +165,73 @@
     </section>
     <% } %>
 
-    <!-- Kiến Trúc DevOps & Tiêu Chuẩn Đề 11 -->
-    <section class="card" style="background: linear-gradient(135deg, rgba(23, 30, 43, 0.9), rgba(11, 15, 25, 0.95)); border-color: var(--border-color);">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+    <!-- Nền Tảng Công Nghệ & Giám Sát Đề 11 (Ref: BookMyShow & System Spec) -->
+    <section class="card" style="background: linear-gradient(135deg, rgba(23, 30, 43, 0.95), rgba(11, 15, 25, 0.98)); border-color: var(--border-color); padding: 2.5rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
             <div>
-                <span class="brand-badge gold" style="margin-bottom: 0.5rem;">TIÊU CHÍ 10/10 ĐIỂM</span>
-                <h3 style="font-family: var(--font-heading); font-size: 1.4rem; color: #ffffff;">
+                <span class="brand-badge gold" style="margin-bottom: 0.5rem;">TIÊU CHÍ NGHIỆM THU 10/10 ĐIỂM</span>
+                <h3 style="font-family: var(--font-heading); font-size: 1.5rem; color: #FFFFFF; font-weight: 800;">
                     <i class="fas fa-server" style="color: var(--color-primary);"></i> Nền Tảng Công Nghệ & Giám Sát Đề 11
                 </h3>
             </div>
-            <a href="/about" class="btn btn-secondary btn-sm">Xem chi tiết kiến trúc <i class="fas fa-arrow-right"></i></a>
+            <a href="/about" class="btn btn-secondary btn-sm">Xem chi tiết báo cáo <i class="fas fa-arrow-right"></i></a>
         </div>
 
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem;">
-            <div style="background: var(--bg-surface); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
-                <div style="color: var(--color-primary); font-size: 1.35rem; margin-bottom: 0.5rem;"><i class="fas fa-shield-halved"></i></div>
-                <h4 style="color: #fff; font-size: 1rem; margin-bottom: 0.35rem;">Nginx Gateway & SSL</h4>
-                <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">Reverse Proxy phân tầng mạng, SSL tự ký HTTPS cổng 443 và đầy đủ 6 HTTP Security Headers.</p>
+            <div style="background: var(--bg-surface); padding: 1.5rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); transition: var(--transition);" class="card-hover">
+                <div style="color: var(--color-primary); font-size: 1.6rem; margin-bottom: 0.75rem;"><i class="fas fa-shield-halved"></i></div>
+                <h4 style="color: #FFFFFF; font-size: 1.05rem; font-weight: 700; margin-bottom: 0.4rem;">Nginx Gateway & SSL</h4>
+                <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">Reverse Proxy phân tầng mạng, SSL tự ký HTTPS cổng 443 và đầy đủ 6 HTTP Security Headers.</p>
             </div>
 
-            <div style="background: var(--bg-surface); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
-                <div style="color: var(--color-gold); font-size: 1.35rem; margin-bottom: 0.5rem;"><i class="fas fa-database"></i></div>
-                <h4 style="color: #fff; font-size: 1rem; margin-bottom: 0.35rem;">MySQL 8.0 & ACID</h4>
-                <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">Khóa giao dịch <code>SELECT ... FOR UPDATE</code> và ràng buộc duy nhất chống hoàn toàn double-booking.</p>
+            <div style="background: var(--bg-surface); padding: 1.5rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); transition: var(--transition);" class="card-hover">
+                <div style="color: var(--color-gold); font-size: 1.6rem; margin-bottom: 0.75rem;"><i class="fas fa-database"></i></div>
+                <h4 style="color: #FFFFFF; font-size: 1.05rem; font-weight: 700; margin-bottom: 0.4rem;">MySQL 8.0 & ACID</h4>
+                <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">Khóa giao dịch <code>SELECT ... FOR UPDATE</code> và ràng buộc duy nhất chống hoàn toàn double-booking.</p>
             </div>
 
-            <div style="background: var(--bg-surface); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
-                <div style="color: #38bdf8; font-size: 1.35rem; margin-bottom: 0.5rem;"><i class="fas fa-chart-line"></i></div>
-                <h4 style="color: #fff; font-size: 1rem; margin-bottom: 0.35rem;">Prometheus & Grafana</h4>
-                <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">4/4 Scrape targets UP. Dashboard nạp tự động trực quan hóa CPU, RAM, Latency và Request Rate.</p>
+            <div style="background: var(--bg-surface); padding: 1.5rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); transition: var(--transition);" class="card-hover">
+                <div style="color: #38bdf8; font-size: 1.6rem; margin-bottom: 0.75rem;"><i class="fas fa-chart-line"></i></div>
+                <h4 style="color: #FFFFFF; font-size: 1.05rem; font-weight: 700; margin-bottom: 0.4rem;">Prometheus & Grafana</h4>
+                <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">Thu thập time-series metrics. Dashboard nạp tự động trực quan hóa CPU, RAM, Latency và Request Rate.</p>
             </div>
 
-            <div style="background: var(--bg-surface); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
-                <div style="color: #4ade80; font-size: 1.35rem; margin-bottom: 0.5rem;"><i class="fas fa-file-waveform"></i></div>
-                <h4 style="color: #fff; font-size: 1rem; margin-bottom: 0.35rem;">Loki & Promtail</h4>
-                <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6;">Thu thập log tập trung qua Volume chia sẻ. Hỗ trợ đầy đủ 3 truy vấn LogQL chuẩn nghiệp vụ.</p>
+            <div style="background: var(--bg-surface); padding: 1.5rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); transition: var(--transition);" class="card-hover">
+                <div style="color: #4ade80; font-size: 1.6rem; margin-bottom: 0.75rem;"><i class="fas fa-file-waveform"></i></div>
+                <h4 style="color: #FFFFFF; font-size: 1.05rem; font-weight: 700; margin-bottom: 0.4rem;">Loki & Promtail</h4>
+                <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.6;">Thu thập log tập trung qua Volume chia sẻ. Hỗ trợ đầy đủ 3 truy vấn LogQL chuẩn nghiệp vụ.</p>
             </div>
         </div>
     </section>
 </main>
+
+<script>
+// Interactive Client-side filter tabs on home page
+document.addEventListener('DOMContentLoaded', () => {
+    const tabs = document.querySelectorAll('.filter-tab');
+    const cards = document.querySelectorAll('#homeMoviesGrid .movie-card');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => {
+                t.classList.remove('btn-primary', 'active');
+                t.classList.add('btn-secondary');
+            });
+            tab.classList.remove('btn-secondary');
+            tab.classList.add('btn-primary', 'active');
+
+            const selectedGenre = tab.getAttribute('data-genre');
+            cards.forEach(card => {
+                const genre = card.getAttribute('data-genre') || '';
+                if (selectedGenre === 'all' || genre.toLowerCase().includes(selectedGenre.toLowerCase())) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+});
+</script>
 
 <%- include('partials/footer') %>

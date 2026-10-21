@@ -1,43 +1,45 @@
-<nav class="navbar">
+<nav class="navbar" id="mainNavbar">
     <div class="nav-container">
+        <!-- Brand Logo -->
         <a href="/" class="brand-logo" title="CineVibe Cinema">
             <i class="fas fa-film"></i>
             <span>CINE<span style="color: var(--color-primary);">VIBE</span></span>
+            <span class="brand-badge gold" style="font-size: 0.65rem; padding: 0.15rem 0.45rem; margin-left: 0.15rem;">PREMIUM</span>
         </a>
 
         <!-- Desktop Navigation Links -->
         <ul class="nav-links" id="navLinks">
             <li>
-                <a href="/" class="<%= currentPath === '/' ? 'active' : '' %>">
-                    <i class="fas fa-home"></i> Trang chủ
+                <a href="/" class="<%= typeof currentPath !== 'undefined' && currentPath === '/' ? 'active' : '' %>">
+                    <i class="fas fa-compass"></i> Trang chủ
                 </a>
             </li>
             <li>
-                <a href="/movies" class="<%= currentPath.startsWith('/movies') ? 'active' : '' %>">
+                <a href="/movies" class="<%= typeof currentPath !== 'undefined' && currentPath.startsWith('/movies') ? 'active' : '' %>">
                     <i class="fas fa-clapperboard"></i> Phim
                 </a>
             </li>
             <li>
-                <a href="/showtimes" class="<%= currentPath.startsWith('/showtimes') ? 'active' : '' %>">
+                <a href="/showtimes" class="<%= typeof currentPath !== 'undefined' && currentPath.startsWith('/showtimes') ? 'active' : '' %>">
                     <i class="fas fa-calendar-alt"></i> Lịch chiếu
                 </a>
             </li>
-            <% if (currentUser) { %>
+            <% if (typeof currentUser !== 'undefined' && currentUser) { %>
                 <li>
-                    <a href="/booking/history" class="<%= currentPath === '/booking/history' ? 'active' : '' %>">
+                    <a href="/booking/history" class="<%= typeof currentPath !== 'undefined' && currentPath === '/booking/history' ? 'active' : '' %>">
                         <i class="fas fa-ticket"></i> Vé của tôi
                     </a>
                 </li>
             <% } %>
-            <% if (currentUser && currentUser.role === 'admin') { %>
+            <% if (typeof currentUser !== 'undefined' && currentUser && currentUser.role === 'admin') { %>
                 <li>
-                    <a href="/admin" class="<%= currentPath.startsWith('/admin') ? 'active' : '' %>" style="color: var(--color-gold);">
+                    <a href="/admin" class="<%= typeof currentPath !== 'undefined' && currentPath.startsWith('/admin') ? 'active' : '' %>" style="color: var(--color-gold);">
                         <i class="fas fa-shield-halved"></i> Quản trị
                     </a>
                 </li>
             <% } %>
             <li>
-                <a href="/about" class="<%= currentPath === '/about' ? 'active' : '' %>">
+                <a href="/about" class="<%= typeof currentPath !== 'undefined' && currentPath === '/about' ? 'active' : '' %>">
                     <i class="fas fa-circle-info"></i> Giới thiệu
                 </a>
             </li>
@@ -45,10 +47,10 @@
 
         <!-- Right Side: Auth / User Profile -->
         <div class="nav-actions">
-            <% if (currentUser) { %>
-                <div style="display: flex; align-items: center; gap: 0.85rem;">
-                    <div style="display: flex; align-items: center; gap: 0.5rem; background: var(--bg-surface); padding: 0.35rem 0.75rem; border-radius: var(--radius-full); border: 1px solid var(--border-color);">
-                        <i class="fas fa-user-circle" style="color: var(--color-gold); font-size: 1.1rem;"></i>
+            <% if (typeof currentUser !== 'undefined' && currentUser) { %>
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; background: var(--bg-surface); padding: 0.35rem 0.85rem; border-radius: var(--radius-full); border: 1px solid var(--border-color);">
+                        <i class="fas fa-user-circle" style="color: var(--color-gold); font-size: 1.15rem;"></i>
                         <span style="font-size: 0.88rem; font-weight: 600; color: var(--text-primary);">
                             <%= currentUser.full_name || currentUser.username %>
                         </span>

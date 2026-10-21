@@ -1,5 +1,6 @@
 <footer class="footer">
     <div class="footer-container">
+        <!-- Col 1: Cinema Brand & Student Info -->
         <div>
             <div class="brand-logo" style="margin-bottom: 1rem;">
                 <i class="fas fa-film" style="color: var(--color-primary);"></i>
@@ -7,44 +8,53 @@
                 <span class="brand-badge gold">PREMIUM</span>
             </div>
             <p style="color: var(--text-secondary); font-size: 0.92rem; max-width: 440px; margin-bottom: 1.25rem; line-height: 1.7;">
-                Hệ thống Đặt vé Xem phim & Sự kiện trực tuyến cao cấp. Triển khai trọn gói trên Docker Compose với Nginx Gateway, MySQL 8.0, Prometheus, Grafana, Loki & Promtail.
+                Hệ thống Đặt vé Xem phim & Sự kiện trực tuyến cao cấp theo phong cách Dark Cinema. Đóng gói hoàn chỉnh trên Docker Compose với kiến trúc 10 dịch vụ phân tầng bảo mật.
             </p>
             <div style="display: flex; align-items: center; gap: 0.6rem; color: var(--color-gold); font-size: 0.88rem; font-weight: 600;">
                 <i class="fas fa-user-graduate"></i>
-                <span>SV: Nguyễn Duy Trường — MSV: DTC245200120 — Lớp: CNTTK23E</span>
+                <span>Sinh viên thực hiện: Nguyễn Duy Trường &bull; MSV: DTC245200120 &bull; Lớp: CNTTK23E</span>
             </div>
         </div>
 
+        <!-- Col 2: Navigation Links -->
         <div>
-            <h4 style="font-family: var(--font-heading); margin-bottom: 1.25rem; color: #fff; font-size: 1.05rem;">Khám phá CineVibe</h4>
+            <h4 style="font-family: var(--font-heading); margin-bottom: 1.25rem; color: #FFFFFF; font-size: 1.05rem; display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fas fa-compass" style="color: var(--color-primary);"></i> Khám Phá CineVibe
+            </h4>
             <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.65rem; font-size: 0.92rem; color: var(--text-secondary);">
-                <li><a href="/" style="transition: var(--transition);"><i class="fas fa-chevron-right" style="font-size: 0.75rem; color: var(--color-primary); margin-right: 0.4rem;"></i> Trang chủ</a></li>
-                <li><a href="/movies" style="transition: var(--transition);"><i class="fas fa-chevron-right" style="font-size: 0.75rem; color: var(--color-primary); margin-right: 0.4rem;"></i> Danh sách Phim</a></li>
-                <li><a href="/showtimes" style="transition: var(--transition);"><i class="fas fa-chevron-right" style="font-size: 0.75rem; color: var(--color-primary); margin-right: 0.4rem;"></i> Lịch chiếu rạp</a></li>
-                <li><a href="/booking/history" style="transition: var(--transition);"><i class="fas fa-chevron-right" style="font-size: 0.75rem; color: var(--color-primary); margin-right: 0.4rem;"></i> Lịch sử đặt vé</a></li>
-                <li><a href="/about" style="transition: var(--transition);"><i class="fas fa-chevron-right" style="font-size: 0.75rem; color: var(--color-primary); margin-right: 0.4rem;"></i> Kiến trúc DevOps Đề 11</a></li>
+                <li><a href="/" style="transition: var(--transition-fast);"><i class="fas fa-chevron-right" style="font-size: 0.72rem; color: var(--color-primary); margin-right: 0.4rem;"></i> Trang chủ</a></li>
+                <li><a href="/movies" style="transition: var(--transition-fast);"><i class="fas fa-chevron-right" style="font-size: 0.72rem; color: var(--color-primary); margin-right: 0.4rem;"></i> Danh mục Phim</a></li>
+                <li><a href="/showtimes" style="transition: var(--transition-fast);"><i class="fas fa-chevron-right" style="font-size: 0.72rem; color: var(--color-primary); margin-right: 0.4rem;"></i> Lịch chiếu toàn quốc</a></li>
+                <li><a href="/booking/history" style="transition: var(--transition-fast);"><i class="fas fa-chevron-right" style="font-size: 0.72rem; color: var(--color-primary); margin-right: 0.4rem;"></i> Lịch sử đặt vé & E-Ticket</a></li>
+                <li><a href="/about" style="transition: var(--transition-fast);"><i class="fas fa-chevron-right" style="font-size: 0.72rem; color: var(--color-primary); margin-right: 0.4rem;"></i> Báo cáo Kiến trúc Đề 11</a></li>
             </ul>
         </div>
 
+        <!-- Col 3: DevOps & Monitoring Endpoints -->
         <div>
-            <h4 style="font-family: var(--font-heading); margin-bottom: 1.25rem; color: #fff; font-size: 1.05rem;">Quản trị & Giám sát DevOps</h4>
+            <h4 style="font-family: var(--font-heading); margin-bottom: 1.25rem; color: #FFFFFF; font-size: 1.05rem; display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fas fa-server" style="color: var(--color-gold);"></i> Quản Trị & Giám Sát DevOps
+            </h4>
             <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.65rem; font-size: 0.92rem; color: var(--text-secondary);">
-                <li><a href="http://localhost:8080" target="_blank" style="transition: var(--transition);"><i class="fas fa-database" style="color: var(--color-gold); margin-right: 0.4rem;"></i> phpMyAdmin (:8080)</a></li>
-                <li><a href="http://localhost:3001" target="_blank" style="transition: var(--transition);"><i class="fas fa-chart-line" style="color: #38bdf8; margin-right: 0.4rem;"></i> Grafana Dashboard (:3001)</a></li>
-                <li><a href="http://localhost:9090" target="_blank" style="transition: var(--transition);"><i class="fas fa-server" style="color: #fb923c; margin-right: 0.4rem;"></i> Prometheus (:9090)</a></li>
-                <li><a href="/metrics" target="_blank" style="transition: var(--transition);"><i class="fas fa-code" style="color: #a78bfa; margin-right: 0.4rem;"></i> Prometheus Metrics (/metrics)</a></li>
-                <li><a href="/healthz" target="_blank" style="transition: var(--transition);"><i class="fas fa-heart-pulse" style="color: #4ade80; margin-right: 0.4rem;"></i> Healthcheck (/healthz)</a></li>
+                <li><a href="http://localhost:8080" target="_blank" style="transition: var(--transition-fast);"><i class="fas fa-database" style="color: var(--color-gold); margin-right: 0.4rem;"></i> phpMyAdmin (:8080)</a></li>
+                <li><a href="http://localhost:3001" target="_blank" style="transition: var(--transition-fast);"><i class="fas fa-chart-line" style="color: #38bdf8; margin-right: 0.4rem;"></i> Grafana Dashboard (:3001)</a></li>
+                <li><a href="http://localhost:9090" target="_blank" style="transition: var(--transition-fast);"><i class="fas fa-bullseye" style="color: #fb923c; margin-right: 0.4rem;"></i> Prometheus (:9090)</a></li>
+                <li><a href="http://localhost:8081" target="_blank" style="transition: var(--transition-fast);"><i class="fas fa-microchip" style="color: #a78bfa; margin-right: 0.4rem;"></i> cAdvisor Container (:8081)</a></li>
+                <li><a href="/metrics" target="_blank" style="transition: var(--transition-fast);"><i class="fas fa-code" style="color: #f472b6; margin-right: 0.4rem;"></i> Prometheus Metrics (/metrics)</a></li>
+                <li><a href="/healthz" target="_blank" style="transition: var(--transition-fast);"><i class="fas fa-heart-pulse" style="color: #4ade80; margin-right: 0.4rem;"></i> Healthcheck (/healthz)</a></li>
             </ul>
         </div>
     </div>
 
+    <!-- Bottom Copyright & Security Badges -->
     <div class="footer-bottom">
         <div>
-            &copy; 2026 <strong>CineVibe</strong>. Học phần Triển khai và Quản trị Hệ thống Phần mềm.
+            &copy; 2026 <strong>CineVibe Cinema System</strong>. Đề tài số 11 — Triển khai và Quản trị Hệ thống Phần mềm.
         </div>
-        <div style="display: flex; gap: 1rem; align-items: center;">
-            <span class="badge badge-gold"><i class="fas fa-shield"></i> Hardening 6 Lớp</span>
-            <span>Docker Compose</span> &bull; <span>Nginx Reverse Proxy</span> &bull; <span>Loki Logging</span>
+        <div style="display: flex; gap: 0.85rem; align-items: center; flex-wrap: wrap;">
+            <span class="badge badge-gold"><i class="fas fa-shield-halved"></i> 6 Tiêu Chí Hardening</span>
+            <span class="badge badge-red"><i class="fas fa-lock"></i> ACID Anti-Double Booking</span>
+            <span class="badge badge-green"><i class="fas fa-check-double"></i> 10/10 Dịch Vụ Healthy</span>
         </div>
     </div>
 </footer>

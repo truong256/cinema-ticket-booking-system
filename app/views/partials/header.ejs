@@ -3,22 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= typeof title !== 'undefined' ? title : 'Hệ thống Đặt vé Xem phim / Sự kiện - Đề 11' %></title>
-    <meta name="description" content="Hệ thống Đặt vé Xem phim & Sự kiện trực tuyến - Đề 11 - Triển khai và Quản trị Hệ thống Phần mềm">
+    <title><%= typeof title !== 'undefined' ? title : 'CineVibe - Hệ Thống Đặt Vé Xem Phim & Sự Kiện' %></title>
+    <meta name="description" content="Hệ thống Đặt vé Xem phim & Sự kiện trực tuyến cao cấp - Đề 11 - Triển khai và Quản trị Hệ thống Phần mềm">
     <meta name="author" content="Nguyễn Duy Trường - DTC245200120 - CNTTK23E">
 
     <!-- Google Fonts: Be Vietnam Pro & Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    <!-- Main Styles -->
+    <!-- Main Dark Cinema Styles -->
     <link rel="stylesheet" href="/css/style.css">
     <% if (typeof extraCss !== 'undefined') { %>
         <link rel="stylesheet" href="<%= extraCss %>">
     <% } %>
 </head>
 <body>
+    <!-- Ambient Cinematic Lighting Layer (Ref: Lumière Cinema) -->
+    <div class="ambient-bg" aria-hidden="true">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        <div class="grain-overlay"></div>
+    </div>

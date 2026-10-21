@@ -2,14 +2,26 @@
 <%- include('../partials/navbar') %>
 
 <main class="main-wrapper">
+    <!-- Header -->
     <div class="section-header">
         <div>
-            <span class="brand-badge gold" style="margin-bottom: 0.5rem;">LỊCH CHIẾU QUỐC GIA</span>
+            <span class="brand-badge gold" style="margin-bottom: 0.5rem;">LỊCH CHIẾU QUỐC GIA &bull; TOÀN HỆ THỐNG</span>
             <h1 class="section-title">
-                <i class="fas fa-calendar-alt"></i> Lịch Chiếu Phim Toàn Quốc
+                <i class="fas fa-calendar-alt"></i> Lịch Chiếu Phim Khả Dụng
             </h1>
-            <p class="section-subtitle">Cập nhật các suất chiếu phim bom tấn mới nhất tại tất cả các cụm rạp CineStar và Galaxy Cinema</p>
+            <p class="section-subtitle">Cập nhật liên tục các suất chiếu bom tấn mới nhất tại các cụm rạp CineStar và Galaxy Cinema</p>
         </div>
+    </div>
+
+    <!-- Quick Room Type Filter Bar -->
+    <div style="display: flex; gap: 0.65rem; flex-wrap: wrap; margin-bottom: 2.5rem; align-items: center;">
+        <span style="font-size: 0.88rem; font-weight: 700; color: var(--text-muted); margin-right: 0.35rem; text-transform: uppercase; letter-spacing: 0.5px;">
+            <i class="fas fa-sliders" style="color: var(--color-gold);"></i> Định dạng:
+        </span>
+        <button type="button" class="btn btn-sm btn-primary showtime-filter active" data-type="all">Tất cả phòng</button>
+        <button type="button" class="btn btn-sm btn-secondary showtime-filter" data-type="IMAX">Phòng IMAX</button>
+        <button type="button" class="btn btn-sm btn-secondary showtime-filter" data-type="VIP">Phòng VIP</button>
+        <button type="button" class="btn btn-sm btn-secondary showtime-filter" data-type="Standard">Standard</button>
     </div>
 
     <% if (locals.error) { %>
@@ -17,44 +29,73 @@
     <% } %>
 
     <% if (!showtimes || showtimes.length === 0) { %>
-        <div class="card" style="text-align: center; padding: 4rem 2rem;">
+        <div class="card" style="text-align: center; padding: 4.5rem 2rem;">
             <i class="fas fa-film fa-3x" style="color: var(--text-muted); margin-bottom: 1rem;"></i>
-            <h3 style="color: #fff; margin-bottom: 0.5rem;">Hiện chưa có suất chiếu nào được lên lịch</h3>
-            <p style="color: var(--text-secondary);">Vui lòng quay lại sau hoặc xem danh sách phim sắp chiếu.</p>
-            <a href="/movies" class="btn btn-secondary btn-sm" style="margin-top: 1rem;">Xem danh mục phim</a>
+            <h3 style="color: #FFFFFF; margin-bottom: 0.5rem; font-size: 1.3rem; font-weight: 700;">Hiện chưa có suất chiếu nào được lên lịch</h3>
+            <p style="color: var(--text-secondary); max-width: 440px; margin: 0 auto 1.5rem;">Vui lòng quay lại sau hoặc duyệt qua danh mục phim bom tấn để xem thông tin chi tiết.</p>
+            <a href="/movies" class="btn btn-secondary btn-sm"><i class="fas fa-clapperboard"></i> Xem danh mục phim</a>
         </div>
     <% } else { %>
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem;" id="showtimesGrid">
             <% showtimes.forEach(st => { %>
-                <div class="card card-hover" style="display: flex; flex-direction: column; justify-content: space-between;">
+                <div class="card card-hover showtime-item" data-room-type="<%= st.room_type %>" style="display: flex; flex-direction: column; justify-content: space-between; padding: 1.35rem;">
                     <div>
-                        <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
-                            <img src="<%= st.poster_url %>" alt="<%= st.movie_title %>" style="width: 80px; height: 115px; object-fit: cover; border-radius: var(--radius-sm); flex-shrink: 0; box-shadow: var(--shadow-sm);" onerror="this.onerror=null; this.src='/images/default_poster.jpg';">
+                        <div style="display: flex; gap: 1rem; margin-bottom: 1.25rem;">
+                            <img src="<%= st.poster_url %>" alt="<%= st.movie_title %>" style="width: 84px; height: 122px; object-fit: cover; border-radius: var(--radius-sm); flex-shrink: 0; box-shadow: var(--shadow-sm); border: 1px solid var(--border-color);" onerror="this.onerror=null; this.src='/images/default_poster.jpg';">
                             <div style="flex: 1; min-width: 0;">
-                                <div style="display: flex; gap: 0.4rem; margin-bottom: 0.35rem; flex-wrap: wrap;">
-                                    <span class="age-badge <%= st.age_rating %>" style="position: static; font-size: 0.7rem; padding: 0.15rem 0.45rem;"><%= st.age_rating %></span>
+                                <div style="display: flex; gap: 0.4rem; margin-bottom: 0.4rem; flex-wrap: wrap;">
+                                    <span class="age-badge <%= st.age_rating %>" style="position: static; font-size: 0.7rem; padding: 0.15rem 0.45rem; box-shadow: none;"><%= st.age_rating %></span>
                                     <span class="brand-badge <%= st.room_type === 'IMAX' ? 'gold' : '' %>" style="font-size: 0.7rem; padding: 0.15rem 0.45rem;"><%= st.room_type %></span>
                                 </div>
-                                <h3 style="font-size: 1.05rem; font-weight: 700; color: #fff; margin-bottom: 0.35rem; line-height: 1.3;"><%= st.movie_title %></h3>
+                                <h3 style="font-size: 1.1rem; font-weight: 700; color: #FFFFFF; margin-bottom: 0.35rem; line-height: 1.3;"><%= st.movie_title %></h3>
                                 <p style="font-size: 0.82rem; color: var(--text-muted);"><i class="far fa-clock"></i> <%= st.duration_minutes %> phút</p>
                             </div>
                         </div>
 
                         <div style="border-top: 1px solid var(--border-color); padding-top: 0.85rem; margin-bottom: 1.25rem; font-size: 0.88rem;">
-                            <p style="margin-bottom: 0.35rem; color: #fff;"><i class="fas fa-location-dot" style="color: var(--color-gold); width: 16px;"></i> <strong><%= st.cinema_name %></strong></p>
-                            <p style="margin-bottom: 0.35rem; color: var(--text-secondary);"><i class="fas fa-door-open" style="width: 16px;"></i> <%= st.room_name %></p>
-                            <p style="margin-bottom: 0.35rem; color: var(--color-gold); font-weight: 700;"><i class="fas fa-calendar-day" style="width: 16px;"></i> <%= new Date(st.start_time).toLocaleString('vi-VN', { dateStyle: 'short', timeStyle: 'short' }) %></p>
-                            <p style="color: var(--text-muted);"><i class="fas fa-tag" style="width: 16px;"></i> Giá từ: <strong style="color: var(--color-gold);"><%= Number(st.price_regular).toLocaleString('vi-VN') %> đ</strong></p>
+                            <p style="margin-bottom: 0.35rem; color: #FFFFFF;"><i class="fas fa-location-dot" style="color: var(--color-gold); width: 18px;"></i> <strong><%= st.cinema_name %></strong></p>
+                            <p style="margin-bottom: 0.35rem; color: var(--text-secondary);"><i class="fas fa-door-open" style="width: 18px;"></i> <%= st.room_name %></p>
+                            <p style="margin-bottom: 0.35rem; color: var(--color-gold); font-weight: 700;"><i class="fas fa-calendar-day" style="width: 18px;"></i> <%= new Date(st.start_time).toLocaleString('vi-VN', { dateStyle: 'short', timeStyle: 'short' }) %></p>
+                            <p style="color: var(--text-muted);"><i class="fas fa-tag" style="width: 18px;"></i> Giá vé từ: <strong style="color: var(--color-gold); font-size: 0.95rem;"><%= Number(st.price_regular).toLocaleString('vi-VN') %> đ</strong></p>
                         </div>
                     </div>
 
                     <a href="/booking/showtime/<%= st.id %>" class="btn btn-primary" style="width: 100%;">
-                        <i class="fas fa-ticket"></i> Chọn Ghế Ngồi
+                        <i class="fas fa-chair"></i> Chọn Ghế Ngồi
                     </a>
                 </div>
             <% }); %>
         </div>
     <% } %>
 </main>
+
+<script>
+// Filter showtimes by room type
+document.addEventListener('DOMContentLoaded', () => {
+    const filterBtns = document.querySelectorAll('.showtime-filter');
+    const items = document.querySelectorAll('#showtimesGrid .showtime-item');
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            filterBtns.forEach(b => {
+                b.classList.remove('btn-primary', 'active');
+                b.classList.add('btn-secondary');
+            });
+            btn.classList.remove('btn-secondary');
+            btn.classList.add('btn-primary', 'active');
+
+            const filterType = btn.getAttribute('data-type');
+            items.forEach(item => {
+                const roomType = item.getAttribute('data-room-type') || '';
+                if (filterType === 'all' || roomType.toLowerCase() === filterType.toLowerCase()) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    });
+});
+</script>
 
 <%- include('../partials/footer') %>

@@ -2,44 +2,46 @@
 <%- include('../partials/navbar') %>
 
 <main class="main-wrapper">
-    <!-- Breadcrumb & Showtime Info Header -->
+    <!-- Breadcrumb & Showtime Header -->
     <div style="margin-bottom: 2rem;">
-        <a href="/movies/<%= showtime.movie_id %>" style="color: var(--text-secondary); font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.4rem; transition: var(--transition);">
+        <a href="/movies/<%= showtime.movie_id %>" style="color: var(--text-secondary); font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.4rem; transition: var(--transition-fast);">
             <i class="fas fa-chevron-left"></i> Quay lại chi tiết phim
         </a>
-        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 0.5rem; flex-wrap: wrap; gap: 1rem;">
+
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 0.75rem; flex-wrap: wrap; gap: 1rem;">
             <div>
-                <span class="brand-badge gold" style="margin-bottom: 0.4rem;">SƠ ĐỒ PHÒNG CHIẾU</span>
-                <h1 style="font-family: var(--font-heading); font-size: 2.2rem; font-weight: 800; color: #fff;">
+                <span class="brand-badge gold" style="margin-bottom: 0.45rem;">SƠ ĐỒ PHÒNG CHIẾU THỜI GIAN THỰC</span>
+                <h1 style="font-family: var(--font-heading); font-size: 2.2rem; font-weight: 800; color: #FFFFFF; letter-spacing: -0.5px;">
                     <%= showtime.movie_title %>
                 </h1>
-                <div style="color: var(--text-secondary); font-size: 0.95rem; display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; margin-top: 0.25rem;">
+                <div style="color: var(--text-secondary); font-size: 0.95rem; display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; margin-top: 0.35rem;">
                     <span><i class="fas fa-location-dot" style="color: var(--color-gold);"></i> <%= showtime.cinema_name %></span> &bull; 
                     <span><i class="fas fa-door-open"></i> <%= showtime.room_name %> (<%= showtime.room_type || 'Standard' %>)</span> &bull; 
                     <span style="color: var(--color-gold); font-weight: 700;"><i class="far fa-clock"></i> <%= new Date(showtime.start_time).toLocaleString('vi-VN') %></span>
                 </div>
             </div>
-            <div style="display: flex; gap: 0.5rem; align-items: center;">
-                <span class="badge badge-gold"><i class="fas fa-eye"></i> Thời gian thực</span>
-                <span class="badge badge-red"><i class="fas fa-lock"></i> ACID Transaction</span>
+
+            <div style="display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap;">
+                <span class="badge badge-gold"><i class="fas fa-bolt"></i> Thời gian thực</span>
+                <span class="badge badge-red"><i class="fas fa-shield"></i> ACID Concurrency Safe</span>
             </div>
         </div>
     </div>
 
-    <!-- Hidden configuration inputs required by seats.js -->
+    <!-- Hidden configuration inputs for seats.js -->
     <input type="hidden" id="showtimeId" value="<%= showtime.id %>">
     <input type="hidden" id="priceRegular" value="<%= showtime.price_regular %>">
     <input type="hidden" id="priceVip" value="<%= showtime.price_vip %>">
     <input type="hidden" id="priceCouple" value="<%= showtime.price_couple %>">
 
     <div class="booking-container">
-        <!-- Left: Cinema Room Layout -->
+        <!-- Left: Cinema Auditorium Seating Map -->
         <div class="card" style="padding: 2.5rem 1.75rem; background: var(--bg-secondary); border-color: var(--border-color);">
-            <!-- Screen with Curved Glow -->
+            <!-- Curved Cinema Screen with Projection Cone -->
             <div class="cinema-screen-wrap">
                 <div class="cinema-screen"></div>
                 <div class="screen-text">
-                    <i class="fas fa-film"></i> MÀN HÌNH CHIẾU CHÍNH (SCREEN)
+                    <i class="fas fa-film" style="color: var(--color-gold);"></i> MÀN HÌNH CHIẾU CHÍNH (SCREEN)
                 </div>
             </div>
 
@@ -53,7 +55,10 @@
                                  data-id="<%= seat.id %>"
                                  data-label="<%= seat.row_label %><%= seat.seat_number %>"
                                  data-type="<%= seat.seat_type %>"
-                                 title="Ghế <%= seat.row_label %><%= seat.seat_number %> - <%= seat.seat_type %> <%= seat.isBooked ? '(Đã có người đặt)' : '' %>">
+                                 title="Ghế <%= seat.row_label %><%= seat.seat_number %> (<%= seat.seat_type %>) <%= seat.isBooked ? '— ĐÃ BÁN' : '' %>"
+                                 role="button"
+                                 tabindex="<%= seat.isBooked ? -1 : 0 %>"
+                                 aria-label="Ghế <%= seat.row_label %><%= seat.seat_number %> loại <%= seat.seat_type %>">
                                 <%= seat.seat_number %>
                             </div>
                         <% }); %>
@@ -65,89 +70,105 @@
             <!-- Seat Legend -->
             <div class="seat-legend">
                 <div class="legend-item">
-                    <span class="legend-badge" style="background: #20293A; border: 1px solid #2D394E;"></span>
-                    <span>Ghế Thường: <strong style="color: #fff;"><%= new Intl.NumberFormat('vi-VN').format(showtime.price_regular) %> đ</strong></span>
+                    <span class="legend-badge" style="background: #1F2839; border: 1px solid rgba(255,255,255,0.15);"></span>
+                    <span>Thường: <strong style="color: #FFFFFF;"><%= Number(showtime.price_regular).toLocaleString('vi-VN') %> đ</strong></span>
                 </div>
                 <div class="legend-item">
                     <span class="legend-badge" style="background: rgba(245, 196, 81, 0.15); border: 1px solid var(--color-gold);"></span>
-                    <span>Ghế VIP: <strong style="color: var(--color-gold);"><%= new Intl.NumberFormat('vi-VN').format(showtime.price_vip) %> đ</strong></span>
+                    <span>VIP: <strong style="color: var(--color-gold);"><%= Number(showtime.price_vip).toLocaleString('vi-VN') %> đ</strong></span>
                 </div>
                 <div class="legend-item">
-                    <span class="legend-badge" style="background: var(--color-primary); border: 1px solid #ffffff; box-shadow: 0 0 8px rgba(229,9,20,0.6);"></span>
-                    <span>Đang chọn</span>
+                    <span class="legend-badge" style="background: rgba(244, 114, 182, 0.15); border: 1px solid #F472B6;"></span>
+                    <span>Couple: <strong style="color: #F472B6;"><%= Number(showtime.price_couple).toLocaleString('vi-VN') %> đ</strong></span>
                 </div>
                 <div class="legend-item">
-                    <span class="legend-badge" style="background: #131924; border: 1px solid #1D2433; opacity: 0.5;"></span>
+                    <span class="legend-badge" style="background: var(--color-primary); border: 1px solid #FFFFFF; box-shadow: 0 0 8px rgba(229,9,20,0.6);"></span>
+                    <span style="color: #FFFFFF; font-weight: 600;">Đang chọn</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-badge" style="background: #111622; border: 1px solid #1A202C; opacity: 0.5;"></span>
                     <span>Đã bán</span>
                 </div>
             </div>
         </div>
 
-        <!-- Right: Booking Summary & Customer Information Form -->
+        <!-- Right: Sticky Ticket Summary & Information Form -->
         <div class="summary-card">
             <h3 class="summary-title">
-                <i class="fas fa-receipt" style="color: var(--color-primary);"></i> Thông Tin Đặt Vé
+                <i class="fas fa-receipt" style="color: var(--color-primary);"></i> Thông Tin Đơn Vé
             </h3>
 
             <div class="summary-row">
-                <span>Phim:</span>
-                <strong title="<%= showtime.movie_title %>"><%= showtime.movie_title %></strong>
+                <span>Bộ phim:</span>
+                <strong title="<%= showtime.movie_title %>" style="color: #FFFFFF;"><%= showtime.movie_title %></strong>
             </div>
             <div class="summary-row">
                 <span>Rạp chiếu:</span>
-                <strong><%= showtime.cinema_name %></strong>
+                <strong style="color: #FFFFFF;"><%= showtime.cinema_name %></strong>
             </div>
             <div class="summary-row">
                 <span>Phòng:</span>
-                <strong><%= showtime.room_name %> (<%= showtime.room_type || 'Standard' %>)</strong>
+                <strong style="color: #FFFFFF;"><%= showtime.room_name %> (<%= showtime.room_type || 'Standard' %>)</strong>
             </div>
             <div class="summary-row">
                 <span>Suất chiếu:</span>
                 <strong style="color: var(--color-gold);"><%= new Date(showtime.start_time).toLocaleString('vi-VN') %></strong>
             </div>
 
-            <!-- Selected Seats Box (Filled dynamically by seats.js) -->
+            <!-- Dynamic Selected Seats Container -->
             <div style="margin: 1.25rem 0 0.5rem 0;">
-                <div style="font-size: 0.88rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 0.5rem;">
-                    Ghế đã chọn:
+                <div style="font-size: 0.88rem; font-weight: 700; color: var(--text-secondary); margin-bottom: 0.5rem; display: flex; justify-content: space-between;">
+                    <span>Ghế đã chọn:</span>
+                    <span id="selectedCountBadge" style="color: var(--color-gold); font-size: 0.82rem;">0 ghế</span>
                 </div>
                 <div class="selected-seats-box" id="selectedSeatsList">
-                    <span style="color: var(--text-muted); font-size: 0.85rem;">Chưa có ghế nào được chọn</span>
+                    <span style="color: var(--text-muted); font-size: 0.85rem;">Chưa có ghế nào được chọn. Nhấp vào ghế trên sơ đồ để chọn.</span>
                 </div>
             </div>
 
+            <!-- Dynamic Price Total -->
             <div class="summary-row" style="border-top: 1px solid var(--border-color); padding-top: 1rem; margin-top: 1rem;">
-                <span style="font-size: 1rem; font-weight: 700; color: #fff;">Tổng tiền:</span>
+                <span style="font-size: 1rem; font-weight: 700; color: #FFFFFF;">Tổng tạm tính:</span>
                 <span class="total-price" id="totalPrice">0 đ</span>
             </div>
 
             <!-- Customer Booking Form -->
             <form id="bookingForm" style="margin-top: 1.5rem;">
                 <div class="form-group">
-                    <label class="form-label" for="customerName">Họ và tên người nhận vé *</label>
+                    <label class="form-label" for="customerName">
+                        <i class="fas fa-user" style="color: var(--color-gold); margin-right: 0.35rem;"></i> Họ tên người nhận vé <span style="color: var(--color-primary);">*</span>
+                    </label>
                     <input type="text" id="customerName" name="customerName" class="form-control" required 
                            value="<%= currentUser ? (currentUser.full_name || currentUser.username) : '' %>" 
-                           placeholder="Nguyễn Văn A">
+                           placeholder="Ví dụ: Nguyễn Văn A">
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" for="customerEmail">Email nhận vé điện tử *</label>
+                    <label class="form-label" for="customerEmail">
+                        <i class="fas fa-envelope" style="color: var(--color-gold); margin-right: 0.35rem;"></i> Email nhận vé điện tử <span style="color: var(--color-primary);">*</span>
+                    </label>
                     <input type="email" id="customerEmail" name="customerEmail" class="form-control" required 
                            value="<%= currentUser ? (currentUser.email || '') : '' %>" 
                            placeholder="email@example.com">
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label" for="customerPhone">Số điện thoại *</label>
+                    <label class="form-label" for="customerPhone">
+                        <i class="fas fa-phone" style="color: var(--color-gold); margin-right: 0.35rem;"></i> Số điện thoại <span style="color: var(--color-primary);">*</span>
+                    </label>
                     <input type="tel" id="customerPhone" name="customerPhone" class="form-control" required 
                            value="<%= currentUser ? (currentUser.phone || '') : '' %>" 
                            placeholder="0912345678">
                 </div>
 
-                <button type="submit" id="btnSubmitBooking" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem; padding: 0.85rem;" disabled>
+                <button type="submit" id="btnSubmitBooking" class="btn btn-primary btn-lg" style="width: 100%; margin-top: 0.75rem;" disabled>
                     <i class="fas fa-ticket"></i> Tiếp tục thanh toán
                 </button>
             </form>
+
+            <div style="text-align: center; font-size: 0.78rem; color: var(--text-muted); margin-top: 1rem;">
+                <i class="fas fa-lock"></i> Giữ chỗ an toàn với ACID Database Lock
+            </div>
         </div>
     </div>
 </main>

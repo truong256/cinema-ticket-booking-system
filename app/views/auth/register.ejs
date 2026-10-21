@@ -9,11 +9,11 @@
                 <i class="fas fa-film"></i>
                 <span>CINE<span style="color: var(--color-primary);">VIBE</span></span>
             </div>
-            <h1 style="font-family: var(--font-heading); font-size: 1.85rem; font-weight: 800; color: #ffffff; letter-spacing: -0.5px; margin-bottom: 0.35rem;">
+            <h1 style="font-family: var(--font-heading); font-size: 1.85rem; font-weight: 800; color: #FFFFFF; letter-spacing: -0.5px; margin-bottom: 0.35rem;">
                 Đăng Ký Thành Viên Mới
             </h1>
             <p style="color: var(--text-secondary); font-size: 0.92rem;">
-                Gia nhập CINEVIBE để nhận đặc quyền ghế VIP và ưu đãi độc quyền
+                Gia nhập CINEVIBE để nhận đặc quyền ghế VIP và đặt vé trực tuyến
             </p>
         </div>
 
@@ -30,14 +30,14 @@
                 <label class="form-label" for="full_name">
                     <i class="fas fa-id-card" style="color: var(--color-gold); margin-right: 0.4rem;"></i> Họ và tên người dùng <span style="color: var(--color-primary);">*</span>
                 </label>
-                <input type="text" id="full_name" name="full_name" class="form-control" required value="<%= formData?.full_name || '' %>" placeholder="Ví dụ: Nguyễn Văn A" autocomplete="name">
+                <input type="text" id="full_name" name="full_name" class="form-control" required value="<%= typeof formData !== 'undefined' && formData?.full_name ? formData.full_name : '' %>" placeholder="Ví dụ: Nguyễn Văn A" autocomplete="name">
             </div>
 
             <div class="form-group">
                 <label class="form-label" for="username">
                     <i class="fas fa-user" style="color: var(--color-gold); margin-right: 0.4rem;"></i> Tên đăng nhập <span style="color: var(--color-primary);">*</span>
                 </label>
-                <input type="text" id="username" name="username" class="form-control" required value="<%= formData?.username || '' %>" placeholder="Tối thiểu 3 ký tự (chữ hoặc số)" autocomplete="username">
+                <input type="text" id="username" name="username" class="form-control" required value="<%= typeof formData !== 'undefined' && formData?.username ? formData.username : '' %>" placeholder="Tối thiểu 3 ký tự (chữ hoặc số)" autocomplete="username">
             </div>
 
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
@@ -45,14 +45,14 @@
                     <label class="form-label" for="email">
                         <i class="fas fa-envelope" style="color: var(--color-gold); margin-right: 0.4rem;"></i> Địa chỉ Email <span style="color: var(--color-primary);">*</span>
                     </label>
-                    <input type="email" id="email" name="email" class="form-control" required value="<%= formData?.email || '' %>" placeholder="email@domain.com" autocomplete="email">
+                    <input type="email" id="email" name="email" class="form-control" required value="<%= typeof formData !== 'undefined' && formData?.email ? formData.email : '' %>" placeholder="email@domain.com" autocomplete="email">
                 </div>
 
                 <div class="form-group">
                     <label class="form-label" for="phone">
                         <i class="fas fa-phone" style="color: var(--color-gold); margin-right: 0.4rem;"></i> Số điện thoại
                     </label>
-                    <input type="tel" id="phone" name="phone" class="form-control" value="<%= formData?.phone || '' %>" placeholder="0912345678" autocomplete="tel">
+                    <input type="tel" id="phone" name="phone" class="form-control" value="<%= typeof formData !== 'undefined' && formData?.phone ? formData.phone : '' %>" placeholder="0912345678" autocomplete="tel">
                 </div>
             </div>
 
@@ -81,7 +81,7 @@
             </div>
 
             <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.4rem;">
-                <i class="fas fa-shield-halved" style="color: #10b981;"></i>
+                <i class="fas fa-shield-halved" style="color: #10B981;"></i>
                 Mật khẩu được mã hóa an toàn bằng thuật toán <strong>bcrypt (rounds 10)</strong>.
             </div>
 
