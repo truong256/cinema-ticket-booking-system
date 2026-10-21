@@ -9,6 +9,20 @@
 const http = require('http');
 const https = require('https');
 const { execSync } = require('child_process');
+const path = require('path');
+const fs = require('fs');
+
+// Nạp biến môi trường từ .env nếu tồn tại (không lưu mật khẩu trong mã nguồn)
+const envFile = path.join(__dirname, '../.env');
+if (fs.existsSync(envFile)) {
+    const lines = fs.readFileSync(envFile, 'utf8').split('\n');
+    for (const line of lines) {
+        const match = line.match(/^\s*([\w.-]+)\s*=\s*(.*)?\s*$/);
+        if (match && !process.env[match[1]]) {
+            process.env[match[1]] = match[2].trim().replace(/(^['"]|['"]$)/g, '');
+        }
+    }
+}
 
 // Đảm bảo Docker CLI trong PATH trên Windows
 if (process.platform === 'win32') {
@@ -67,8 +81,10 @@ async function run() {
 
     // Dọn dẹp booking test cũ trước khi bắt đầu để test lặp lại độc lập
     try {
-        const rootPass = process.env.MYSQL_ROOT_PASSWORD || 'Root_CineVibe_2026!SecX9';
-        execSync(`docker exec cinema-mysql mysql -u root -p${rootPass} cinema_db -e "DELETE FROM bookings WHERE id > 2;"`, { stdio: 'pipe' });
+        const rootPass = process.env.MYSQL_ROOT_PASSWORD;
+        if (rootPass) {
+            execSync(`docker exec cinema-mysql mysql -u root -p"${rootPass}" cinema_db -e "DELETE FROM bookings WHERE id > 2;"`, { stdio: 'pipe' });
+        }
     } catch (_) {}
 
     // ================================================================
@@ -832,8 +848,10 @@ async function run() {
 
     // 9.3 Database Least Privilege Check
     try {
-        const rootPass = process.env.MYSQL_ROOT_PASSWORD || 'Root_CineVibe_2026!SecX9';
-        const dbUsers = execSync(`docker exec cinema-mysql mysql -u root -p${rootPass} -e "SELECT user, host FROM mysql.user WHERE user IN ('cinema_user', 'exporter');"`).toString();
+        const rootPass = process.env.MYSQL_ROOT_PASSWORD;
+        const dbUsers = rootPass
+            ? execSync(`docker exec cinema-mysql mysql -u root -p"${rootPass}" -e "SELECT user, host FROM mysql.user WHERE user IN ('cinema_user', 'exporter');"`).toString()
+            : '';
         if (dbUsers.includes('cinema_user') && dbUsers.includes('exporter')) {
             record('Hardening 3: Database Least Privilege', 'Phase 9: Hardening', 'PASS', 'Tài khoản app chỉ được cấp CRUD trên cinema_db.*, tài khoản exporter chỉ có quyền REPLICATION/PROCESS/SELECT');
         } else {
@@ -869,8 +887,10 @@ async function run() {
 
     // 9.6 Strong Passwords & Bcrypt Validation
     try {
-        const rootPass = process.env.MYSQL_ROOT_PASSWORD || 'Root_CineVibe_2026!SecX9';
-        const userSample = execSync(`docker exec cinema-mysql mysql -u root -p${rootPass} cinema_db -e "SELECT password_hash FROM users WHERE username='admin';"`).toString();
+        const rootPass = process.env.MYSQL_ROOT_PASSWORD;
+        const userSample = rootPass
+            ? execSync(`docker exec cinema-mysql mysql -u root -p"${rootPass}" cinema_db -e "SELECT password_hash FROM users WHERE username='admin';"`).toString()
+            : '';
         if (userSample.includes('$2a$10$') || userSample.includes('$2b$10$')) {
             record('Hardening 6: Bcrypt Password Hashing', 'Phase 9: Hardening', 'PASS', 'Tất cả mật khẩu lưu trữ trong MySQL đều được băm bằng bcrypt rounds 10');
         } else {

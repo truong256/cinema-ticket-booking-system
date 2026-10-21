@@ -7,8 +7,7 @@
 useDefault = true
 
 [allowlist]
-description = "Bỏ qua chứng chỉ SSL tự ký dùng cho môi trường demo localhost"
+description = "Ngoại lệ hẹp: Khóa riêng SSL tự ký dùng cho môi trường demo localhost trong lịch sử commit cũ (e0b26ab). Khóa này đã được untrack và đưa vào .gitignore."
 paths = [
-    '''nginx/ssl/cinema\.key''',
-    '''docs/.*'''
+    '''(?:^|/)nginx/ssl/cinema\.key$'''
 ]

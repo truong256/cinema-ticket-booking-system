@@ -7,6 +7,10 @@
 monitoring/mysql-exporter/.my.cnf
 *.my.cnf
 
+# SSL certificates & private keys (do not commit to git)
+nginx/ssl/*.crt
+nginx/ssl/*.key
+
 # Dependencies
 node_modules/
 npm-debug.log*

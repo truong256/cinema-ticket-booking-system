@@ -141,8 +141,6 @@ services:
       - '--config.my-cnf=/etc/my.cnf'
     volumes:
       - ./monitoring/mysql-exporter/.my.cnf:/etc/my.cnf:ro
-    environment:
-      - DATA_SOURCE_NAME=${MYSQL_EXPORTER_USER:-exporter}:${MYSQL_EXPORTER_PASSWORD}@(mysql:3306)/
     networks:
       - backend_net
       - monitor_net
