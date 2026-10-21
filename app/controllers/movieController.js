@@ -25,7 +25,7 @@ const movieController = {
             `);
 
             res.render('index', {
-                title: 'Trang chủ - Đặt vé Xem phim & Sự kiện Đề 11',
+                title: 'CINEVIBE - Nền Tảng Đặt Vé Xem Phim Trực Tuyến',
                 movies,
                 featuredMovie,
                 todayShowtimes

@@ -100,7 +100,7 @@ app.use('/admin', adminRoutes);
 // About / Information page
 app.get('/about', (req, res) => {
     res.render('about', {
-        title: 'Giới thiệu Dự án Đề 11 - Triển khai & Quản trị Hệ thống'
+        title: 'Giới thiệu CINEVIBE - Nền Tảng Đặt Vé Xem Phim Trực Tuyến'
     });
 });
 
