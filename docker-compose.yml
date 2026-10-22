@@ -208,6 +208,39 @@ services:
     depends_on:
       - prometheus
 
+  # -------------------------------------------------------------
+  # DỊCH VỤ 9: LOKI (Hệ thống lưu trữ log tập trung)
+  # -------------------------------------------------------------
+  loki:
+    image: grafana/loki:2.9.6
+    container_name: cinema-loki
+    restart: unless-stopped
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./logging/loki/loki-config.yml:/etc/loki/local-config.yaml:ro
+      - loki_data:/loki
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - monitor_net
+
+  # -------------------------------------------------------------
+  # DỊCH VỤ 10: PROMTAIL (Log Shipper thu thập file log từ Volume)
+  # -------------------------------------------------------------
+  promtail:
+    image: grafana/promtail:2.9.6
+    container_name: cinema-promtail
+    restart: unless-stopped
+    volumes:
+      - ./logging/promtail/promtail-config.yml:/etc/promtail/config.yml:ro
+      - app_logs:/var/log/app:ro
+      - nginx_logs:/var/log/nginx:ro
+    command: -config.file=/etc/promtail/config.yml
+    networks:
+      - monitor_net
+    depends_on:
+      - loki
+
 # ====================================================================
 # MẠNG NỘI BỘ (NETWORK ISOLATION - TIÊU CHÍ BẢO MẬT HARDENING 9.2)
 # ====================================================================
@@ -236,3 +269,5 @@ volumes:
     name: cinema_prometheus_data
   grafana_data:
     name: cinema_grafana_data
+  loki_data:
+    name: cinema_loki_data

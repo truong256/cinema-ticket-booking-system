@@ -1,0 +1,32 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+scrape_configs:
+  # 1. Thu thập Application Logs (từ volume chia sẻ /var/log/app)
+  - job_name: app
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: app
+          app: cinema-booking
+          host: nodejs-app
+          __path__: /var/log/app/*.log
+
+  # 2. Thu thập Nginx Access & Error Logs (từ volume chia sẻ /var/log/nginx)
+  - job_name: nginx
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: nginx
+          service: reverse-proxy
+          host: nginx-proxy
+          __path__: /var/log/nginx/*.log
