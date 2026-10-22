@@ -1,0 +1,9 @@
+# ====================================================================
+# TEMPLATE CẤU HÌNH MYSQL EXPORTER (.my.cnf.example)
+# Sao chép file này thành .my.cnf và điền mật khẩu exporter tương ứng
+# ====================================================================
+[client]
+user = exporter
+password = <MYSQL_EXPORTER_PASSWORD>
+host = mysql
+port = 3306

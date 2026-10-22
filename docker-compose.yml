@@ -129,6 +129,85 @@ services:
       retries: 3
       start_period: 10s
 
+  # -------------------------------------------------------------
+  # DỊCH VỤ 5: PROMETHEUS MYSQLD EXPORTER (Giám sát Database)
+  # Cấu hình hiện đại qua file .my.cnf theo khuyến nghị v0.15.1
+  # -------------------------------------------------------------
+  mysql-exporter:
+    image: prom/mysqld-exporter:v0.15.1
+    container_name: cinema-mysql-exporter
+    restart: unless-stopped
+    command:
+      - '--config.my-cnf=/etc/my.cnf'
+    volumes:
+      - ./monitoring/mysql-exporter/.my.cnf:/etc/my.cnf:ro
+    networks:
+      - backend_net
+      - monitor_net
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  # -------------------------------------------------------------
+  # DỊCH VỤ 6: CADVISOR (Giám sát tài nguyên CPU/RAM Container)
+  # -------------------------------------------------------------
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.49.1
+    container_name: cinema-cadvisor
+    restart: unless-stopped
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    ports:
+      - "8081:8080"
+    networks:
+      - monitor_net
+
+  # -------------------------------------------------------------
+  # DỊCH VỤ 7: PROMETHEUS METRICS SERVER
+  # -------------------------------------------------------------
+  prometheus:
+    image: prom/prometheus:v2.51.0
+    container_name: cinema-prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    networks:
+      - monitor_net
+
+  # -------------------------------------------------------------
+  # DỊCH VỤ 8: GRAFANA MONITORING & LOGGING DASHBOARD
+  # -------------------------------------------------------------
+  grafana:
+    image: grafana/grafana:10.4.1
+    container_name: cinema-grafana
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_ADMIN_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana_data:/var/lib/grafana
+    networks:
+      - monitor_net
+    depends_on:
+      - prometheus
+
 # ====================================================================
 # MẠNG NỘI BỘ (NETWORK ISOLATION - TIÊU CHÍ BẢO MẬT HARDENING 9.2)
 # ====================================================================
@@ -153,3 +232,7 @@ volumes:
     name: cinema_app_logs
   nginx_logs:
     name: cinema_nginx_logs
+  prometheus_data:
+    name: cinema_prometheus_data
+  grafana_data:
+    name: cinema_grafana_data

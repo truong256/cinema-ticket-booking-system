@@ -1,0 +1,36 @@
+global:
+  scrape_interval: 5s
+  evaluation_interval: 5s
+
+scrape_configs:
+  # 1. Giám sát chính Prometheus
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # 2. Giám sát Ứng dụng Web Đặt vé (Node.js Express + prom-client)
+  - job_name: 'cinema-app'
+    metrics_path: '/metrics'
+    scrape_interval: 3s
+    static_configs:
+      - targets: ['app:3000']
+        labels:
+          app: 'cinema-booking'
+          env: 'production'
+          student: 'Nguyen Duy Truong - DTC245200120'
+
+  # 3. Giám sát Cơ sở dữ liệu MySQL qua mysqld-exporter
+  - job_name: 'mysql'
+    static_configs:
+      - targets: ['mysql-exporter:9104']
+        labels:
+          service: 'mysql-database'
+          cluster: 'cinema-mysql'
+
+  # 4. Giám sát Tài nguyên Container (CPU/RAM/Network) qua cAdvisor
+  - job_name: 'cadvisor'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['cadvisor:8080']
+        labels:
+          service: 'container-metrics'
