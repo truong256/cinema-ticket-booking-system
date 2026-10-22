@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= typeof title !== 'undefined' ? title : 'CineVibe - Hệ Thống Đặt Vé Xem Phim & Sự Kiện' %></title>
+    <meta name="description" content="CINEVIBE - Nền tảng đặt vé xem phim trực tuyến hàng đầu, tra cứu lịch chiếu, chọn ghế yêu thích và đặt vé nhanh chóng, tiện lợi.">
+    <meta name="author" content="CINEVIBE Cinema">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
+
+    <!-- Google Fonts: Be Vietnam Pro & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Main Dark Cinema Styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <% if (typeof extraCss !== 'undefined') { %>
+        <link rel="stylesheet" href="<%= extraCss %>">
+    <% } %>
+</head>
+<body>
+    <!-- Ambient Cinematic Lighting Layer (Ref: Lumière Cinema) -->
+    <div class="ambient-bg" aria-hidden="true">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        <div class="grain-overlay"></div>
+    </div>

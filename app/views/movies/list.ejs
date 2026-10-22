@@ -1,0 +1,103 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<main class="main-wrapper">
+    <!-- Header & Catalog Title -->
+    <div class="section-header">
+        <div>
+            <div class="brand-badge gold" style="margin-bottom: 0.5rem;">CINEVIBE CATALOG</div>
+            <h1 class="section-title">
+                <i class="fas fa-clapperboard"></i> Danh Sách Phim & Sự Kiện Chiếu Rạp
+            </h1>
+            <p class="section-subtitle">Khám phá các tác phẩm điện ảnh bom tấn đang chiếu và sắp ra mắt tại hệ thống cụm rạp trên toàn quốc</p>
+        </div>
+
+        <!-- Search Bar -->
+        <div style="position: relative; min-width: 300px; max-width: 100%;">
+            <input type="text" id="movieSearchInput" class="form-control" placeholder="Tìm kiếm tựa phim theo tên..." style="padding-left: 2.6rem;">
+            <i class="fas fa-search" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+        </div>
+    </div>
+
+    <!-- Genre Filter Pills -->
+    <div style="display: flex; gap: 0.65rem; flex-wrap: wrap; margin-bottom: 2.5rem; align-items: center;">
+        <span style="font-size: 0.88rem; font-weight: 700; color: var(--text-muted); margin-right: 0.35rem; text-transform: uppercase; letter-spacing: 0.5px;">
+            <i class="fas fa-filter" style="color: var(--color-gold);"></i> Thể loại:
+        </span>
+        <a href="/movies" class="btn btn-sm <%= !currentGenre ? 'btn-primary' : 'btn-secondary' %>">Tất cả</a>
+        <a href="/movies?genre=Hành động" class="btn btn-sm <%= currentGenre === 'Hành động' ? 'btn-primary' : 'btn-secondary' %>">Hành động</a>
+        <a href="/movies?genre=Khoa học viễn tưởng" class="btn btn-sm <%= currentGenre === 'Khoa học viễn tưởng' ? 'btn-primary' : 'btn-secondary' %>">Khoa học viễn tưởng</a>
+        <a href="/movies?genre=Tâm lý" class="btn btn-sm <%= currentGenre === 'Tâm lý' ? 'btn-primary' : 'btn-secondary' %>">Tâm lý</a>
+        <a href="/movies?genre=Hoạt hình" class="btn btn-sm <%= currentGenre === 'Hoạt hình' ? 'btn-primary' : 'btn-secondary' %>">Hoạt hình</a>
+        <a href="/movies?genre=Gia đình" class="btn btn-sm <%= currentGenre === 'Gia đình' ? 'btn-primary' : 'btn-secondary' %>">Gia đình</a>
+        <a href="/movies?genre=Lịch sử" class="btn btn-sm <%= currentGenre === 'Lịch sử' ? 'btn-primary' : 'btn-secondary' %>">Lịch sử</a>
+    </div>
+
+    <!-- Responsive Movies Grid (4 columns desktop) -->
+    <div class="movies-grid" id="moviesCatalogGrid">
+        <% if (movies && movies.length > 0) { %>
+            <% movies.forEach((movie, idx) => { %>
+                <div class="movie-card" data-title="<%= movie.title.toLowerCase() %>" data-genre="<%= movie.genre.toLowerCase() %>">
+                    <div class="movie-poster-wrap">
+                        <img src="<%= movie.poster_url %>" alt="<%= movie.title %>" class="movie-poster" loading="<%= idx < 4 ? 'eager' : 'lazy' %>" onerror="this.onerror=null; this.src='/images/default_poster.jpg';">
+                        <div class="movie-poster-overlay"></div>
+                        <span class="age-badge <%= movie.age_rating %>"><%= movie.age_rating %></span>
+                    </div>
+                    <div class="movie-info">
+                        <span class="movie-genre"><%= movie.genre %></span>
+                        <h3 class="movie-title" title="<%= movie.title %>"><%= movie.title %></h3>
+                        <p style="font-size: 0.86rem; color: var(--text-secondary); margin-bottom: 1rem; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                            <%= movie.description %>
+                        </p>
+                        <div class="movie-meta">
+                            <span><i class="far fa-clock"></i> <%= movie.duration_minutes %> phút</span>
+                            <a href="/movies/<%= movie.id %>" class="btn btn-primary btn-sm">
+                                Chi tiết & Đặt vé <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <!-- Empty State -->
+            <div class="card" style="grid-column: 1 / -1; text-align: center; padding: 4.5rem 2rem;">
+                <div style="width: 72px; height: 72px; border-radius: 50%; background: var(--bg-surface); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; color: var(--text-muted); font-size: 2.2rem; border: 1px solid var(--border-color);">
+                    <i class="fas fa-film"></i>
+                </div>
+                <h3 style="font-family: var(--font-heading); font-size: 1.35rem; color: #FFFFFF; margin-bottom: 0.5rem; font-weight: 700;">
+                    Không tìm thấy phim phù hợp
+                </h3>
+                <p style="color: var(--text-secondary); max-width: 440px; margin: 0 auto 1.5rem; font-size: 0.95rem;">
+                    Không có bộ phim nào khớp với bộ lọc hoặc từ khóa tìm kiếm bạn đã chọn. Vui lòng thử lại với tiêu chí khác.
+                </p>
+                <a href="/movies" class="btn btn-secondary btn-sm"><i class="fas fa-rotate-left"></i> Xem lại toàn bộ phim</a>
+            </div>
+        <% } %>
+    </div>
+</main>
+
+<script>
+// Fast Client-side quick filter by title and genre
+document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('movieSearchInput');
+    const cards = document.querySelectorAll('#moviesCatalogGrid .movie-card');
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            let visibleCount = 0;
+            cards.forEach(card => {
+                const title = card.getAttribute('data-title') || '';
+                const genre = card.getAttribute('data-genre') || '';
+                if (title.includes(query) || genre.includes(query)) {
+                    card.style.display = 'flex';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    }
+});
+</script>
+
+<%- include('../partials/footer') %>

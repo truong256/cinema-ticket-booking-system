@@ -1,0 +1,155 @@
+version: '3.8'
+
+# ====================================================================
+# DOCKER COMPOSE - HỆ THỐNG ĐẶT VÉ XEM PHIM / SỰ KIỆN - ĐỀ 11
+# Học phần: Triển khai và Quản trị Hệ thống Phần mềm
+# Sinh viên: Nguyễn Duy Trường - MSV: DTC245200120 - Lớp: CNTTK23E
+# ====================================================================
+
+services:
+  # -------------------------------------------------------------
+  # DỊCH VỤ 1: WEB APPLICATION (Node.js + Express + EJS)
+  # Hardening: Chạy user non-root (UID 1000: node), no-new-privileges
+  # -------------------------------------------------------------
+  app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    container_name: cinema-app
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
+      PORT: 3000
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: ${MYSQL_USER:-cinema_user}
+      DB_PASSWORD: ${DB_PASSWORD:-${MYSQL_PASSWORD}}
+      DB_NAME: ${MYSQL_DATABASE:-cinema_db}
+      SESSION_SECRET: ${SESSION_SECRET:-CinemaSuperSecretKey2026_DTC245200120}
+      LOG_DIR: /var/log/app
+    volumes:
+      - app_logs:/var/log/app
+    networks:
+      - frontend_net
+      - backend_net
+      - monitor_net
+    depends_on:
+      mysql:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/healthz"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  # -------------------------------------------------------------
+  # DỊCH VỤ 2: CƠ SỞ DỮ LIỆU MYSQL 8.0
+  # Hardening: Không expose cổng 3306 ra host ngoài, cô lập backend_net
+  # -------------------------------------------------------------
+  mysql:
+    image: mysql:8.0
+    container_name: cinema-mysql
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    env_file:
+      - .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-cinema_db}
+      MYSQL_USER: ${MYSQL_USER:-cinema_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+      - ./database/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
+      - ./database/01-exporter-user.sh:/docker-entrypoint-initdb.d/03-exporter-user.sh:ro
+    networks:
+      - backend_net
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$${MYSQL_ROOT_PASSWORD} --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  # -------------------------------------------------------------
+  # DỊCH VỤ 3: QUẢN TRỊ DATABASE PHPMYADMIN
+  # -------------------------------------------------------------
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: cinema-phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      UPLOAD_LIMIT: 64M
+    networks:
+      - backend_net
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  # -------------------------------------------------------------
+  # DỊCH VỤ 4: NGINX REVERSE PROXY & SECURITY HEADERS
+  # -------------------------------------------------------------
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: cinema-nginx
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - nginx_logs:/var/log/nginx
+    networks:
+      - frontend_net
+      - monitor_net
+    depends_on:
+      app:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://127.0.0.1/ || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+# ====================================================================
+# MẠNG NỘI BỘ (NETWORK ISOLATION - TIÊU CHÍ BẢO MẬT HARDENING 9.2)
+# ====================================================================
+networks:
+  frontend_net:
+    driver: bridge
+    name: cinema_frontend_net
+  backend_net:
+    driver: bridge
+    name: cinema_backend_net
+  monitor_net:
+    driver: bridge
+    name: cinema_monitor_net
+
+# ====================================================================
+# NAMED VOLUMES (LƯU TRỮ DỮ LIỆU BỀN VỮNG & CHIA SẺ LOGS)
+# ====================================================================
+volumes:
+  mysql_data:
+    name: cinema_mysql_data
+  app_logs:
+    name: cinema_app_logs
+  nginx_logs:
+    name: cinema_nginx_logs

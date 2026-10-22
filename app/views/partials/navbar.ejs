@@ -1,0 +1,111 @@
+<nav class="navbar" id="mainNavbar">
+    <div class="nav-container">
+        <!-- Brand Logo -->
+        <a href="/" class="brand-logo" title="CineVibe Cinema">
+            <i class="fas fa-film"></i>
+            <span>CINE<span style="color: var(--color-primary);">VIBE</span></span>
+        </a>
+
+        <!-- Desktop Navigation Links -->
+        <ul class="nav-links" id="navLinks">
+            <li>
+                <a href="/" class="<%= typeof currentPath !== 'undefined' && currentPath === '/' ? 'active' : '' %>">
+                    <i class="fas fa-compass"></i> Trang chủ
+                </a>
+            </li>
+            <li>
+                <a href="/movies" class="<%= typeof currentPath !== 'undefined' && currentPath.startsWith('/movies') ? 'active' : '' %>">
+                    <i class="fas fa-clapperboard"></i> Phim
+                </a>
+            </li>
+            <li>
+                <a href="/showtimes" class="<%= typeof currentPath !== 'undefined' && currentPath.startsWith('/showtimes') ? 'active' : '' %>">
+                    <i class="fas fa-calendar-alt"></i> Lịch chiếu
+                </a>
+            </li>
+            <% if (typeof currentUser !== 'undefined' && currentUser) { %>
+                <li>
+                    <a href="/booking/history" class="<%= typeof currentPath !== 'undefined' && currentPath === '/booking/history' ? 'active' : '' %>">
+                        <i class="fas fa-ticket"></i> Vé của tôi
+                    </a>
+                </li>
+            <% } %>
+            <% if (typeof currentUser !== 'undefined' && currentUser && currentUser.role === 'admin') { %>
+                <li>
+                    <a href="/admin" class="<%= typeof currentPath !== 'undefined' && currentPath.startsWith('/admin') ? 'active' : '' %>" style="color: var(--color-gold);">
+                        <i class="fas fa-shield-halved"></i> Quản trị
+                    </a>
+                </li>
+            <% } %>
+            <li>
+                <a href="/about" class="<%= typeof currentPath !== 'undefined' && currentPath === '/about' ? 'active' : '' %>">
+                    <i class="fas fa-circle-info"></i> Giới thiệu
+                </a>
+            </li>
+            <li class="mobile-only-auth" style="display: none; border-top: 1px solid var(--border-color); padding-top: 0.75rem; margin-top: 0.5rem;">
+                <% if (typeof currentUser !== 'undefined' && currentUser) { %>
+                    <div style="margin-bottom: 0.6rem; color: var(--color-gold); font-size: 0.9rem; font-weight: 600;">
+                        <i class="fas fa-user-circle"></i> <%= currentUser.full_name || currentUser.username %>
+                    </div>
+                    <a href="/auth/logout" class="btn btn-secondary btn-sm" style="width: 100%; display: flex; justify-content: center; align-items: center; gap: 0.35rem;">
+                        <i class="fas fa-arrow-right-from-bracket"></i> Đăng xuất
+                    </a>
+                <% } else { %>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <a href="/auth/login" class="btn <%= typeof currentPath !== 'undefined' && currentPath === '/auth/login' ? 'btn-primary' : 'btn-secondary' %> btn-sm" style="flex: 1; text-align: center;">Đăng nhập</a>
+                        <a href="/auth/register" class="btn <%= typeof currentPath !== 'undefined' && currentPath === '/auth/register' ? 'btn-primary' : 'btn-secondary' %> btn-sm" style="flex: 1; text-align: center;">Đăng ký</a>
+                    </div>
+                <% } %>
+            </li>
+        </ul>
+
+        <!-- Right Side: Auth / User Profile -->
+        <div class="nav-actions">
+            <% if (typeof currentUser !== 'undefined' && currentUser) { %>
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <div style="display: flex; align-items: center; gap: 0.5rem; background: var(--bg-surface); padding: 0.35rem 0.85rem; border-radius: var(--radius-full); border: 1px solid var(--border-color);">
+                        <i class="fas fa-user-circle" style="color: var(--color-gold); font-size: 1.15rem;"></i>
+                        <span style="font-size: 0.88rem; font-weight: 600; color: var(--text-primary);">
+                            <%= currentUser.full_name || currentUser.username %>
+                        </span>
+                    </div>
+                    <a href="/auth/logout" class="btn btn-secondary btn-sm" title="Đăng xuất khỏi hệ thống">
+                        <i class="fas fa-arrow-right-from-bracket"></i> Đăng xuất
+                    </a>
+                </div>
+            <% } else { %>
+                <a href="/auth/login" class="btn <%= typeof currentPath !== 'undefined' && currentPath === '/auth/login' ? 'btn-secondary active' : 'btn-secondary' %> btn-sm" style="<%= typeof currentPath !== 'undefined' && currentPath === '/auth/login' ? 'border-color: var(--color-primary); color: #FFFFFF;' : '' %>">
+                    <i class="fas fa-arrow-right-to-bracket"></i> Đăng nhập
+                </a>
+                <a href="/auth/register" class="btn <%= typeof currentPath !== 'undefined' && (currentPath === '/auth/login' || currentPath === '/auth/register') ? 'btn-secondary' : 'btn-primary' %> btn-sm" style="<%= typeof currentPath !== 'undefined' && currentPath === '/auth/register' ? 'border-color: var(--color-primary); color: #FFFFFF;' : '' %>">
+                    <i class="fas fa-user-plus"></i> Đăng ký
+                </a>
+            <% } %>
+        </div>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle Navigation Menu">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+</nav>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const menuBtn = document.getElementById('mobileMenuBtn');
+    const navLinks = document.getElementById('navLinks');
+    if (menuBtn && navLinks) {
+        menuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('show');
+            const icon = menuBtn.querySelector('i');
+            if (navLinks.classList.contains('show')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-xmark');
+            } else {
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
+            }
+        });
+    }
+});
+</script>

@@ -1,0 +1,1616 @@
+/* ====================================================================
+   CINEVIBE - DARK CINEMA PREMIUM DESIGN SYSTEM
+   Commercial Grade Movie Booking Platform UI/UX
+   ==================================================================== */
+
+:root {
+    color-scheme: dark;
+
+    /* 1. MANDATORY DESIGN SYSTEM COLOR PALETTE */
+    --bg-primary: #0B0F19;
+    --bg-secondary: #171E2B;
+    --bg-elevated: #1F2839;
+    --bg-surface: #121824;
+    --bg-card: #171E2B;
+    --bg-card-hover: #1E2738;
+    --bg-overlay: rgba(11, 15, 25, 0.88);
+
+    --color-primary: #E50914;
+    --color-primary-hover: #C10712;
+    --color-primary-active: #9E050E;
+    --color-primary-glow: rgba(229, 9, 20, 0.4);
+
+    --color-gold: #F5C451;
+    --color-gold-hover: #E5B236;
+    --color-gold-glow: rgba(245, 196, 81, 0.35);
+    --gold-gradient: linear-gradient(135deg, #F5C451, #FBBF24, #D97706);
+
+    --text-primary: #FFFFFF;
+    --text-secondary: #A8B3C5;
+    --text-muted: #64748B;
+    --text-gold: #F5C451;
+
+    --border-color: rgba(255, 255, 255, 0.08);
+    --border-light: rgba(255, 255, 255, 0.12);
+    --border-hover: rgba(255, 255, 255, 0.2);
+    --border-focus: #E50914;
+
+    /* System Status Colors */
+    --color-success: #10B981;
+    --color-danger: #EF4444;
+    --color-warning: #F59E0B;
+    --color-info: #06B6D4;
+
+    /* Geometry Tokens */
+    --radius-card: 16px;
+    --radius-poster: 14px;
+    --radius-button: 10px;
+    --radius-input: 10px;
+    --radius-badge: 6px;
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --radius-full: 9999px;
+
+    /* Typography Scale */
+    --font-primary: 'Be Vietnam Pro', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-heading: 'Be Vietnam Pro', 'Inter', sans-serif;
+    --font-body: 'Be Vietnam Pro', 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+    /* Shadow & Depth */
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+    --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.7);
+    --shadow-elevated: 0 20px 40px -15px rgba(0, 0, 0, 0.85);
+    --shadow-glow-red: 0 0 25px rgba(229, 9, 20, 0.45);
+    --shadow-glow-gold: 0 0 25px rgba(245, 196, 81, 0.35);
+
+    /* Transitions */
+    --transition-fast: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+    --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    --transition-smooth: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+
+    --nav-height: 72px;
+}
+
+/* ====================================================================
+   BASE RESET & TYPOGRAPHY
+   ==================================================================== */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+}
+
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font-primary);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    position: relative;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+    transition: var(--transition-fast);
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+button, input, select, textarea {
+    font-family: inherit;
+    font-size: inherit;
+}
+
+:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 3px;
+}
+
+/* Scrollbar Customization */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--bg-elevated);
+    border-radius: var(--radius-full);
+    border: 2px solid var(--bg-primary);
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #2D3A50;
+}
+
+/* ====================================================================
+   AMBIENT BACKGROUND & CINEMATIC LIGHTING (REF: LUMIÈRE CINEMA)
+   ==================================================================== */
+.ambient-bg {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(140px);
+    opacity: 0.22;
+    transition: transform 0.5s ease;
+}
+
+.orb-1 {
+    width: 650px;
+    height: 650px;
+    top: -150px;
+    left: 20%;
+    background: radial-gradient(circle, rgba(229, 9, 20, 0.35) 0%, transparent 70%);
+}
+
+.orb-2 {
+    width: 500px;
+    height: 500px;
+    top: 30%;
+    right: -100px;
+    background: radial-gradient(circle, rgba(245, 196, 81, 0.22) 0%, transparent 70%);
+}
+
+.orb-3 {
+    width: 600px;
+    height: 600px;
+    bottom: -150px;
+    left: -100px;
+    background: radial-gradient(circle, rgba(30, 41, 59, 0.4) 0%, transparent 70%);
+}
+
+.grain-overlay {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 24px 24px;
+    opacity: 0.5;
+}
+
+/* ====================================================================
+   LAYOUT & CONTAINERS
+   ==================================================================== */
+.main-wrapper {
+    max-width: 1360px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 2.5rem 2rem;
+    flex: 1;
+    position: relative;
+    z-index: 1;
+}
+
+/* ====================================================================
+   HEADER & NAVBAR (DARK CINEMA LUXURY)
+   ==================================================================== */
+.navbar {
+    background: rgba(11, 15, 25, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    padding: 0.85rem 2rem;
+    transition: var(--transition);
+}
+
+.nav-container {
+    max-width: 1360px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.brand-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    font-family: var(--font-heading);
+    font-size: 1.45rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: #FFFFFF;
+    user-select: none;
+}
+
+.brand-logo i {
+    color: var(--color-primary);
+    font-size: 1.4rem;
+    filter: drop-shadow(0 0 10px rgba(229, 9, 20, 0.5));
+}
+
+.brand-badge {
+    background: linear-gradient(135deg, var(--color-primary), #990000);
+    color: #FFFFFF;
+    padding: 0.25rem 0.65rem;
+    border-radius: var(--radius-badge);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    box-shadow: 0 2px 8px rgba(229, 9, 20, 0.4);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.brand-badge.gold {
+    background: linear-gradient(135deg, var(--color-gold), #B45309);
+    color: #0B0F19;
+    font-weight: 800;
+    box-shadow: 0 2px 8px rgba(245, 196, 81, 0.35);
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    list-style: none;
+}
+
+.nav-links a {
+    color: var(--text-secondary);
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: 0.4rem 0.2rem;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    transition: var(--transition-fast);
+}
+
+.nav-links a:hover {
+    color: #FFFFFF;
+}
+
+.nav-links a.active {
+    color: #FFFFFF;
+    font-weight: 600;
+}
+
+.nav-links a.active::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--color-primary);
+    border-radius: 2px;
+    box-shadow: 0 0 10px var(--color-primary-glow);
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+}
+
+.mobile-menu-btn {
+    display: none;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 1.15rem;
+    transition: var(--transition-fast);
+}
+
+.mobile-menu-btn:hover {
+    background: var(--bg-elevated);
+    border-color: var(--border-hover);
+    color: var(--color-primary);
+}
+
+/* ====================================================================
+   BUTTONS (CINEMA RED CTA & LUXURY GOLD)
+   ==================================================================== */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1.4rem;
+    border-radius: var(--radius-button);
+    font-weight: 600;
+    font-size: 0.92rem;
+    cursor: pointer;
+    border: 1px solid transparent;
+    outline: none;
+    transition: var(--transition);
+    text-align: center;
+    font-family: var(--font-primary);
+    user-select: none;
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Primary Red CTA */
+.btn-primary {
+    background: var(--color-primary);
+    color: #FFFFFF;
+    box-shadow: 0 4px 16px var(--color-primary-glow);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: var(--color-primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px var(--shadow-glow-red);
+}
+
+/* Secondary Dark Button */
+.btn-secondary {
+    background: var(--bg-elevated);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background: #253147;
+    border-color: var(--border-hover);
+    color: #FFFFFF;
+    transform: translateY(-2px);
+}
+
+/* Gold VIP Button */
+.btn-gold {
+    background: var(--gold-gradient);
+    color: #0B0F19;
+    font-weight: 700;
+    box-shadow: 0 4px 16px var(--color-gold-glow);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-gold:hover:not(:disabled) {
+    background: linear-gradient(135deg, #FBBF24, #B45309);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px var(--shadow-glow-gold);
+}
+
+/* Success Button */
+.btn-success {
+    background: #059669;
+    color: #FFFFFF;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+}
+
+.btn-success:hover:not(:disabled) {
+    background: #047857;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+}
+
+/* Danger Button */
+.btn-danger {
+    background: rgba(239, 68, 68, 0.15);
+    color: #EF4444;
+    border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+.btn-danger:hover:not(:disabled) {
+    background: #EF4444;
+    color: #FFFFFF;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(239, 68, 68, 0.35);
+}
+
+.btn-sm {
+    padding: 0.42rem 0.95rem;
+    font-size: 0.84rem;
+    border-radius: var(--radius-sm);
+}
+
+.btn-lg {
+    padding: 0.88rem 2rem;
+    font-size: 1.05rem;
+    border-radius: var(--radius-button);
+}
+
+/* ====================================================================
+   CARDS & CONTAINERS (DARK GLASSMORPHISM)
+   ==================================================================== */
+.card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-card);
+    padding: 1.75rem;
+    box-shadow: var(--shadow-card);
+    transition: var(--transition);
+    position: relative;
+}
+
+.card-hover:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-elevated);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 2rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.section-title {
+    font-family: var(--font-heading);
+    font-size: 1.85rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    letter-spacing: -0.5px;
+}
+
+.section-title i {
+    color: var(--color-primary);
+}
+
+.section-subtitle {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin-top: 0.35rem;
+}
+
+/* ====================================================================
+   CINEMATIC HERO SECTION
+   ==================================================================== */
+.hero-banner {
+    position: relative;
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    margin-bottom: 3.5rem;
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    padding: 3.5rem 3.5rem;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-elevated);
+    background-image: 
+        linear-gradient(90deg, #0B0F19 0%, rgba(11, 15, 25, 0.94) 48%, rgba(11, 15, 25, 0.3) 100%),
+        url('/images/dune2_backdrop.jpg');
+    background-size: cover;
+    background-position: center right;
+    background-repeat: no-repeat;
+}
+
+.hero-content {
+    max-width: 680px;
+    z-index: 2;
+    position: relative;
+}
+
+.hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(229, 9, 20, 0.15);
+    border: 1px solid rgba(229, 9, 20, 0.35);
+    color: #FCA5A5;
+    padding: 0.35rem 0.85rem;
+    border-radius: var(--radius-full);
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 1.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.hero-tag.gold {
+    background: rgba(245, 196, 81, 0.15);
+    border-color: rgba(245, 196, 81, 0.4);
+    color: var(--color-gold);
+}
+
+.hero-title {
+    font-family: var(--font-heading);
+    font-size: 3.2rem;
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 1.25rem;
+    color: #FFFFFF;
+    letter-spacing: -1px;
+}
+
+.hero-desc {
+    color: var(--text-secondary);
+    font-size: 1.08rem;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+}
+
+/* Hero Stats Counter Bar */
+.hero-stats-bar {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    flex-wrap: wrap;
+}
+
+.hero-stat-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.hero-stat-number {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    font-family: var(--font-heading);
+}
+
+.hero-stat-label {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.hero-stat-divider {
+    width: 1px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* ====================================================================
+   MOVIE CARDS & GRID (2:3 POSTER RATIO, BO GÓC 14-16PX)
+   ==================================================================== */
+.movies-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.75rem;
+}
+
+.movie-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    transition: var(--transition-smooth);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    box-shadow: var(--shadow-card);
+}
+
+.movie-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(245, 196, 81, 0.4);
+    box-shadow: var(--shadow-elevated), 0 0 25px rgba(229, 9, 20, 0.18);
+}
+
+.movie-poster-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    overflow: hidden;
+    background: #0D121C;
+    border-radius: var(--radius-poster) var(--radius-poster) 0 0;
+}
+
+.movie-poster {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.movie-card:hover .movie-poster {
+    transform: scale(1.06);
+}
+
+.movie-poster-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(23, 30, 43, 0.98) 0%, rgba(23, 30, 43, 0.2) 50%, transparent 100%);
+    opacity: 0.85;
+    transition: var(--transition);
+}
+
+.movie-card:hover .movie-poster-overlay {
+    opacity: 0.95;
+}
+
+/* Age Rating Badge */
+.age-badge {
+    position: absolute;
+    top: 0.85rem;
+    right: 0.85rem;
+    padding: 0.25rem 0.55rem;
+    border-radius: var(--radius-badge);
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    z-index: 3;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.age-badge.P { background: rgba(16, 185, 129, 0.9); color: #FFFFFF; }
+.age-badge.K { background: rgba(6, 182, 212, 0.9); color: #FFFFFF; }
+.age-badge.T13 { background: rgba(245, 158, 11, 0.9); color: #FFFFFF; }
+.age-badge.T16 { background: rgba(249, 115, 22, 0.9); color: #FFFFFF; }
+.age-badge.T18 { background: rgba(229, 9, 20, 0.9); color: #FFFFFF; }
+
+.movie-info {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.movie-genre {
+    color: var(--color-gold);
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.35rem;
+}
+
+.movie-title {
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    line-height: 1.35;
+    margin-bottom: 0.75rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.movie-meta {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border-color);
+}
+
+/* ====================================================================
+   SHOWTIME SCHEDULE CARDS
+   ==================================================================== */
+.showtime-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 1rem 1.25rem;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.showtime-card:hover {
+    border-color: var(--color-primary);
+    background: var(--bg-elevated);
+    transform: translateY(-2px);
+}
+
+.showtime-time {
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #FFFFFF;
+}
+
+.showtime-badge {
+    background: rgba(245, 196, 81, 0.15);
+    border: 1px solid rgba(245, 196, 81, 0.3);
+    color: var(--color-gold);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+/* ====================================================================
+   FORMS & INPUTS (DARK CINEMA LUXURY)
+   ==================================================================== */
+.form-group {
+    margin-bottom: 1.35rem;
+}
+
+.form-label {
+    display: block;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.form-control {
+    width: 100%;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-input);
+    padding: 0.75rem 1rem;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    font-family: var(--font-primary);
+    transition: var(--transition-fast);
+}
+
+.form-control:focus {
+    border-color: var(--color-primary);
+    background: #141B29;
+    box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.22);
+    outline: none;
+}
+
+.form-control::placeholder {
+    color: var(--text-muted);
+}
+
+/* Password input with toggle button */
+.password-input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-input-group .form-control {
+    padding-right: 2.75rem;
+}
+
+.btn-toggle-password {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 0.35rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    transition: var(--transition-fast);
+}
+
+.btn-toggle-password:hover {
+    color: var(--text-primary);
+}
+
+/* Auth Pages (Login & Register) */
+.auth-page-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 200px);
+    padding: 3.5rem 1.5rem 4.5rem;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 480px;
+    background: radial-gradient(circle at 50% 0%, rgba(229, 9, 20, 0.08) 0%, #171E2B 75%);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-card);
+    padding: 2.75rem 2.25rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 30px rgba(229, 9, 20, 0.05);
+}
+
+/* Expandable Demo Login Drawer */
+.demo-disclosure {
+    margin-top: 1.75rem;
+    padding: 1rem 1.15rem;
+    border-radius: var(--radius-sm);
+    background: rgba(11, 15, 25, 0.6);
+    border: 1px solid var(--border-color);
+    font-size: 0.85rem;
+}
+
+.demo-disclosure summary {
+    font-weight: 700;
+    color: var(--color-gold);
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    user-select: none;
+}
+
+.demo-disclosure summary::-webkit-details-marker {
+    display: none;
+}
+
+.demo-disclosure summary::after {
+    content: '\f078';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    font-size: 0.75rem;
+    transition: transform 0.2s ease;
+}
+
+.demo-disclosure[open] summary::after {
+    transform: rotate(180deg);
+}
+
+.demo-disclosure-content {
+    margin-top: 0.85rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* ====================================================================
+   ALERTS & FEEDBACK
+   ==================================================================== */
+.alert {
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-button);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.92rem;
+    border: 1px solid transparent;
+}
+
+.alert-danger {
+    background: rgba(239, 68, 68, 0.15);
+    color: #FCA5A5;
+    border-color: rgba(239, 68, 68, 0.35);
+}
+
+.alert-success {
+    background: rgba(16, 185, 129, 0.15);
+    color: #6EE7B7;
+    border-color: rgba(16, 185, 129, 0.35);
+}
+
+.alert-info {
+    background: rgba(6, 182, 212, 0.15);
+    color: #67E8F9;
+    border-color: rgba(6, 182, 212, 0.35);
+}
+
+/* ====================================================================
+   BADGES & PILLS
+   ==================================================================== */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.3rem 0.65rem;
+    border-radius: var(--radius-badge);
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.badge-gold {
+    background: rgba(245, 196, 81, 0.15);
+    color: var(--color-gold);
+    border: 1px solid rgba(245, 196, 81, 0.35);
+}
+
+.badge-red {
+    background: rgba(229, 9, 20, 0.15);
+    color: #FCA5A5;
+    border: 1px solid rgba(229, 9, 20, 0.35);
+}
+
+.badge-green {
+    background: rgba(16, 185, 129, 0.15);
+    color: #6EE7B7;
+    border: 1px solid rgba(16, 185, 129, 0.35);
+}
+
+.selected-seat-tag {
+    background: rgba(229, 9, 20, 0.18);
+    color: #FCA5A5;
+    border: 1px solid rgba(229, 9, 20, 0.45);
+    padding: 0.3rem 0.75rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.82rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+/* ====================================================================
+   CHECKOUT PAYMENT METHOD CARDS
+   ==================================================================== */
+.payment-method-card {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    background: var(--bg-surface);
+    padding: 1.2rem;
+    border-radius: var(--radius-card);
+    border: 2px solid var(--border-color);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.payment-method-card:hover {
+    border-color: rgba(255, 255, 255, 0.25);
+    background: #151D2C;
+}
+
+.payment-method-card:has(input:checked) {
+    border-color: var(--color-primary);
+    background: rgba(229, 9, 20, 0.06);
+    box-shadow: 0 4px 20px rgba(229, 9, 20, 0.15);
+}
+
+/* ====================================================================
+   DATA TABLES (DARK CINEMA LUXURY)
+   ==================================================================== */
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: var(--radius-card);
+}
+
+.cinema-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.9rem;
+}
+
+.cinema-table thead tr {
+    background: #0D121C;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+}
+
+.cinema-table th {
+    padding: 1.1rem 1.25rem;
+}
+
+.cinema-table tbody tr {
+    border-bottom: 1px solid var(--border-color);
+    transition: var(--transition-fast);
+}
+
+.cinema-table tbody tr:hover {
+    background: rgba(23, 30, 43, 0.75);
+}
+
+.cinema-table td {
+    padding: 1rem 1.25rem;
+    vertical-align: middle;
+}
+
+/* ====================================================================
+   MODAL COMPONENT (DARK CINEMA)
+   ==================================================================== */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(4, 7, 13, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 2000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    overflow-y: auto;
+}
+
+.modal-content-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-card);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+    width: 100%;
+    max-width: 620px;
+    padding: 2rem;
+    position: relative;
+    animation: modalFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.96) translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* ====================================================================
+   ABOUT PAGE (DARK CINEMA COMMERCIAL GRADE)
+   ==================================================================== */
+.about-hero {
+    position: relative;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    padding: 5rem 3.5rem;
+    margin-bottom: 4rem;
+    border: 1px solid var(--border-color);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 440px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+.about-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(11, 15, 25, 0.96) 0%, rgba(11, 15, 25, 0.88) 55%, rgba(11, 15, 25, 0.45) 100%),
+                linear-gradient(180deg, rgba(11, 15, 25, 0.3) 0%, rgba(11, 15, 25, 0.95) 100%);
+    z-index: 1;
+}
+
+.about-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 760px;
+}
+
+.about-hero-title {
+    font-family: var(--font-heading);
+    font-size: 2.6rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    line-height: 1.25;
+    letter-spacing: -0.5px;
+    margin-bottom: 1.25rem;
+}
+
+.about-hero-desc {
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+    line-height: 1.8;
+    margin-bottom: 2rem;
+}
+
+.about-hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.about-section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.about-section-title {
+    font-family: var(--font-heading);
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    margin-top: 0.5rem;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.5px;
+}
+
+.about-section-desc {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.7;
+}
+
+/* Feature Cards Grid (4 columns) */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 4.5rem;
+}
+
+.feature-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-card);
+    padding: 2.25rem 1.6rem;
+    display: flex;
+    flex-direction: column;
+    transition: var(--transition);
+    position: relative;
+}
+
+.feature-card:hover {
+    transform: translateY(-6px);
+    border-color: rgba(229, 9, 20, 0.4);
+    box-shadow: 0 16px 32px rgba(0, 0, 0, 0.5), 0 0 20px var(--color-primary-glow);
+}
+
+.feature-icon-wrapper {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    background: rgba(229, 9, 20, 0.12);
+    border: 1px solid rgba(229, 9, 20, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary);
+    font-size: 1.4rem;
+    margin-bottom: 1.35rem;
+    transition: var(--transition-fast);
+}
+
+.feature-card:hover .feature-icon-wrapper {
+    background: var(--color-primary);
+    color: #FFFFFF;
+    box-shadow: 0 0 18px var(--color-primary-glow);
+}
+
+.feature-card-title {
+    font-family: var(--font-heading);
+    font-size: 1.18rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin-bottom: 0.65rem;
+}
+
+.feature-card-desc {
+    color: var(--text-secondary);
+    font-size: 0.92rem;
+    line-height: 1.65;
+}
+
+/* Step-by-Step Grid (5 columns) */
+.steps-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1.25rem;
+    margin-bottom: 5rem;
+}
+
+.step-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-card);
+    padding: 1.85rem 1.35rem;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    transition: var(--transition);
+}
+
+.step-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(245, 196, 81, 0.4);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+}
+
+.step-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+}
+
+.step-number {
+    font-family: var(--font-heading);
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: var(--color-gold);
+    line-height: 1;
+}
+
+.step-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: rgba(245, 196, 81, 0.12);
+    border: 1px solid rgba(245, 196, 81, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-gold);
+    font-size: 1.05rem;
+}
+
+.step-title {
+    font-family: var(--font-heading);
+    font-size: 1.08rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin-bottom: 0.5rem;
+}
+
+.step-desc {
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+    line-height: 1.6;
+}
+
+/* Cinema Experience Split Section */
+.experience-section {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 3.5rem;
+    align-items: center;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 3.5rem;
+    margin-bottom: 5rem;
+}
+
+.experience-content h2 {
+    font-family: var(--font-heading);
+    font-size: 2.1rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    line-height: 1.3;
+    letter-spacing: -0.5px;
+    margin-top: 0.5rem;
+    margin-bottom: 1.25rem;
+}
+
+.experience-content p {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    line-height: 1.75;
+    margin-bottom: 1.75rem;
+}
+
+.experience-perks {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.95rem;
+}
+
+.experience-perk-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    color: var(--text-secondary);
+    font-size: 0.92rem;
+    line-height: 1.6;
+}
+
+.experience-perk-item i {
+    color: var(--color-primary);
+    font-size: 1.1rem;
+    margin-top: 0.2rem;
+    flex-shrink: 0;
+}
+
+.experience-image-wrapper {
+    position: relative;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid var(--border-light);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
+    aspect-ratio: 16 / 9;
+}
+
+.experience-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.experience-image-wrapper:hover .experience-image {
+    transform: scale(1.04);
+}
+
+/* About CTA Section */
+.about-cta-card {
+    background: linear-gradient(135deg, rgba(23, 30, 43, 0.96) 0%, rgba(15, 22, 36, 0.98) 100%);
+    border: 1px solid rgba(229, 9, 20, 0.35);
+    border-radius: var(--radius-lg);
+    padding: 4.5rem 2rem;
+    text-align: center;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), 0 0 35px rgba(229, 9, 20, 0.15);
+}
+
+.about-cta-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 320px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+}
+
+.about-cta-title {
+    font-family: var(--font-heading);
+    font-size: 2.3rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    margin-bottom: 1rem;
+    letter-spacing: -0.5px;
+}
+
+.about-cta-desc {
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+    line-height: 1.7;
+}
+
+/* ====================================================================
+   FOOTER (DARK CINEMA COMMERCIAL GRADE)
+   ==================================================================== */
+.footer {
+    background: #070A11;
+    border-top: 1px solid var(--border-color);
+    padding: 4rem 2rem 2rem;
+    margin-top: auto;
+    position: relative;
+    z-index: 1;
+}
+
+.footer-container {
+    max-width: 1360px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.8fr 1fr 1fr 1.2fr;
+    gap: 3rem;
+    margin-bottom: 3rem;
+}
+
+.footer-bottom {
+    max-width: 1360px;
+    margin: 0 auto;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+/* ====================================================================
+   RESPONSIVE BREAKPOINTS (DESKTOP, TABLET, MOBILE)
+   ==================================================================== */
+
+/* Laptop / Small Desktop (1024px - 1200px) */
+@media (max-width: 1200px) {
+    .movies-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+    }
+    .hero-title {
+        font-size: 2.6rem;
+    }
+}
+
+/* Tablet (768px - 1023px) */
+@media (max-width: 1023px) {
+    .navbar {
+        padding: 0.75rem 1.5rem;
+    }
+    .movies-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .footer-container {
+        grid-template-columns: 1fr 1fr;
+        gap: 2.5rem;
+    }
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .steps-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    .experience-section {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+        padding: 2.5rem;
+    }
+    .hero-banner {
+        padding: 2.75rem 2rem;
+        min-height: 400px;
+    }
+    .hero-title {
+        font-size: 2.3rem;
+    }
+}
+
+/* Mobile (Under 768px) */
+@media (max-width: 767px) {
+    .main-wrapper {
+        padding: 1.5rem 1rem;
+    }
+    .mobile-menu-btn {
+        display: block;
+    }
+    .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--bg-secondary);
+        flex-direction: column;
+        padding: 1.5rem 1.25rem;
+        gap: 1rem;
+        border-bottom: 1px solid var(--border-color);
+        box-shadow: var(--shadow-elevated);
+    }
+    .nav-links.show {
+        display: flex;
+    }
+    .nav-links a {
+        width: 100%;
+        padding: 0.6rem 0.5rem;
+    }
+    .mobile-only-auth {
+        display: block !important;
+    }
+    .nav-actions {
+        display: none;
+    }
+    .movies-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+    .hero-banner {
+        padding: 2.25rem 1.25rem;
+        min-height: 380px;
+        background-image: 
+            linear-gradient(180deg, rgba(11, 15, 25, 0.96) 0%, rgba(11, 15, 25, 0.88) 60%, rgba(11, 15, 25, 0.5) 100%),
+            url('/images/dune2_backdrop.jpg');
+        background-position: center;
+    }
+    .hero-title {
+        font-size: 1.85rem;
+    }
+    .hero-desc {
+        font-size: 0.95rem;
+    }
+    .auth-page-container {
+        padding: 2rem 1rem 3.5rem;
+        min-height: auto;
+    }
+    .auth-card {
+        padding: 2rem 1.25rem;
+    }
+    .about-hero {
+        padding: 3rem 1.5rem;
+        min-height: 380px;
+    }
+    .about-hero-title {
+        font-size: 1.85rem;
+    }
+    .features-grid {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+    .steps-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    .experience-section {
+        padding: 2rem 1.25rem;
+        gap: 2rem;
+    }
+    .experience-content h2 {
+        font-size: 1.65rem;
+    }
+    .about-cta-card {
+        padding: 3rem 1.25rem;
+    }
+    .about-cta-title {
+        font-size: 1.7rem;
+    }
+    .footer-container {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+/* Small Mobile (Under 480px) */
+@media (max-width: 480px) {
+    .movies-grid {
+        grid-template-columns: 1fr;
+    }
+    .section-title {
+        font-size: 1.4rem;
+    }
+    .hero-content .btn,
+    .auth-card .btn,
+    .booking-summary-sidebar .btn {
+        width: 100%;
+    }
+}
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}

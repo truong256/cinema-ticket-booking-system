@@ -1,0 +1,806 @@
+/* ==========================================================================
+   CINEVIBE CINEMA CITY AUTHENTICATION DESIGN SYSTEM (POLISHED)
+   Theme: Dark Cinematic Authentication (Cinema City Aesthetic)
+   ========================================================================== */
+
+/* Page container: natural vertical centering without huge empty space */
+.auth-page {
+    position: relative;
+    width: 100%;
+    min-height: calc(100vh - 72px - 220px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2.25rem 1.5rem 3.5rem;
+    background-color: var(--bg-main, #0B0F19);
+    overflow-x: hidden;
+    box-sizing: border-box;
+}
+
+/* Atmospheric subtle cinema ambient light */
+.auth-page::before {
+    content: '';
+    position: absolute;
+    top: 15%;
+    left: 8%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(229, 9, 20, 0.10) 0%, transparent 70%);
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.auth-page::after {
+    content: '';
+    position: absolute;
+    bottom: 12%;
+    right: 8%;
+    width: 450px;
+    height: 450px;
+    background: radial-gradient(circle, rgba(245, 196, 81, 0.06) 0%, transparent 70%);
+    filter: blur(90px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.auth-container {
+    width: 100%;
+    max-width: 1140px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+/* ==========================================================================
+   SPLIT-SCREEN GRID LAYOUT (45% FORM - 55% POSTER GALLERY)
+   ========================================================================== */
+.auth-split-layout {
+    display: grid;
+    grid-template-columns: 45% 55%;
+    gap: 3.5rem; /* 56px - within the 48px to 64px range */
+    align-items: center;
+    background: rgba(23, 30, 43, 0.72);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-color, #2A3446);
+    border-radius: 20px;
+    padding: 2.25rem 2.5rem;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65), 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+/* Register layout: balanced 48% / 52% */
+.auth-split-layout.is-register {
+    grid-template-columns: 48% 52%;
+    gap: 3rem;
+    padding: 2rem 2.5rem;
+}
+
+/* ==========================================================================
+   LEFT PANEL: AUTH FORM PANEL
+   ========================================================================== */
+.auth-form-panel {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+/* Friendly badge: THÀNH VIÊN CINEVIBE */
+.auth-brand-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.3rem 0.8rem;
+    background: rgba(229, 9, 20, 0.12);
+    border: 1px solid rgba(229, 9, 20, 0.35);
+    border-radius: 9999px;
+    color: var(--color-primary, #E50914);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem; /* 12px */
+    align-self: flex-start;
+}
+
+.auth-brand-badge i {
+    font-size: 0.8rem;
+    color: var(--color-gold, #F5C451);
+}
+
+.auth-form-header {
+    margin-bottom: 1.5rem; /* 24px */
+}
+
+.auth-form-header h1 {
+    font-family: var(--font-heading, 'Be Vietnam Pro', sans-serif);
+    font-size: 1.85rem;
+    font-weight: 800;
+    color: var(--text-primary, #F8FAFC);
+    letter-spacing: -0.5px;
+    line-height: 1.25;
+    margin: 0 0 0.5rem 0; /* 8px */
+}
+
+.auth-form-header p {
+    color: var(--text-secondary, #94A3B8);
+    font-size: 0.92rem;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* Feedback Alerts */
+.auth-alert {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.85rem 1rem;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    line-height: 1.45;
+    margin-bottom: 1.25rem;
+    animation: authFadeIn 0.25s ease;
+}
+
+.auth-alert-danger {
+    background: rgba(229, 9, 20, 0.14);
+    border: 1px solid rgba(229, 9, 20, 0.45);
+    color: #FCA5A5;
+}
+
+.auth-alert-danger i {
+    color: var(--color-primary, #E50914);
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.auth-alert-success {
+    background: rgba(16, 185, 129, 0.14);
+    border: 1px solid rgba(16, 185, 129, 0.45);
+    color: #6EE7B7;
+}
+
+.auth-alert-success i {
+    color: #10B981;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+/* Form structure */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem; /* 18px-20px */
+    width: 100%;
+}
+
+.auth-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    width: 100%;
+}
+
+.auth-field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    position: relative;
+}
+
+.auth-label {
+    display: flex;
+    align-items: center;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text-primary, #F8FAFC);
+    letter-spacing: 0.2px;
+}
+
+.auth-label i {
+    margin-right: 0.45rem;
+    font-size: 0.85rem;
+    color: var(--color-gold, #F5C451);
+}
+
+.auth-label .required-star {
+    color: var(--color-primary, #E50914);
+    margin-left: 0.25rem;
+    font-weight: 700;
+}
+
+.auth-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+/* HIGH CONTRAST INPUT DESIGN */
+.auth-input {
+    width: 100%;
+    height: 48px;
+    padding: 0 1rem 0 2.75rem;
+    background-color: #131A26; /* Deep surface */
+    border: 1px solid #334155; /* Defined, crisp border */
+    border-radius: 10px;
+    color: #F8FAFC;
+    font-family: inherit;
+    font-size: 0.95rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    box-sizing: border-box;
+}
+
+/* Crisp readable placeholder */
+.auth-input::placeholder {
+    color: #94A3B8; /* High contrast placeholder */
+    font-size: 0.88rem;
+    opacity: 1;
+}
+
+.auth-input:focus {
+    outline: none;
+    border-color: var(--color-primary, #E50914);
+    box-shadow: 0 0 0 3px rgba(229, 9, 20, 0.22);
+    background-color: #172030;
+}
+
+/* Autofill styling fix */
+.auth-input:-webkit-autofill,
+.auth-input:-webkit-autofill:hover, 
+.auth-input:-webkit-autofill:focus {
+    -webkit-text-fill-color: #F8FAFC;
+    -webkit-box-shadow: 0 0 0px 1000px #131A26 inset;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Clear icon visibility */
+.auth-input-icon {
+    position: absolute;
+    left: 1rem;
+    color: #94A3B8;
+    font-size: 0.95rem;
+    pointer-events: none;
+    transition: color 0.2s ease;
+    z-index: 2;
+}
+
+.auth-input:focus ~ .auth-input-icon,
+.auth-input:not(:placeholder-shown) ~ .auth-input-icon {
+    color: var(--color-gold, #F5C451);
+}
+
+/* Password Toggle */
+.auth-password-toggle {
+    position: absolute;
+    right: 0.85rem;
+    background: transparent;
+    border: none;
+    color: #94A3B8;
+    font-size: 1rem;
+    padding: 0.4rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition: color 0.2s ease, background 0.2s ease;
+    z-index: 2;
+}
+
+.auth-password-toggle:hover {
+    color: #FFFFFF;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.auth-password-toggle:focus {
+    outline: none;
+    color: var(--color-primary, #E50914);
+}
+
+.auth-input.has-toggle {
+    padding-right: 2.75rem;
+}
+
+.auth-field-error {
+    font-size: 0.78rem;
+    color: #F87171;
+    margin-top: 0.2rem;
+    display: none;
+}
+
+/* Submit Button */
+.auth-submit-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    width: 100%;
+    height: 50px;
+    margin-top: 0.35rem; /* ~24px total gap from input */
+    background-color: var(--color-primary, #E50914);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 10px;
+    font-family: inherit;
+    font-size: 0.98rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(229, 9, 20, 0.35);
+    transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    overflow: hidden;
+}
+
+.auth-submit-btn:hover:not(:disabled) {
+    background-color: var(--color-primary-hover, #B20710);
+    box-shadow: 0 6px 20px rgba(229, 9, 20, 0.5);
+    transform: translateY(-1px);
+}
+
+.auth-submit-btn:active:not(:disabled) {
+    transform: translateY(1px);
+    box-shadow: 0 2px 10px rgba(229, 9, 20, 0.3);
+}
+
+.auth-submit-btn:disabled {
+    opacity: 0.75;
+    cursor: not-allowed;
+}
+
+.auth-btn-spinner {
+    display: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #FFFFFF;
+    border-radius: 50%;
+    animation: authSpin 0.75s linear infinite;
+}
+
+.auth-submit-btn.is-loading .auth-btn-icon {
+    display: none;
+}
+
+.auth-submit-btn.is-loading .auth-btn-spinner {
+    display: inline-block;
+}
+
+/* Security notice */
+.auth-security-notice {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--text-muted, #94A3B8);
+    margin: 0.2rem 0;
+    padding: 0.45rem 0.75rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px dashed rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+}
+
+.auth-security-notice i {
+    color: #10B981;
+    font-size: 0.88rem;
+    flex-shrink: 0;
+}
+
+/* Switch link */
+.auth-switch-prompt {
+    text-align: center;
+    margin-top: 1.25rem; /* 20px */
+    font-size: 0.9rem;
+    color: var(--text-secondary, #94A3B8);
+}
+
+.auth-switch-link {
+    color: var(--color-primary, #E50914);
+    font-weight: 700;
+    text-decoration: none;
+    margin-left: 0.35rem;
+    transition: color 0.2s ease, text-decoration 0.2s ease;
+}
+
+.auth-switch-link:hover {
+    color: #FF4D58;
+    text-decoration: underline;
+}
+
+/* ==========================================================================
+   RIGHT PANEL: MOVIE POSTER GALLERY (BALANCED WITH FORM)
+   ========================================================================== */
+.auth-poster-gallery {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 0;
+    user-select: none;
+}
+
+/* Cinema atmospheric glow */
+.gallery-glow-backdrop {
+    position: absolute;
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(circle, rgba(229, 9, 20, 0.22) 0%, rgba(245, 196, 81, 0.06) 45%, transparent 70%);
+    filter: blur(45px);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Poster stack staging: proportional height */
+.poster-stack-container {
+    position: relative;
+    width: 100%;
+    max-width: 440px;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    perspective: 1000px;
+}
+
+/* Tilted individual posters */
+.tilted-poster {
+    position: absolute;
+    width: 155px;
+    height: 230px;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #0F172A;
+    border: 2px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.7);
+    cursor: pointer;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+                box-shadow 0.3s ease, 
+                border-color 0.3s ease;
+    outline: none;
+}
+
+.tilted-poster img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.35s ease;
+}
+
+.tilted-poster .poster-glass-gloss {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.4) 100%);
+    pointer-events: none;
+}
+
+.tilted-poster .poster-badge {
+    position: absolute;
+    bottom: 8px;
+    left: 6px;
+    right: 6px;
+    padding: 0.25rem 0.5rem;
+    background: rgba(11, 15, 25, 0.9);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 6px;
+    color: #FFFFFF;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Layering & Angles */
+.tilted-poster.poster-far-left {
+    width: 135px;
+    height: 200px;
+    transform: translate(-120px, 16px) rotate(-18deg) scale(0.85);
+    z-index: 2;
+    filter: brightness(0.8);
+}
+
+.tilted-poster.poster-left {
+    transform: translate(-65px, 6px) rotate(-10deg) scale(0.94);
+    z-index: 3;
+}
+
+.tilted-poster.poster-center {
+    width: 172px;
+    height: 255px;
+    transform: translate(0, -6px) rotate(0deg) scale(1.04);
+    z-index: 5;
+    border-color: rgba(245, 196, 81, 0.5);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.8), 0 0 20px rgba(229, 9, 20, 0.22);
+}
+
+.tilted-poster.poster-center .poster-badge {
+    background: rgba(229, 9, 20, 0.92);
+    border-color: rgba(245, 196, 81, 0.5);
+    color: #FFFFFF;
+}
+
+.tilted-poster.poster-right {
+    transform: translate(65px, 6px) rotate(10deg) scale(0.94);
+    z-index: 4;
+}
+
+.tilted-poster.poster-far-right {
+    width: 135px;
+    height: 200px;
+    transform: translate(120px, 16px) rotate(18deg) scale(0.85);
+    z-index: 2;
+    filter: brightness(0.8);
+}
+
+/* Hover effects */
+.tilted-poster:hover,
+.tilted-poster:focus-visible {
+    z-index: 10 !important;
+    border-color: var(--color-primary, #E50914);
+    box-shadow: 0 24px 50px rgba(0, 0, 0, 0.9), 0 0 30px rgba(229, 9, 20, 0.45) !important;
+    filter: brightness(1.05) !important;
+}
+
+.tilted-poster.poster-far-left:hover {
+    transform: translate(-120px, 0px) rotate(-10deg) scale(0.96);
+}
+
+.tilted-poster.poster-left:hover {
+    transform: translate(-65px, -10px) rotate(-4deg) scale(1.03);
+}
+
+.tilted-poster.poster-center:hover {
+    transform: translate(0, -16px) rotate(0deg) scale(1.1);
+}
+
+.tilted-poster.poster-right:hover {
+    transform: translate(65px, -10px) rotate(4deg) scale(1.03);
+}
+
+.tilted-poster.poster-far-right:hover {
+    transform: translate(120px, 0px) rotate(10deg) scale(0.96);
+}
+
+.tilted-poster:hover img {
+    transform: scale(1.03);
+}
+
+/* Unified Cinema City Slogan */
+.gallery-caption {
+    text-align: center;
+    margin-top: 1.15rem;
+    z-index: 2;
+}
+
+.gallery-title {
+    font-family: var(--font-heading, 'Be Vietnam Pro', sans-serif);
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    letter-spacing: 0.5px;
+    line-height: 1.3;
+    margin: 0 0 0.35rem 0;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+}
+
+.gallery-desc {
+    color: var(--text-secondary, #94A3B8);
+    font-size: 0.88rem;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* Keyframes */
+@keyframes authSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes authFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .tilted-poster,
+    .tilted-poster img,
+    .auth-submit-btn,
+    .auth-alert {
+        transition: none !important;
+        animation: none !important;
+        transform: none !important;
+    }
+}
+
+/* ==========================================================================
+   RESPONSIVE BREAKPOINTS (Desktop, Laptop, Tablet, Mobile)
+   ========================================================================== */
+
+/* Laptop: 1024px to 1199px */
+@media (max-width: 1199px) {
+    .auth-split-layout {
+        grid-template-columns: 48% 52%;
+        gap: 2.25rem;
+        padding: 2rem;
+    }
+    .auth-split-layout.is-register {
+        grid-template-columns: 50% 50%;
+        gap: 2rem;
+        padding: 1.75rem 2rem;
+    }
+    .tilted-poster.poster-far-left,
+    .tilted-poster.poster-far-right {
+        display: none;
+    }
+    .tilted-poster {
+        width: 145px;
+        height: 215px;
+    }
+    .tilted-poster.poster-center {
+        width: 160px;
+        height: 235px;
+    }
+    .tilted-poster.poster-left {
+        transform: translate(-50px, 4px) rotate(-8deg) scale(0.95);
+    }
+    .tilted-poster.poster-right {
+        transform: translate(50px, 4px) rotate(8deg) scale(0.95);
+    }
+    .gallery-title {
+        font-size: 1.15rem;
+    }
+}
+
+/* Tablet: 768px to 1023px */
+@media (max-width: 1023px) {
+    .auth-page {
+        padding: 2rem 1.25rem 3rem;
+    }
+    .auth-split-layout,
+    .auth-split-layout.is-register {
+        grid-template-columns: 1fr;
+        gap: 2.25rem;
+        padding: 2rem;
+        max-width: 580px;
+        margin: 0 auto;
+    }
+    .auth-poster-gallery {
+        order: -1;
+        padding: 0;
+    }
+    .poster-stack-container {
+        height: 240px;
+        max-width: 380px;
+    }
+    .tilted-poster {
+        width: 130px;
+        height: 195px;
+    }
+    .tilted-poster.poster-center {
+        width: 145px;
+        height: 215px;
+    }
+    .tilted-poster.poster-far-left,
+    .tilted-poster.poster-far-right {
+        display: none;
+    }
+    .tilted-poster.poster-left {
+        transform: translate(-45px, 4px) rotate(-7deg) scale(0.95);
+    }
+    .tilted-poster.poster-right {
+        transform: translate(45px, 4px) rotate(7deg) scale(0.95);
+    }
+}
+
+/* Mobile: below 768px (390px, 375px, 360px) */
+@media (max-width: 767px) {
+    .auth-page {
+        padding: 1.25rem 0.85rem 3rem;
+    }
+    .auth-split-layout,
+    .auth-split-layout.is-register {
+        grid-template-columns: 1fr;
+        padding: 1.5rem 1.15rem;
+        border-radius: 16px;
+        gap: 1.5rem;
+    }
+    .auth-poster-gallery {
+        order: -1;
+        padding: 0;
+    }
+    .poster-stack-container {
+        height: 190px;
+        max-width: 300px;
+    }
+    .tilted-poster {
+        width: 100px;
+        height: 150px;
+        border-radius: 8px;
+    }
+    .tilted-poster.poster-center {
+        width: 115px;
+        height: 170px;
+    }
+    .tilted-poster.poster-far-left,
+    .tilted-poster.poster-far-right {
+        display: none;
+    }
+    .tilted-poster.poster-left {
+        transform: translate(-32px, 3px) rotate(-6deg) scale(0.95);
+    }
+    .tilted-poster.poster-right {
+        transform: translate(32px, 3px) rotate(6deg) scale(0.95);
+    }
+    .tilted-poster .poster-badge {
+        font-size: 0.62rem;
+        padding: 0.15rem 0.35rem;
+        bottom: 5px;
+    }
+    .gallery-caption {
+        margin-top: 0.85rem;
+    }
+    .gallery-title {
+        font-size: 1.05rem;
+    }
+    .gallery-desc {
+        font-size: 0.8rem;
+    }
+    .auth-form-header h1 {
+        font-size: 1.55rem;
+    }
+    .auth-form-header p {
+        font-size: 0.86rem;
+    }
+    /* Strictly 1 column on mobile */
+    .auth-form-row {
+        grid-template-columns: 1fr;
+        gap: 1.15rem;
+    }
+    .auth-input {
+        height: 48px;
+        font-size: 0.92rem;
+    }
+    .auth-submit-btn {
+        height: 48px;
+        font-size: 0.95rem;
+    }
+}
+
+/* Extra small mobile: below 390px */
+@media (max-width: 389px) {
+    .auth-split-layout,
+    .auth-split-layout.is-register {
+        padding: 1.25rem 0.85rem;
+    }
+    .poster-stack-container {
+        height: 170px;
+    }
+    .tilted-poster {
+        width: 90px;
+        height: 135px;
+    }
+    .tilted-poster.poster-center {
+        width: 102px;
+        height: 150px;
+    }
+    .tilted-poster.poster-left {
+        transform: translate(-26px, 2px) rotate(-5deg) scale(0.95);
+    }
+    .tilted-poster.poster-right {
+        transform: translate(26px, 2px) rotate(5deg) scale(0.95);
+    }
+}

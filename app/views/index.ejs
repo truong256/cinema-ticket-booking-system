@@ -1,0 +1,196 @@
+<%- include('partials/header') %>
+<%- include('partials/navbar') %>
+
+<main class="main-wrapper">
+    <!-- Hero Banner (Cinematic Featured Film - Ref: Lumière Cinema) -->
+    <% const heroMovie = (typeof featuredMovie !== 'undefined' && featuredMovie) ? featuredMovie : ((movies && movies.length > 0) ? movies[0] : null); %>
+    <section class="hero-banner" style="<%= heroMovie && heroMovie.poster_url ? `background-image: linear-gradient(90deg, #0B0F19 0%, rgba(11, 15, 25, 0.94) 52%, rgba(11, 15, 25, 0.4) 100%), url('${heroMovie.poster_url === '/images/dune2.jpg' ? '/images/dune2_backdrop.jpg' : heroMovie.poster_url}');` : '' %>">
+        <div class="hero-content">
+            <div class="hero-tag gold">
+                <i class="fas fa-crown"></i> BOM TẤN CHIẾU RẠP ĐỘC QUYỀN &bull; CINEVIBE EXCLUSIVE
+            </div>
+            
+            <h1 class="hero-title">
+                <%= heroMovie ? heroMovie.title : 'Dune: Part Two (Hành Tinh Cát 2)' %>
+            </h1>
+
+            <div style="display: flex; gap: 0.75rem; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap;">
+                <span class="badge badge-gold"><i class="fas fa-star"></i> 8.6/10 IMDb</span>
+                <span class="age-badge <%= heroMovie ? heroMovie.age_rating : 'T16' %>" style="position: static; box-shadow: none;"><%= heroMovie ? heroMovie.age_rating : 'T16' %></span>
+                <span style="color: var(--text-secondary); font-size: 0.9rem;"><i class="far fa-clock"></i> <%= heroMovie ? heroMovie.duration_minutes : 166 %> phút</span>
+                <span style="color: var(--text-secondary); font-size: 0.9rem;"><i class="fas fa-film"></i> <%= heroMovie ? heroMovie.genre : 'Khoa học viễn tưởng, Hành động' %></span>
+                <span class="brand-badge gold" style="font-size: 0.7rem; padding: 0.2rem 0.5rem;"><i class="fas fa-video"></i> IMAX Laser</span>
+            </div>
+
+            <p class="hero-desc">
+                <%= heroMovie ? heroMovie.description : 'Paul Atreides hợp lực cùng Chani và tộc người Fremen để trả thù những kẻ đã hủy hoại gia đình mình, đứng trước sự lựa chọn định mệnh giữa tình yêu sâu đậm và số phận của toàn vũ trụ.' %>
+            </p>
+
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+                <a href="/movies/<%= heroMovie ? heroMovie.id : 1 %>" class="btn btn-primary btn-lg">
+                    <i class="fas fa-ticket"></i> Đặt vé ngay
+                </a>
+                <a href="<%= heroMovie && heroMovie.trailer_url ? heroMovie.trailer_url : 'https://www.youtube.com/watch?v=Way9Dexny3w' %>" target="_blank" class="btn btn-secondary btn-lg" title="Xem trailer trên YouTube">
+                    <i class="fab fa-youtube" style="color: var(--color-primary); font-size: 1.15rem;"></i> Xem Trailer
+                </a>
+                <a href="/movies" class="btn btn-secondary btn-lg">
+                    <i class="fas fa-clapperboard"></i> Toàn bộ phim
+                </a>
+            </div>
+
+            <!-- Stats Bar inspired by Lumière Cinema -->
+            <div class="hero-stats-bar">
+                <div class="hero-stat-item">
+                    <span class="hero-stat-number"><%= movies ? movies.length : 6 %></span>
+                    <span class="hero-stat-label">Phim Chiếu Rạp</span>
+                </div>
+                <div class="hero-stat-divider"></div>
+                <div class="hero-stat-item">
+                    <span class="hero-stat-number">3</span>
+                    <span class="hero-stat-label">Phòng IMAX & VIP</span>
+                </div>
+                <div class="hero-stat-divider"></div>
+                <div class="hero-stat-item">
+                    <span class="hero-stat-number" style="color: var(--color-gold);">100%</span>
+                    <span class="hero-stat-label">Giữ Chỗ Tức Thì</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Genre Filter Quick Bar -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+        <div style="display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: center;">
+            <span style="font-size: 0.88rem; font-weight: 700; color: var(--text-muted); margin-right: 0.35rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                <i class="fas fa-filter" style="color: var(--color-gold);"></i> Thể loại:
+            </span>
+            <button type="button" class="btn btn-sm btn-primary filter-tab active" data-genre="all">Tất cả</button>
+            <button type="button" class="btn btn-sm btn-secondary filter-tab" data-genre="Hành động">Hành động</button>
+            <button type="button" class="btn btn-sm btn-secondary filter-tab" data-genre="Khoa học viễn tưởng">Khoa học viễn tưởng</button>
+            <button type="button" class="btn btn-sm btn-secondary filter-tab" data-genre="Tâm lý">Tâm lý</button>
+            <button type="button" class="btn btn-sm btn-secondary filter-tab" data-genre="Hoạt hình">Hoạt hình</button>
+            <button type="button" class="btn btn-sm btn-secondary filter-tab" data-genre="Gia đình">Gia đình</button>
+        </div>
+
+        <a href="/movies" class="btn btn-secondary btn-sm">
+            Xem toàn bộ danh mục <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
+
+    <!-- Phim Đang Chiếu Nổi Bật -->
+    <section style="margin-bottom: 4.5rem;">
+        <div class="section-header">
+            <div>
+                <span class="brand-badge gold" style="margin-bottom: 0.4rem;">NOW SHOWING</span>
+                <h2 class="section-title">
+                    <i class="fas fa-film"></i> Phim Đang Chiếu Nổi Bật
+                </h2>
+                <p class="section-subtitle">Lựa chọn phim bom tấn để xem lịch chiếu thời gian thực và đặt vị trí ghế VIP</p>
+            </div>
+        </div>
+
+        <div class="movies-grid" id="homeMoviesGrid">
+            <% if (movies && movies.length > 0) { %>
+                <% movies.forEach((movie, idx) => { %>
+                    <div class="movie-card" data-genre="<%= movie.genre %>">
+                        <div class="movie-poster-wrap">
+                            <img src="<%= movie.poster_url %>" alt="<%= movie.title %>" class="movie-poster" loading="<%= idx < 2 ? 'eager' : 'lazy' %>" onerror="this.onerror=null; this.src='/images/default_poster.jpg';">
+                            <div class="movie-poster-overlay"></div>
+                            <span class="age-badge <%= movie.age_rating %>"><%= movie.age_rating %></span>
+                        </div>
+                        <div class="movie-info">
+                            <span class="movie-genre"><%= movie.genre %></span>
+                            <h3 class="movie-title" title="<%= movie.title %>"><%= movie.title %></h3>
+                            <div class="movie-meta">
+                                <span><i class="far fa-clock"></i> <%= movie.duration_minutes %> phút</span>
+                                <a href="/movies/<%= movie.id %>" class="btn btn-primary btn-sm">
+                                    Đặt vé <i class="fas fa-chevron-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <div class="card" style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
+                    <p style="color: var(--text-muted);">Hiện chưa có phim nào trong danh mục.</p>
+                </div>
+            <% } %>
+        </div>
+    </section>
+
+    <!-- Suất Chiếu Sắp Diễn Ra Hôm Nay -->
+    <% if (todayShowtimes && todayShowtimes.length > 0) { %>
+    <section style="margin-bottom: 4.5rem;">
+        <div class="section-header">
+            <div>
+                <span class="brand-badge" style="margin-bottom: 0.4rem;">LỊCH CHIẾU TRỰC TUYẾN</span>
+                <h2 class="section-title">
+                    <i class="fas fa-calendar-day"></i> Suất Chiếu Sắp Diễn Ra Hôm Nay
+                </h2>
+                <p class="section-subtitle">Đặt chỗ tức thì với sơ đồ ghế thời gian thực và khóa giao dịch ACID</p>
+            </div>
+            <a href="/showtimes" class="btn btn-secondary btn-sm">
+                Toàn bộ lịch chiếu <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem;">
+            <% todayShowtimes.forEach(st => { %>
+                <div class="card card-hover" style="display: flex; gap: 1.25rem; align-items: center; padding: 1.25rem;">
+                    <img src="<%= st.poster_url %>" alt="<%= st.movie_title %>" loading="lazy" style="width: 78px; height: 114px; border-radius: var(--radius-sm); object-fit: cover; flex-shrink: 0; box-shadow: var(--shadow-sm); border: 1px solid var(--border-color);" onerror="this.onerror=null; this.src='/images/default_poster.jpg';">
+                    <div style="flex: 1; min-width: 0;">
+                        <h4 style="font-family: var(--font-heading); font-size: 1.05rem; font-weight: 700; color: #FFFFFF; margin-bottom: 0.35rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="<%= st.movie_title %>">
+                            <%= st.movie_title %>
+                        </h4>
+                        <div style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 0.2rem;">
+                            <i class="fas fa-location-dot" style="color: var(--color-gold);"></i> <%= st.cinema_name %>
+                        </div>
+                        <div style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.65rem;">
+                            <i class="fas fa-door-open"></i> <%= st.room_name %>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-size: 1rem; color: var(--color-gold); font-weight: 800; font-family: var(--font-heading);">
+                                <i class="far fa-clock"></i> <%= new Date(st.start_time).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) %>
+                            </span>
+                            <a href="/booking/showtime/<%= st.id %>" class="btn btn-primary btn-sm">
+                                Chọn ghế <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    </section>
+    <% } %>
+</main>
+
+<script>
+// Interactive Client-side filter tabs on home page
+document.addEventListener('DOMContentLoaded', () => {
+    const tabs = document.querySelectorAll('.filter-tab');
+    const cards = document.querySelectorAll('#homeMoviesGrid .movie-card');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => {
+                t.classList.remove('btn-primary', 'active');
+                t.classList.add('btn-secondary');
+            });
+            tab.classList.remove('btn-secondary');
+            tab.classList.add('btn-primary', 'active');
+
+            const selectedGenre = tab.getAttribute('data-genre');
+            cards.forEach(card => {
+                const genre = card.getAttribute('data-genre') || '';
+                if (selectedGenre === 'all' || genre.toLowerCase().includes(selectedGenre.toLowerCase())) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+});
+</script>
+
+<%- include('partials/footer') %>
