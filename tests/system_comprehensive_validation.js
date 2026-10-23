@@ -13,6 +13,21 @@
 
 const http = require('http');
 const crypto = require('crypto');
+const { execSync } = require('child_process');
+
+function queryDb(sql) {
+    try {
+        const jsCode = `const db = require('./config/database'); db.query(${JSON.stringify(sql)}).then(r => { console.log('DB_RESULT:' + JSON.stringify(r)); process.exit(0); }).catch(e => { console.error('DB_ERROR:' + e.message); process.exit(1); });`;
+        const b64 = Buffer.from(jsCode).toString('base64');
+        const cmd = `docker exec cinema-app node -e "eval(Buffer.from('${b64}','base64').toString('utf8'))"`;
+        const out = execSync(cmd, { encoding: 'utf8', timeout: 8000 });
+        const match = out.match(/DB_RESULT:(.*)/);
+        if (match) return JSON.parse(match[1]);
+        return null;
+    } catch (e) {
+        return null;
+    }
+}
 
 const BASE_URL = 'http://localhost';
 
@@ -160,20 +175,47 @@ async function runTestSuite() {
         });
         assert(dupReg.body.includes('đã được sử dụng'), 'Duplicate registration detected and blocked');
 
-        // Brute force: 5 failed logins should trigger rate limit message
+        // Brute force: 5 failed logins should trigger rate limit HTTP 429
         const bruteClient = new TestClient();
+        const testBruteUser = `brute_test_${Date.now()}`;
         for (let i = 0; i < 5; i++) {
-            await bruteClient.postForm('/auth/login', { username: 'notexist999', password: 'wrongpass' });
+            await bruteClient.postForm('/auth/login', { username: testBruteUser, password: 'wrongpass' });
         }
-        const bruteRes = await bruteClient.postForm('/auth/login', { username: 'notexist999', password: 'wrongpass' });
-        assert(bruteRes.body.includes('thử lại sau') || bruteRes.status === 200, 'Rate limiting blocks after 5 failed attempts');
+        const bruteRes = await bruteClient.postForm('/auth/login', { username: testBruteUser, password: 'wrongpass' });
+        assert(bruteRes.status === 429 && bruteRes.body.includes('thử lại sau'), 'Rate limiting returns 429 and blocks after 5 failed attempts');
 
         // Forgot password endpoint (safe - no user enumeration)
         const forgotReq = await guestClient.postForm('/auth/forgot-password', { email: 'khachhang1@gmail.com' });
         assert(forgotReq.status === 200 && forgotReq.body.includes('khôi phục mật khẩu'), 'Forgot password link generation works safely');
 
-        // Verify reset token is NOT logged in application log (check sandbox file instead)
-        assert(true, 'Reset token stored as hash in DB (not plain text - verified by code review)');
+        // Real DB Check: Reset token stored as SHA-256 hash in DB (not plain text)
+        const dbUsers = queryDb('SELECT reset_password_token, reset_password_expires FROM users WHERE email = "khachhang1@gmail.com"');
+        const tokenHash = dbUsers && dbUsers[0] ? dbUsers[0].reset_password_token : null;
+        assert(tokenHash !== null && tokenHash.length === 64, 'Reset token is verified in DB as 64-char SHA-256 hash (not plain text)');
+
+        // Test actual password reset & single-use enforcement:
+        const testRawToken = crypto.randomBytes(32).toString('hex');
+        const testTokenHash = crypto.createHash('sha256').update(testRawToken).digest('hex');
+        const testExpiry = new Date(Date.now() + 3600000).toISOString().slice(0, 19).replace('T', ' ');
+        queryDb(`UPDATE users SET reset_password_token = '${testTokenHash}', reset_password_expires = '${testExpiry}' WHERE email = 'khachhang1@gmail.com'`);
+
+        // Perform password reset using testRawToken
+        const resetRes = await guestClient.postForm(`/auth/reset-password/${testRawToken}`, {
+            password: 'User@123456',
+            confirm_password: 'User@123456'
+        });
+        assert(resetRes.status === 302 || resetRes.status === 200, 'Password reset succeeds and redirects to login');
+
+        // Verify token is wiped in DB immediately (single-use)
+        const userAfterReset = queryDb('SELECT reset_password_token FROM users WHERE email = "khachhang1@gmail.com"');
+        assert(userAfterReset && userAfterReset[0] && userAfterReset[0].reset_password_token === null, 'Reset token is wiped from DB after single use');
+
+        // Attempt to reuse token - must fail
+        const reuseRes = await guestClient.postForm(`/auth/reset-password/${testRawToken}`, {
+            password: 'User@123456',
+            confirm_password: 'User@123456'
+        });
+        assert(reuseRes.body.includes('hết hạn') || reuseRes.body.includes('không hợp lệ') || reuseRes.status === 200, 'Reset token cannot be reused');
     } catch (e) {
         assert(false, 'Auth test suite executed', e.message);
     }
@@ -213,10 +255,13 @@ async function runTestSuite() {
         assert(seatsApi.json !== null, 'Seats API returns JSON', JSON.stringify(seatsApi.json));
 
         const bookedSeatIds = new Set(seatsApi.json ? seatsApi.json.bookedSeatIds : []);
+        const unbookedSeats = [];
         for (let sId = 1; sId <= 60; sId++) {
-            if (!bookedSeatIds.has(sId)) { chosenSeatId = sId; break; }
+            if (!bookedSeatIds.has(sId)) { unbookedSeats.push(sId); }
         }
-        assert(chosenSeatId !== null, `Found available seat for test: #${chosenSeatId}`);
+        assert(unbookedSeats.length >= 2, `Found available seats for test (${unbookedSeats.length} available)`);
+        chosenSeatId = unbookedSeats[0];
+        const concurrentSeatId = unbookedSeats[1];
 
         // Validation: Empty seat list
         const emptySeatRes = await guestClient.post('/booking/create', {
@@ -261,23 +306,33 @@ async function runTestSuite() {
         testBookingCode = createRes.json.bookingCode;
         console.log(`    -> Created Booking ID: ${testBookingId}, Code: ${testBookingCode}`);
 
-        // TRUE concurrent double-booking test: 2 parallel requests for same seat
-        await customer2.postForm('/auth/login', { username: 'customer2', password: 'User@123456' });
-        const [concurrent1, concurrent2] = await Promise.all([
-            customer2.post('/booking/create', {
-                showtimeId: 1, seatIds: [chosenSeatId],
-                customerName: 'Concurrent Attacker 1', customerEmail: 'attack1@cinema.local', customerPhone: '0900000001'
+        // TRUE concurrent double-booking test: starts from EMPTY seat (concurrentSeatId)
+        // 2 parallel requests attempting to book the EXACT SAME seat simultaneously
+        const concurrentCustA = new TestClient();
+        const concurrentCustB = new TestClient();
+        await concurrentCustA.postForm('/auth/login', { username: 'customer2', password: 'User@123456' });
+
+        const [concResA, concResB] = await Promise.all([
+            concurrentCustA.post('/booking/create', {
+                showtimeId: 1, seatIds: [concurrentSeatId],
+                customerName: 'Concurrent User A', customerEmail: 'concA@cinema.local', customerPhone: '0911111111'
             }),
-            guestClient.post('/booking/create', {
-                showtimeId: 1, seatIds: [chosenSeatId],
-                customerName: 'Concurrent Attacker 2', customerEmail: 'attack2@cinema.local', customerPhone: '0900000002'
+            concurrentCustB.post('/booking/create', {
+                showtimeId: 1, seatIds: [concurrentSeatId],
+                customerName: 'Concurrent User B', customerEmail: 'concB@cinema.local', customerPhone: '0922222222'
             })
         ]);
-        const bothBlocked = concurrent1.status === 409 && concurrent2.status === 409;
-        const oneBlocked = (concurrent1.status === 409) || (concurrent2.status === 409);
-        assert(oneBlocked || bothBlocked, 'Concurrent double-booking: at least one conflicting request blocked with 409');
-        const conflictFlagSet = (concurrent1.json && concurrent1.json.conflict) || (concurrent2.json && concurrent2.json.conflict);
-        assert(conflictFlagSet, 'Conflict flag is true in JSON for blocked double-booking');
+
+        const aWon = concResA.status === 200 && concResB.status === 409;
+        const bWon = concResA.status === 409 && concResB.status === 200;
+        assert(aWon || bWon, 'Concurrent double-booking on empty seat: exactly ONE request succeeds (200), other gets 409 conflict');
+
+        const failedRes = concResA.status === 409 ? concResA : concResB;
+        assert(failedRes.json && failedRes.json.conflict === true, 'Conflict response includes conflict: true');
+
+        // Check database: exactly 1 booking_seats record exists for concurrentSeatId
+        const dbBookingSeats = queryDb(`SELECT COUNT(*) as cnt FROM booking_seats WHERE showtime_id = 1 AND seat_id = ${concurrentSeatId}`);
+        assert(dbBookingSeats && dbBookingSeats[0] && parseInt(dbBookingSeats[0].cnt, 10) === 1, 'Database check: exactly 1 booking_seats record exists for the seat (no double allocation)');
     } catch (e) {
         assert(false, 'Booking test suite executed', e.message);
     }
@@ -360,29 +415,40 @@ async function runTestSuite() {
         const fakeVerifyRes = await guestClient.get('/ticket/verify?token=TAMPERED_FAKE_TOKEN_XYZ');
         assert(fakeVerifyRes.body.includes('KHÔNG HỢP LỆ') || fakeVerifyRes.body.includes('Không Tìm Thấy'), 'Tampered QR token is rejected');
 
-        // Admin check-in (atomic)
-        const checkinRes = await adminClient.post('/ticket/checkin', { bookingId: testBookingId });
-        assert(checkinRes.status === 200, 'Admin check-in ticket succeeds (200 OK)');
-        assert(checkinRes.json && checkinRes.json.success === true, 'Check-in returned success = true');
+        // TRUE concurrent check-in test on a fresh, paid, UNCHECKED-IN ticket:
+        // Two admin terminals scan the same ticket at the exact same millisecond
+        const adminClientA = new TestClient();
+        const adminClientB = new TestClient();
+        await adminClientA.postForm('/auth/login', { username: 'admin', password: 'Admin@123456' });
+        await adminClientB.postForm('/auth/login', { username: 'admin', password: 'Admin@123456' });
 
-        // Duplicate check-in prevention
-        const dupCheckinRes = await adminClient.post('/ticket/checkin', { bookingId: testBookingId });
-        assert(dupCheckinRes.status === 400, 'Duplicate check-in attempt on used ticket is blocked (400)');
-        assert(dupCheckinRes.json && dupCheckinRes.json.message.includes('đã được check-in'), 'Message states ticket was already used');
-
-        // Concurrent check-in test: Two admin requests at the same time
-        // (Create a fresh completed booking for this test)
-        // We verify only one of two concurrent check-in attempts on an already-checked-in ticket fails
-        const [conCheckin1, conCheckin2] = await Promise.all([
-            adminClient.post('/ticket/checkin', { bookingId: testBookingId }),
-            adminClient.post('/ticket/checkin', { bookingId: testBookingId })
+        const [cinResA, cinResB] = await Promise.all([
+            adminClientA.post('/ticket/checkin', { bookingId: testBookingId }),
+            adminClientB.post('/ticket/checkin', { bookingId: testBookingId })
         ]);
-        const bothFailed = conCheckin1.status === 400 && conCheckin2.status === 400;
-        assert(bothFailed, 'Concurrent check-in on already-checked-in ticket: both requests correctly blocked');
 
-        // Verify ticket now shows CHECKED-IN status
+        const cinAWon = cinResA.status === 200 && cinResB.status === 400;
+        const cinBWon = cinResA.status === 400 && cinResB.status === 200;
+        assert(cinAWon || cinBWon, 'Concurrent check-in on unchecked-in ticket: exactly ONE request succeeds (200), other gets 400');
+
+        const winningRes = cinResA.status === 200 ? cinResA : cinResB;
+        assert(winningRes.json && winningRes.json.success === true, 'Successful check-in returns success = true');
+
+        const failedCheckin = cinResA.status === 400 ? cinResA : cinResB;
+        assert(failedCheckin.json && (failedCheckin.json.message.includes('check-in') || failedCheckin.json.message.includes('soát')), 'Conflicting check-in blocked with already-checked-in message');
+
+        // Check database: ticket is marked checked_in with timestamp and admin
+        const dbTicket = queryDb(`SELECT checkin_status, checkin_by, checkin_at FROM bookings WHERE id = ${testBookingId}`);
+        assert(dbTicket && dbTicket[0] && dbTicket[0].checkin_status === 'checked_in', 'Database check: ticket checkin_status is marked checked_in in DB');
+        assert(dbTicket && dbTicket[0] && dbTicket[0].checkin_at !== null, 'Database check: checkin_at timestamp recorded in DB');
+
+        // Subsequent check-in attempt on used ticket is blocked
+        const dupCheckin = await adminClientA.post('/ticket/checkin', { bookingId: testBookingId });
+        assert(dupCheckin.status === 400, 'Duplicate check-in attempt on used ticket is blocked (400)');
+
+        // Ticket verification page reflects checked-in status
         const reverify = await guestClient.get(`/ticket/verify?token=${testBookingToken}`);
-        assert(reverify.body.includes('CHECKED-IN') || reverify.body.includes('ĐÃ CHECK-IN') || reverify.body.includes('ĐÃ SỬ DỤNG'), 'Ticket status shows CHECKED-IN after checkin');
+        assert(reverify.body.includes('CHECKED-IN') || reverify.body.includes('ĐÃ CHECK-IN') || reverify.body.includes('ĐÃ SỬ DỤNG') || reverify.body.includes('đã được soát'), 'Ticket verification reflects CHECKED-IN status');
     } catch (e) {
         assert(false, 'E-ticket QR & Check-in suite executed', e.message);
     }

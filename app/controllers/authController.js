@@ -65,7 +65,7 @@ const authController = {
         const attemptKey = getAttemptKey(req, username.trim());
         const rateCheck = checkRateLimit(attemptKey);
         if (!rateCheck.allowed) {
-            return res.render('auth/login', {
+            return res.status(429).render('auth/login', {
                 title: 'Đăng nhập',
                 error: `Bạn đã thử đăng nhập sai quá nhiều lần. Vui lòng thử lại sau ${rateCheck.remainingMinutes} phút.`,
                 success: null
@@ -382,15 +382,15 @@ const authController = {
                 // KHÔNG log token thực hoặc URL reset (có thể gây lộ thông tin trong log files)
                 logger.info(`[Password Reset] Token generated for user ${user.username}. Valid for 60 minutes.`);
 
-                // Trong môi trường sandbox/demo: ghi link vào file log riêng (không phải application log)
-                if (!process.env.SMTP_HOST) {
+                // Trong môi trường sandbox/demo: chỉ ghi file log riêng khi không phải production (ngăn rò rỉ token trên production)
+                const isProduction = process.env.NODE_ENV === 'production' && process.env.ALLOW_SANDBOX_LOG !== 'true';
+                if (!process.env.SMTP_HOST && !isProduction) {
                     try {
                         const fs = require('fs');
                         const path = require('path');
                         const resetLink = `${req.protocol}://${req.get('host')}/auth/reset-password/${rawToken}`;
                         const entry = `[${new Date().toISOString()}] PASSWORD RESET - User: ${user.username} | Email: ${user.email} | Link: ${resetLink}\n`;
                         
-                        // Thử ghi vào /tmp (luôn writable trong container Linux) hoặc thư mục logs
                         const tmpLog = '/tmp/password_reset_sandbox.log';
                         try {
                             fs.appendFileSync(tmpLog, entry, 'utf8');

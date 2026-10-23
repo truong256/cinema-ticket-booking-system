@@ -15,34 +15,36 @@ async function runMigrations(db) {
     logger.info('Checking database schema migrations...');
 
     async function addColumnIfNotExists(table, column, definition) {
-        try {
-            const rows = await db.query(
-                `SELECT COLUMN_NAME FROM information_schema.COLUMNS 
-                 WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? AND COLUMN_NAME = ?`,
-                [table, column]
-            );
-            if (rows.length === 0) {
+        const rows = await db.query(
+            `SELECT COLUMN_NAME FROM information_schema.COLUMNS 
+             WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? AND COLUMN_NAME = ?`,
+            [table, column]
+        );
+        if (rows.length === 0) {
+            try {
                 await db.query(`ALTER TABLE ${table} ADD COLUMN ${column} ${definition}`);
                 logger.info(`[Migration] Added column '${column}' to table '${table}'`);
+            } catch (err) {
+                logger.error(`[Migration Error] Failed adding column ${column} to ${table}: ${err.message}`);
+                throw err;
             }
-        } catch (err) {
-            logger.error(`[Migration Error] Failed adding column ${column} to ${table}: ${err.message}`);
         }
     }
 
     async function addIndexIfNotExists(table, indexName, indexDefinition) {
-        try {
-            const rows = await db.query(
-                `SELECT INDEX_NAME FROM information_schema.STATISTICS 
-                 WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? AND INDEX_NAME = ?`,
-                [table, indexName]
-            );
-            if (rows.length === 0) {
+        const rows = await db.query(
+            `SELECT INDEX_NAME FROM information_schema.STATISTICS 
+             WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? AND INDEX_NAME = ?`,
+            [table, indexName]
+        );
+        if (rows.length === 0) {
+            try {
                 await db.query(`ALTER TABLE ${table} ADD INDEX ${indexName} ${indexDefinition}`);
                 logger.info(`[Migration] Added index '${indexName}' to table '${table}'`);
+            } catch (err) {
+                logger.error(`[Migration Error] Failed adding index ${indexName} to ${table}: ${err.message}`);
+                throw err;
             }
-        } catch (err) {
-            logger.error(`[Migration Error] Failed adding index ${indexName} to ${table}: ${err.message}`);
         }
     }
 
@@ -57,15 +59,15 @@ async function runMigrations(db) {
     await addIndexIfNotExists('bookings', 'idx_booking_token', '(booking_token)');
 
     // Populate tokens for existing bookings if missing (dùng crypto_random thay vì SHA2 dự đoán được)
-    try {
-        // Dùng SUBSTR(UUID(), 1, 32) + SHA2 làm token ngẫu nhiên hơn cho existing rows
+    const pendingTokens = await db.query(
+        "SELECT id FROM bookings WHERE booking_token IS NULL OR booking_token = '' LIMIT 1"
+    );
+    if (pendingTokens.length > 0) {
         await db.query(`
             UPDATE bookings 
             SET booking_token = SHA2(CONCAT(id, booking_code, UNIX_TIMESTAMP(created_at), UUID()), 256)
             WHERE booking_token IS NULL OR booking_token = ''
         `);
-    } catch (e) {
-        logger.warn(`[Migration] Could not populate booking tokens: ${e.message}`);
     }
 
     // 2. Users table enhancements (Password recovery dùng hashed token, account locking)
@@ -85,7 +87,30 @@ async function runMigrations(db) {
     await addColumnIfNotExists('showtimes', 'updated_at', 'TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP');
     await addColumnIfNotExists('users', 'updated_at', 'TIMESTAMP NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP');
 
-    logger.info('Database migrations verified successfully.');
+    // 5. Xác thực cấu trúc bảng sau migration (Post-migration schema verification)
+    const requiredSchema = [
+        { table: 'bookings', column: 'expires_at' },
+        { table: 'bookings', column: 'booking_token' },
+        { table: 'bookings', column: 'checkin_status' },
+        { table: 'users', column: 'reset_password_token' },
+        { table: 'users', column: 'reset_password_expires' },
+        { table: 'users', column: 'status' },
+        { table: 'cinemas', column: 'is_active' },
+        { table: 'rooms', column: 'is_active' }
+    ];
+
+    for (const item of requiredSchema) {
+        const verifyRows = await db.query(
+            `SELECT COLUMN_NAME FROM information_schema.COLUMNS 
+             WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? AND COLUMN_NAME = ?`,
+            [item.table, item.column]
+        );
+        if (verifyRows.length === 0) {
+            throw new Error(`[Migration Verification] Column '${item.column}' on '${item.table}' does not exist after migration`);
+        }
+    }
+
+    logger.info('Database migrations verified successfully with post-migration schema checks.');
 }
 
 module.exports = { runMigrations };

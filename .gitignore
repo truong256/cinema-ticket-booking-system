@@ -38,6 +38,3 @@ Thumbs.db
 # Docker persistent local test folders
 .docker-cache/
 temp_clone/
-
-# Local GitHub workflows (PAT lacks workflow scope)
-.github/
