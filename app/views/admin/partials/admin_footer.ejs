@@ -1,0 +1,35 @@
+    </div><!-- End .admin-content -->
+</main><!-- End .admin-main-wrapper -->
+</div><!-- End .admin-app -->
+
+<script>
+function toggleAdminSidebar() {
+    const sidebar = document.getElementById('adminSidebar');
+    if (sidebar) {
+        sidebar.classList.toggle('open');
+    }
+}
+
+// Close sidebar on mobile when clicked outside
+document.addEventListener('click', function(e) {
+    const sidebar = document.getElementById('adminSidebar');
+    const toggleBtn = document.querySelector('.admin-menu-toggle');
+    if (sidebar && sidebar.classList.contains('open')) {
+        if (!sidebar.contains(e.target) && (!toggleBtn || !toggleBtn.contains(e.target))) {
+            sidebar.classList.remove('open');
+        }
+    }
+});
+
+// ESC key closes any open modal
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        const modals = document.querySelectorAll('.admin-modal');
+        modals.forEach(m => m.style.display = 'none');
+        const sidebar = document.getElementById('adminSidebar');
+        if (sidebar) sidebar.classList.remove('open');
+    }
+});
+</script>
+</body>
+</html>

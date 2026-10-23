@@ -1,256 +1,258 @@
-<%- include('../partials/header') %>
-<%- include('../partials/navbar') %>
+<%- include('partials/admin_header', { title: 'Bảng Điều Khiển Quản Trị - CineVibe' }) %>
+<%- include('partials/admin_sidebar', { activeTab: 'dashboard' }) %>
 
-<main class="main-wrapper">
-    <!-- Admin Header -->
-    <div class="section-header">
-        <div>
-            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem;">
-                <span class="brand-badge gold">QUẢN TRỊ VIÊN</span>
-                <span style="font-size: 0.85rem; color: var(--text-muted);">CineVibe - Phân Hệ Quản Trị Hệ Thống</span>
-            </div>
-            <h1 class="section-title">
-                Bảng Điều Khiển Quản Trị
-            </h1>
-        </div>
-    </div>
+<main class="admin-main-wrapper">
+    <%- include('partials/admin_topbar', { 
+        pageTitle: 'Bảng điều khiển quản trị', 
+        pageSubtitle: 'Theo dõi hoạt động kinh doanh và quản lý hệ thống đặt vé CineVibe.' 
+    }) %>
 
-    <!-- Admin Navigation Tabs -->
-    <div style="display: flex; gap: 0.5rem; margin-bottom: 2rem; flex-wrap: wrap;">
-        <a href="/admin" class="btn btn-primary btn-sm">Dashboard</a>
-        <a href="/admin/movies" class="btn btn-secondary btn-sm">Phim</a>
-        <a href="/admin/showtimes" class="btn btn-secondary btn-sm">Suất chiếu</a>
-        <a href="/admin/cinemas" class="btn btn-secondary btn-sm">Cụm rạp</a>
-        <a href="/admin/rooms" class="btn btn-secondary btn-sm">Phòng & Ghế</a>
-        <a href="/admin/bookings" class="btn btn-secondary btn-sm">Đơn đặt vé</a>
-        <a href="/admin/users" class="btn btn-secondary btn-sm">Khách hàng</a>
-    </div>
-
-    <!-- 6 Key Performance Indicators (KPI Cards) -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; margin-bottom: 2.5rem;">
-        <!-- KPI 1: Phim -->
-        <div class="card" style="border-left: 4px solid var(--color-primary); background: var(--bg-secondary); padding: 1.25rem 1.5rem;">
-            <div style="color: var(--text-muted); font-size: 0.78rem; font-weight: 700; text-transform: uppercase;">Phim Đang Chiếu</div>
-            <div style="font-family: var(--font-heading); font-size: 2.2rem; font-weight: 800; color: #fff; margin-top: 0.25rem;">
-                <%= stats.totalMovies %>
-            </div>
-            <div style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 0.5rem;">Trong danh mục mở bán</div>
-        </div>
-
-        <!-- KPI 2: Suất Chiếu -->
-        <div class="card" style="border-left: 4px solid #06B6D4; background: var(--bg-secondary); padding: 1.25rem 1.5rem;">
-            <div style="color: var(--text-muted); font-size: 0.78rem; font-weight: 700; text-transform: uppercase;">Suất Chiếu Mở Bán</div>
-            <div style="font-family: var(--font-heading); font-size: 2.2rem; font-weight: 800; color: #fff; margin-top: 0.25rem;">
-                <%= stats.totalShowtimes %>
-            </div>
-            <div style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 0.5rem;">Đã lên lịch phát sóng</div>
-        </div>
-
-        <!-- KPI 3: Vé Đã Bán -->
-        <div class="card" style="border-left: 4px solid #10B981; background: var(--bg-secondary); padding: 1.25rem 1.5rem;">
-            <div style="color: var(--text-muted); font-size: 0.78rem; font-weight: 700; text-transform: uppercase;">Vé Đã Bán (Paid)</div>
-            <div style="font-family: var(--font-heading); font-size: 2.2rem; font-weight: 800; color: #10B981; margin-top: 0.25rem;">
-                <%= stats.totalTicketsSold %>
-            </div>
-            <div style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 0.5rem;">Giao dịch hoàn tất</div>
-        </div>
-
-        <!-- KPI 4: Doanh Thu -->
-        <div class="card" style="border-left: 4px solid var(--color-gold); background: var(--bg-secondary); padding: 1.25rem 1.5rem;">
-            <div style="color: var(--text-muted); font-size: 0.78rem; font-weight: 700; text-transform: uppercase;">Tổng Doanh Thu</div>
-            <div style="font-family: var(--font-heading); font-size: 1.6rem; font-weight: 800; color: var(--color-gold); margin-top: 0.25rem;">
-                <%= new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(stats.totalRevenue) %>
-            </div>
-            <div style="font-size: 0.78rem; color: var(--color-gold); margin-top: 0.5rem;">Doanh thu thực tế</div>
-        </div>
-
-        <!-- KPI 5: Pending Bookings -->
-        <div class="card" style="border-left: 4px solid #F59E0B; background: var(--bg-secondary); padding: 1.25rem 1.5rem;">
-            <div style="color: var(--text-muted); font-size: 0.78rem; font-weight: 700; text-transform: uppercase;">Đơn Đang Giữ Chỗ</div>
-            <div style="font-family: var(--font-heading); font-size: 2.2rem; font-weight: 800; color: #F59E0B; margin-top: 0.25rem;">
-                <%= stats.totalPending || 0 %>
-            </div>
-            <div style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 0.5rem;">Trong thời hạn 10 phút</div>
-        </div>
-
-        <!-- KPI 6: Customers -->
-        <div class="card" style="border-left: 4px solid #8B5CF6; background: var(--bg-secondary); padding: 1.25rem 1.5rem;">
-            <div style="color: var(--text-muted); font-size: 0.78rem; font-weight: 700; text-transform: uppercase;">Khách Hàng Đăng Ký</div>
-            <div style="font-family: var(--font-heading); font-size: 2.2rem; font-weight: 800; color: #A78BFA; margin-top: 0.25rem;">
-                <%= stats.totalUsers || 0 %>
-            </div>
-            <div style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 0.5rem;">Thành viên hệ thống</div>
-        </div>
-    </div>
-
-    <!-- 2-Column: Top Movies by Revenue & Daily Revenue Chart -->
-    <div style="display: grid; grid-template-columns: 1.3fr 1fr; gap: 1.75rem; margin-bottom: 2.5rem;" class="admin-charts-grid">
-        <!-- Top Movies -->
-        <div class="card" style="padding: 1.5rem; background: var(--bg-secondary);">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem;">
-                <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; color: #fff;">
-                    Top Phim Có Doanh Thu Cao Nhất
-                </h3>
-                <span class="brand-badge gold">BEST-SELLERS</span>
+    <div class="admin-content">
+        <!-- 6 KPI Statistics Cards (Desktop: 3 cols x 2 rows, Tablet: 2 cols, Mobile: 1 col) -->
+        <section class="admin-kpi-grid">
+            <!-- KPI 1: Phim đang chiếu -->
+            <div class="admin-kpi-card admin-kpi-movies">
+                <div class="admin-kpi-label">Phim đang chiếu</div>
+                <div class="admin-kpi-value"><%= stats.totalMovies %></div>
+                <div class="admin-kpi-desc">Phim Đang Hoạt Động mở bán</div>
             </div>
 
-            <% if (typeof topMovies !== 'undefined' && topMovies && topMovies.length > 0) { %>
-                <div style="display: flex; flex-direction: column; gap: 0.85rem;">
-                    <% topMovies.forEach((m, idx) => { %>
-                        <div style="display: flex; align-items: center; gap: 1rem; background: var(--bg-surface); padding: 0.75rem 1rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
-                            <span style="font-size: 1.2rem; font-weight: 800; color: <%= idx === 0 ? 'var(--color-gold)' : (idx === 1 ? '#94A3B8' : (idx === 2 ? '#CD7F32' : 'var(--text-muted)')) %>; width: 24px; text-align: center;">
-                                <%= idx + 1 %>
-                            </span>
-                            <img src="<%= m.poster_url %>" alt="<%= m.title %>" style="width: 38px; height: 54px; object-fit: cover; border-radius: 4px;" onerror="this.src='/images/dune2.jpg'">
-                            <div style="flex: 1; min-width: 0;">
-                                <strong style="color: #FFFFFF; font-size: 0.95rem; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"><%= m.title %></strong>
-                                <span style="font-size: 0.78rem; color: var(--text-muted);"><%= m.genre %> &bull; <%= m.tickets_count %> vé đã bán</span>
-                            </div>
-                            <div style="text-align: right;">
-                                <strong style="color: var(--color-gold); font-size: 1rem; font-family: var(--font-mono); display: block;">
-                                    <%= Number(m.total_revenue).toLocaleString('vi-VN') %> đ
-                                </strong>
-                            </div>
-                        </div>
-                    <% }); %>
+            <!-- KPI 2: Suất chiếu mở bán -->
+            <div class="admin-kpi-card admin-kpi-showtimes">
+                <div class="admin-kpi-label">Suất chiếu mở bán</div>
+                <div class="admin-kpi-value"><%= stats.totalShowtimes %></div>
+                <div class="admin-kpi-desc">Đã lên lịch phát sóng</div>
+            </div>
+
+            <!-- KPI 3: Vé đã bán -->
+            <div class="admin-kpi-card admin-kpi-tickets">
+                <div class="admin-kpi-label">Vé đã bán</div>
+                <div class="admin-kpi-value" style="color: var(--admin-success);"><%= stats.totalTicketsSold %></div>
+                <div class="admin-kpi-desc">Giao dịch hoàn tất</div>
+            </div>
+
+            <!-- KPI 4: Tổng doanh thu -->
+            <div class="admin-kpi-card admin-kpi-revenue">
+                <div class="admin-kpi-label">Tổng doanh thu</div>
+                <div class="admin-kpi-value">
+                    <%= Number(stats.totalRevenue).toLocaleString('vi-VN') %> đ
                 </div>
-            <% } else { %>
-                <p style="color: var(--text-muted); text-align: center; padding: 2rem;">Chưa có dữ liệu doanh thu phim.</p>
-            <% } %>
-        </div>
-
-        <!-- 7-Day Revenue Trend Bar Chart -->
-        <div class="card" style="padding: 1.5rem; background: var(--bg-secondary);">
-            <div style="margin-bottom: 1.25rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem;">
-                <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; color: #fff;">
-                    Doanh Thu 7 Ngày Gần Nhất
-                </h3>
+                <div class="admin-kpi-desc" style="color: var(--admin-accent-gold);">Doanh thu thực tế</div>
             </div>
 
-            <% if (typeof dailyRevenue !== 'undefined' && dailyRevenue && dailyRevenue.length > 0) { %>
-                <div style="display: flex; flex-direction: column; gap: 0.85rem;">
-                    <% 
-                    const maxVal = Math.max(...dailyRevenue.map(d => parseFloat(d.daily_total)), 1);
-                    dailyRevenue.forEach(d => { 
-                        const pct = Math.max(8, Math.round((parseFloat(d.daily_total) / maxVal) * 100));
-                        const dateFormatted = new Date(d.date_label).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' });
+            <!-- KPI 5: Đơn đang giữ chỗ -->
+            <div class="admin-kpi-card admin-kpi-pending">
+                <div class="admin-kpi-label">Đơn đang giữ chỗ</div>
+                <div class="admin-kpi-value" style="color: var(--admin-warning);"><%= stats.totalPending || 0 %></div>
+                <div class="admin-kpi-desc">Trong thời hạn 10 phút</div>
+            </div>
+
+            <!-- KPI 6: Khách hàng đăng ký -->
+            <div class="admin-kpi-card admin-kpi-users">
+                <div class="admin-kpi-label">Khách hàng đăng ký</div>
+                <div class="admin-kpi-value" style="color: #A78BFA;"><%= stats.totalUsers || 0 %></div>
+                <div class="admin-kpi-desc">Thành viên hệ thống</div>
+            </div>
+        </section>
+
+        <!-- 2-Column Analytics Section: Top Movies & 7-Day Revenue Chart -->
+        <div class="admin-dashboard-analytics-grid">
+            <!-- 1. Top Movies by Revenue -->
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <h2 class="admin-card-title">Top phim có doanh thu cao nhất</h2>
+                    <span class="admin-card-badge">Bán chạy nhất</span>
+                </div>
+
+                <% if (typeof topMovies !== 'undefined' && topMovies && topMovies.length > 0) { %>
+                    <div class="admin-top-movies-list">
+                        <% topMovies.forEach((m, idx) => { %>
+                            <div class="admin-top-movie-item <%= idx === 0 ? 'top-rank-1' : '' %>">
+                                <div class="admin-movie-rank">#<%= idx + 1 %></div>
+                                <img src="<%= m.poster_url %>" alt="<%= m.title %>" class="admin-movie-poster" onerror="this.src='/images/dune2.jpg'">
+                                <div class="admin-movie-meta">
+                                    <div class="admin-movie-title"><%= m.title %></div>
+                                    <div class="admin-movie-sub"><%= m.genre || 'Phim rạp' %> &bull; <%= m.tickets_count || 0 %> vé đã bán</div>
+                                </div>
+                                <div class="admin-movie-revenue">
+                                    <div class="admin-movie-amount">
+                                        <%= Number(m.total_revenue).toLocaleString('vi-VN') %> đ
+                                    </div>
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
+                <% } else { %>
+                    <div class="admin-empty-state">
+                        <div class="admin-empty-state-title">Chưa có dữ liệu doanh thu</div>
+                        <p>Hệ thống chưa ghi nhận vé đã thanh toán để xếp hạng phim.</p>
+                    </div>
+                <% } %>
+            </div>
+
+            <!-- 2. 7-Day Revenue Bar Chart -->
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <h2 class="admin-card-title">Doanh thu 7 ngày gần nhất</h2>
+                    <span class="admin-pill-badge">Theo ngày</span>
+                </div>
+
+                <% 
+                const hasRevenueData = typeof dailyRevenue !== 'undefined' && dailyRevenue && dailyRevenue.length > 0;
+                let sum7Days = 0;
+                let maxRevDay = null;
+                let maxRevVal = 0;
+
+                if (hasRevenueData) {
+                    dailyRevenue.forEach(d => {
+                        const val = parseFloat(d.daily_total) || 0;
+                        sum7Days += val;
+                        if (val >= maxRevVal) {
+                            maxRevVal = val;
+                            maxRevDay = d;
+                        }
+                    });
+                }
+                const avgDaily = hasRevenueData ? Math.round(sum7Days / dailyRevenue.length) : 0;
+                %>
+
+                <div class="admin-chart-container">
+                    <% if (hasRevenueData) { 
+                        const chartScale = Math.max(maxRevVal, 100000);
                     %>
-                        <div>
-                            <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 0.25rem;">
-                                <span style="color: var(--text-secondary);"><%= dateFormatted %></span>
-                                <strong style="color: var(--color-gold); font-family: var(--font-mono);"><%= Number(d.daily_total).toLocaleString('vi-VN') %> đ</strong>
+                        <!-- Visual Bar Chart -->
+                        <div class="admin-bar-chart">
+                            <% dailyRevenue.forEach(d => { 
+                                const val = parseFloat(d.daily_total) || 0;
+                                const heightPercent = Math.max(6, Math.min(100, Math.round((val / chartScale) * 100)));
+                                const dateObj = new Date(d.date_label);
+                                const dateFormatted = dateObj.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' });
+                            %>
+                                <div class="admin-chart-column-wrap">
+                                    <span class="admin-chart-bar-hover-val"><%= val > 0 ? (val >= 1000000 ? (val/1000000).toFixed(1) + 'M' : Math.round(val/1000) + 'k') : '0' %></span>
+                                    <div class="admin-chart-bar" style="height: <%= heightPercent %>%;" title="<%= dateFormatted %>: <%= Number(val).toLocaleString('vi-VN') %> đ"></div>
+                                    <span class="admin-chart-x-label"><%= dateFormatted %></span>
+                                </div>
+                            <% }); %>
+                        </div>
+
+                        <!-- 3 Summary Metrics Below Chart -->
+                        <div class="admin-chart-metrics-row">
+                            <div class="admin-chart-metric-box">
+                                <div class="admin-metric-box-label">Tổng kỳ 7 ngày</div>
+                                <div class="admin-metric-box-val gold"><%= Number(sum7Days).toLocaleString('vi-VN') %> đ</div>
                             </div>
-                            <div style="background: rgba(255,255,255,0.06); height: 10px; border-radius: 5px; overflow: hidden;">
-                                <div style="background: linear-gradient(90deg, var(--color-primary), var(--color-gold)); height: 100%; width: <%= pct %>%; border-radius: 5px;"></div>
+                            <div class="admin-chart-metric-box">
+                                <div class="admin-metric-box-label">Trung bình/ngày</div>
+                                <div class="admin-metric-box-val"><%= Number(avgDaily).toLocaleString('vi-VN') %> đ</div>
+                            </div>
+                            <div class="admin-chart-metric-box">
+                                <div class="admin-metric-box-label">Cao nhất (<%= maxRevDay ? new Date(maxRevDay.date_label).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' }) : '--' %>)</div>
+                                <div class="admin-metric-box-val gold"><%= Number(maxRevVal).toLocaleString('vi-VN') %> đ</div>
                             </div>
                         </div>
-                    <% }); %>
+                    <% } else { %>
+                        <div class="admin-empty-state">
+                            <div class="admin-empty-state-title">Chưa có giao dịch gần đây</div>
+                            <p>Không có giao dịch thanh toán thành công trong 7 ngày gần nhất.</p>
+                        </div>
+                    <% } %>
                 </div>
-            <% } else { %>
-                <div style="text-align: center; padding: 2.5rem 1rem; color: var(--text-muted);">
-                    Hệ thống chưa có giao dịch hoàn tất trong 7 ngày gần đây.
-                </div>
-            <% } %>
-        </div>
-    </div>
-
-    <!-- Quick Tools Links for Exam Presentation -->
-    <div class="card" style="margin-bottom: 2.5rem; background: var(--bg-surface); border-color: var(--border-color);">
-        <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; color: #fff; margin-bottom: 1.25rem;">
-            Liên Kết Nhanh Công Cụ Giám Sát DevOps (Exam Live Demo)
-        </h3>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-            <a href="http://localhost:8080" target="_blank" class="card card-hover" style="padding: 1.25rem; text-align: center; border-color: var(--border-color); background: var(--bg-secondary); text-decoration: none;">
-                <span style="display: inline-block; padding: 0.25rem 0.65rem; border-radius: 4px; background: rgba(245, 196, 81, 0.15); color: var(--color-gold); font-size: 0.75rem; font-weight: 700; margin-bottom: 0.5rem; font-family: var(--font-mono);">DB ADMIN</span>
-                <strong style="color: #fff; display: block; font-size: 0.95rem;">phpMyAdmin</strong>
-                <span style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-top: 0.2rem;">Port :8080</span>
-            </a>
-            <a href="http://localhost:3001" target="_blank" class="card card-hover" style="padding: 1.25rem; text-align: center; border-color: var(--border-color); background: var(--bg-secondary); text-decoration: none;">
-                <span style="display: inline-block; padding: 0.25rem 0.65rem; border-radius: 4px; background: rgba(56, 189, 248, 0.15); color: #38bdf8; font-size: 0.75rem; font-weight: 700; margin-bottom: 0.5rem; font-family: var(--font-mono);">MONITORING</span>
-                <strong style="color: #fff; display: block; font-size: 0.95rem;">Grafana Dashboard</strong>
-                <span style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-top: 0.2rem;">Port :3001</span>
-            </a>
-            <a href="http://localhost:9090/targets" target="_blank" class="card card-hover" style="padding: 1.25rem; text-align: center; border-color: var(--border-color); background: var(--bg-secondary); text-decoration: none;">
-                <span style="display: inline-block; padding: 0.25rem 0.65rem; border-radius: 4px; background: rgba(251, 146, 60, 0.15); color: #fb923c; font-size: 0.75rem; font-weight: 700; margin-bottom: 0.5rem; font-family: var(--font-mono);">METRICS</span>
-                <strong style="color: #fff; display: block; font-size: 0.95rem;">Prometheus Targets</strong>
-                <span style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-top: 0.2rem;">Port :9090</span>
-            </a>
-            <a href="/metrics" target="_blank" class="card card-hover" style="padding: 1.25rem; text-align: center; border-color: var(--border-color); background: var(--bg-secondary); text-decoration: none;">
-                <span style="display: inline-block; padding: 0.25rem 0.65rem; border-radius: 4px; background: rgba(167, 139, 250, 0.15); color: #a78bfa; font-size: 0.75rem; font-weight: 700; margin-bottom: 0.5rem; font-family: var(--font-mono);">RAW DATA</span>
-                <strong style="color: #fff; display: block; font-size: 0.95rem;">App Metrics</strong>
-                <span style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-top: 0.2rem;">/metrics</span>
-            </a>
-        </div>
-    </div>
-
-    <!-- Recent Bookings Table -->
-    <div class="card" style="padding: 0; overflow: hidden; background: var(--bg-secondary); border-color: var(--border-color);">
-        <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
-            <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; color: #fff;">
-                Đơn Đặt Vé Mới Nhất
-            </h3>
-            <a href="/admin/bookings" class="btn btn-secondary btn-sm">Xem tất cả đơn vé &rarr;</a>
+            </div>
         </div>
 
-        <div style="overflow-x: auto;">
-            <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
-                <thead>
-                    <tr style="background: var(--bg-surface); border-bottom: 1px solid var(--border-color); color: var(--text-muted); text-transform: uppercase; font-size: 0.76rem; letter-spacing: 0.8px;">
-                        <th style="padding: 1rem 1.5rem;">Mã Đơn</th>
-                        <th style="padding: 1rem 1.5rem;">Khách Hàng</th>
-                        <th style="padding: 1rem 1.5rem;">Phim</th>
-                        <th style="padding: 1rem 1.5rem;">Tổng Tiền</th>
-                        <th style="padding: 1rem 1.5rem;">Trạng Thái</th>
-                        <th style="padding: 1rem 1.5rem;">Thời Gian</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% if (typeof recentBookings !== 'undefined' && recentBookings && recentBookings.length > 0) { %>
-                        <% recentBookings.forEach(b => { %>
-                            <tr style="border-bottom: 1px solid var(--border-color); transition: var(--transition);" class="table-row-hover">
-                                <td style="padding: 1rem 1.5rem; font-weight: 700; color: #fff; font-family: var(--font-mono);"><%= b.booking_code %></td>
-                                <td style="padding: 1rem 1.5rem;">
-                                    <div style="font-weight: 600; color: #fff;"><%= b.customer_name %></div>
-                                    <div style="font-size: 0.78rem; color: var(--text-muted);"><%= b.customer_phone %></div>
-                                </td>
-                                <td style="padding: 1rem 1.5rem; color: var(--text-secondary);"><%= b.movie_title %></td>
-                                <td style="padding: 1rem 1.5rem; font-weight: 800; color: var(--color-gold);">
-                                    <%= new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(b.total_amount) %>
-                                </td>
-                                <td style="padding: 1rem 1.5rem;">
-                                    <% if (b.payment_status === 'completed') { %>
-                                        <span class="badge badge-green">Hoàn tất</span>
-                                    <% } else if (b.payment_status === 'failed' || b.booking_status === 'cancelled') { %>
-                                        <span class="badge badge-red">Đã hủy</span>
-                                    <% } else { %>
-                                        <span class="badge badge-gold">Pending</span>
-                                    <% } %>
-                                </td>
-                                <td style="padding: 1rem 1.5rem; color: var(--text-muted); font-size: 0.82rem;">
-                                    <%= new Date(b.created_at).toLocaleString('vi-VN') %>
+        <!-- Recent Bookings Table -->
+        <div class="admin-card" style="padding: 0; overflow: hidden; margin-bottom: 2rem;">
+            <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--admin-border); display: flex; justify-content: space-between; align-items: center;">
+                <h2 class="admin-card-title">Đơn đặt vé mới nhất</h2>
+                <a href="/admin/bookings" class="admin-btn admin-btn-secondary admin-btn-sm">
+                    Xem tất cả đơn vé
+                </a>
+            </div>
+
+            <div class="admin-table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Mã đơn</th>
+                            <th>Khách hàng</th>
+                            <th>Phim</th>
+                            <th>Tổng tiền</th>
+                            <th>Trạng thái</th>
+                            <th>Thời gian</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (typeof recentBookings !== 'undefined' && recentBookings && recentBookings.length > 0) { %>
+                            <% recentBookings.forEach(b => { %>
+                                <tr>
+                                    <td style="font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #FFFFFF;">
+                                        <%= b.booking_code %>
+                                    </td>
+                                    <td>
+                                        <div style="font-weight: 600; color: #FFFFFF;"><%= b.customer_name %></div>
+                                        <div style="font-size: 0.78rem; color: var(--admin-text-muted);"><%= b.customer_phone %></div>
+                                    </td>
+                                    <td style="color: var(--admin-text-secondary);"><%= b.movie_title %></td>
+                                    <td style="font-weight: 800; color: var(--admin-accent-gold);">
+                                        <%= Number(b.total_amount).toLocaleString('vi-VN') %> đ
+                                    </td>
+                                    <td>
+                                        <% if (b.payment_status === 'completed' || b.payment_status === 'paid') { %>
+                                            <span class="admin-tag admin-tag-success">Hoàn tất</span>
+                                        <% } else if (b.payment_status === 'failed' || b.booking_status === 'cancelled') { %>
+                                            <span class="admin-tag admin-tag-danger">Đã hủy</span>
+                                        <% } else { %>
+                                            <span class="admin-tag admin-tag-warning">Đang giữ chỗ</span>
+                                        <% } %>
+                                    </td>
+                                    <td style="color: var(--admin-text-muted); font-size: 0.8rem;">
+                                        <%= new Date(b.created_at).toLocaleString('vi-VN') %>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="6" style="padding: 2.5rem; text-align: center; color: var(--admin-text-muted);">
+                                    Chưa có đơn vé nào trong hệ thống.
                                 </td>
                             </tr>
-                        <% }); %>
-                    <% } else { %>
-                        <tr>
-                            <td colspan="6" style="padding: 2.5rem; text-align: center; color: var(--text-muted);">Chưa có đơn vé nào được ghi nhận.</td>
-                        </tr>
-                    <% } %>
-                </tbody>
-            </table>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Quick DevOps Monitoring Links -->
+        <div class="admin-card">
+            <div class="admin-card-header">
+                <h2 class="admin-card-title">Công cụ giám sát hạ tầng & DevOps</h2>
+                <span class="admin-pill-badge">Hệ thống</span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
+                <a href="http://localhost:8080" target="_blank" class="admin-card" style="padding: 1.15rem; text-align: center; text-decoration: none; background: var(--admin-bg-surface);">
+                    <div style="font-size: 0.72rem; font-weight: 700; color: var(--admin-accent-gold); text-transform: uppercase; margin-bottom: 0.25rem;">Cơ sở dữ liệu</div>
+                    <div style="font-weight: 700; color: #FFFFFF; font-size: 0.95rem;">phpMyAdmin</div>
+                    <div style="font-size: 0.75rem; color: var(--admin-text-muted); margin-top: 0.25rem;">Cổng :8080</div>
+                </a>
+                <a href="http://localhost:3001" target="_blank" class="admin-card" style="padding: 1.15rem; text-align: center; text-decoration: none; background: var(--admin-bg-surface);">
+                    <div style="font-size: 0.72rem; font-weight: 700; color: #38BDF8; text-transform: uppercase; margin-bottom: 0.25rem;">Giám sát Dashboard</div>
+                    <div style="font-weight: 700; color: #FFFFFF; font-size: 0.95rem;">Grafana</div>
+                    <div style="font-size: 0.75rem; color: var(--admin-text-muted); margin-top: 0.25rem;">Cổng :3001</div>
+                </a>
+                <a href="http://localhost:9090/targets" target="_blank" class="admin-card" style="padding: 1.15rem; text-align: center; text-decoration: none; background: var(--admin-bg-surface);">
+                    <div style="font-size: 0.72rem; font-weight: 700; color: #FB923C; text-transform: uppercase; margin-bottom: 0.25rem;">Chỉ số thu thập</div>
+                    <div style="font-weight: 700; color: #FFFFFF; font-size: 0.95rem;">Prometheus Targets</div>
+                    <div style="font-size: 0.75rem; color: var(--admin-text-muted); margin-top: 0.25rem;">Cổng :9090</div>
+                </a>
+                <a href="/metrics" target="_blank" class="admin-card" style="padding: 1.15rem; text-align: center; text-decoration: none; background: var(--admin-bg-surface);">
+                    <div style="font-size: 0.72rem; font-weight: 700; color: #A78BFA; text-transform: uppercase; margin-bottom: 0.25rem;">Dữ liệu ứng dụng</div>
+                    <div style="font-weight: 700; color: #FFFFFF; font-size: 0.95rem;">Endpoint /metrics</div>
+                    <div style="font-size: 0.75rem; color: var(--admin-text-muted); margin-top: 0.25rem;">Prometheus Client</div>
+                </a>
+            </div>
         </div>
     </div>
 </main>
 
-<style>
-@media (max-width: 900px) {
-    .admin-charts-grid {
-        grid-template-columns: 1fr !important;
-    }
-}
-.table-row-hover:hover {
-    background: rgba(31, 41, 61, 0.6) !important;
-}
-</style>
-
-<%- include('../partials/footer') %>
+<%- include('partials/admin_footer') %>

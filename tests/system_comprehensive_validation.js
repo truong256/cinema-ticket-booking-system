@@ -259,6 +259,9 @@ async function runTestSuite() {
     let chosenSeatId = null;
 
     try {
+        // Ensure showtime 1 is scheduled in the future for repeatable testing
+        queryDb('UPDATE showtimes SET start_time = DATE_ADD(NOW(), INTERVAL 4 HOUR), end_time = DATE_ADD(NOW(), INTERVAL 6 HOUR), status = "scheduled" WHERE id = 1');
+
         const seatsApi = await guestClient.get('/booking/api/showtime/1/seats');
         assert(seatsApi.status === 200, 'Showtime seats API /booking/api/showtime/1/seats responds 200 OK');
         assert(seatsApi.json !== null, 'Seats API returns JSON', JSON.stringify(seatsApi.json));

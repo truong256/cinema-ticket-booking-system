@@ -1,134 +1,201 @@
-<%- include('../partials/header') %>
-<%- include('../partials/navbar') %>
+<%- include('partials/admin_header', { title: 'Quản Lý Cụm Rạp Chiếu - CineVibe' }) %>
+<%- include('partials/admin_sidebar', { activeTab: 'cinemas' }) %>
 
-<main class="main-wrapper">
-    <div class="section-header">
-        <div>
-            <a href="/admin" style="color: var(--color-primary); font-size: 0.85rem; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem; margin-bottom: 0.4rem;">
-                &larr; Quay lại Dashboard
-            </a>
-            <h1 class="section-title">Quản Lý Cụm Rạp Chiếu Phim</h1>
-            <p class="section-subtitle">Danh sách các cơ sở rạp, địa chỉ hoạt động và phân bổ các phòng chiếu phim</p>
+<main class="admin-main-wrapper">
+    <%- include('partials/admin_topbar', { 
+        pageTitle: 'Quản lý cụm rạp chiếu', 
+        pageSubtitle: 'Danh sách các cơ sở rạp, địa chỉ hoạt động và quản lý các phòng chiếu phim.' 
+    }) %>
+
+    <div class="admin-content">
+        <% if (typeof error !== 'undefined' && error) { %>
+            <div class="admin-alert admin-alert-danger"><%= error %></div>
+        <% } %>
+        <% if (typeof success !== 'undefined' && success) { %>
+            <div class="admin-alert admin-alert-success"><%= success %></div>
+        <% } %>
+
+        <div class="admin-filter-bar">
+            <div>
+                <span class="admin-pill-badge">Tổng số: <%= cinemas ? cinemas.length : 0 %> cụm rạp</span>
+            </div>
+            <button type="button" class="admin-btn admin-btn-primary" onclick="openModal('modalAddCinema')">
+                Thêm cụm rạp mới
+            </button>
         </div>
-        <button class="btn btn-primary" onclick="document.getElementById('modalAddCinema').style.display='flex'">
-            Thêm cụm rạp mới
-        </button>
-    </div>
 
-    <!-- Admin Navigation Tabs -->
-    <div style="display: flex; gap: 0.5rem; margin-bottom: 2rem; flex-wrap: wrap;">
-        <a href="/admin" class="btn btn-secondary btn-sm">Dashboard</a>
-        <a href="/admin/movies" class="btn btn-secondary btn-sm">Phim</a>
-        <a href="/admin/showtimes" class="btn btn-secondary btn-sm">Suất chiếu</a>
-        <a href="/admin/cinemas" class="btn btn-primary btn-sm">Cụm rạp</a>
-        <a href="/admin/rooms" class="btn btn-secondary btn-sm">Phòng & Ghế</a>
-        <a href="/admin/bookings" class="btn btn-secondary btn-sm">Đơn đặt vé</a>
-        <a href="/admin/users" class="btn btn-secondary btn-sm">Khách hàng</a>
-    </div>
-
-    <% if (typeof error !== 'undefined' && error) { %>
-        <div class="alert alert-danger" style="margin-bottom: 1.5rem;"><%= error %></div>
-    <% } %>
-    <% if (typeof success !== 'undefined' && success) { %>
-        <div class="alert alert-success" style="margin-bottom: 1.5rem;"><%= success %></div>
-    <% } %>
-
-    <!-- Cinemas Table -->
-    <div class="card" style="padding: 0; overflow: hidden; margin-bottom: 2.5rem;">
-        <div class="table-responsive">
-            <table class="cinema-table">
-                <thead>
-                    <tr>
-                        <th style="width: 60px;">ID</th>
-                        <th>Tên Cụm Rạp</th>
-                        <th>Địa Chỉ</th>
-                        <th>Thành Phố</th>
-                        <th>Hotline</th>
-                        <th>Số Phòng</th>
-                        <th>Trạng Thái</th>
-                        <th style="text-align: right;">Hành Động</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% if (cinemas && cinemas.length > 0) { %>
-                        <% cinemas.forEach(c => { %>
+        <div class="admin-card" style="padding: 0; overflow: hidden;">
+            <div class="admin-table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 60px;">ID</th>
+                            <th>Tên cụm rạp</th>
+                            <th>Địa chỉ</th>
+                            <th>Thành phố</th>
+                            <th>Hotline</th>
+                            <th>Số phòng</th>
+                            <th>Trạng thái</th>
+                            <th style="text-align: right;">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (cinemas && cinemas.length > 0) { %>
+                            <% cinemas.forEach(c => { %>
+                                <tr>
+                                    <td style="color: var(--admin-text-muted); font-weight: 700;">#<%= c.id %></td>
+                                    <td>
+                                        <div style="font-weight: 700; color: #FFFFFF; font-size: 0.95rem;"><%= c.name %></div>
+                                    </td>
+                                    <td style="color: var(--admin-text-secondary);"><%= c.address %></td>
+                                    <td>
+                                        <span class="admin-tag admin-tag-info"><%= c.city %></span>
+                                    </td>
+                                    <td style="color: var(--admin-accent-gold); font-family: 'JetBrains Mono', monospace; font-weight: 600;">
+                                        <%= c.phone || 'N/A' %>
+                                    </td>
+                                    <td>
+                                        <a href="/admin/rooms" class="admin-tag admin-tag-muted" style="text-decoration: none;">
+                                            <%= c.room_count %> phòng
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <% if (c.is_active) { %>
+                                            <span class="admin-tag admin-tag-success">Hoạt động</span>
+                                        <% } else { %>
+                                            <span class="admin-tag admin-tag-danger">Tạm dừng</span>
+                                        <% } %>
+                                    </td>
+                                    <td style="text-align: right;">
+                                        <div class="admin-action-btn-group">
+                                            <button type="button" class="admin-btn admin-btn-secondary admin-btn-sm" onclick='openEditCinemaModal(<%= JSON.stringify(c) %>)'>
+                                                Sửa
+                                            </button>
+                                            <form action="/admin/cinemas/<%= c.id %>/toggle" method="POST" style="display: inline-block;">
+                                                <button type="submit" class="admin-btn admin-btn-secondary admin-btn-sm">
+                                                    <%= c.is_active ? 'Tạm ngưng' : 'Mở lại' %>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        <% } else { %>
                             <tr>
-                                <td style="color: var(--text-muted); font-weight: 600;">#<%= c.id %></td>
-                                <td>
-                                    <strong style="color: #FFFFFF; font-size: 1rem;"><%= c.name %></strong>
-                                </td>
-                                <td style="color: var(--text-secondary);"><%= c.address %></td>
-                                <td><span class="badge badge-blue"><%= c.city %></span></td>
-                                <td style="color: var(--color-gold); font-family: var(--font-mono);"><%= c.phone || 'N/A' %></td>
-                                <td>
-                                    <a href="/admin/rooms" style="color: var(--color-gold); font-weight: 700; text-decoration: underline;">
-                                        <%= c.room_count %> phòng
-                                    </a>
-                                </td>
-                                <td>
-                                    <% if (c.is_active) { %>
-                                        <span class="badge badge-green">Hoạt động</span>
-                                    <% } else { %>
-                                        <span class="badge badge-red">Tạm dừng</span>
-                                    <% } %>
-                                </td>
-                                <td style="text-align: right;">
-                                    <form action="/admin/cinemas/<%= c.id %>/toggle" method="POST" style="display: inline-block;">
-                                        <button type="submit" class="btn btn-secondary btn-sm" title="Bật/Tắt hoạt động">
-                                            <%= c.is_active ? 'Tạm ngưng' : 'Mở lại' %>
-                                        </button>
-                                    </form>
+                                <td colspan="8" class="admin-empty-state">
+                                    <div class="admin-empty-state-title">Chưa có cụm rạp nào</div>
+                                    <p>Nhấn "Thêm cụm rạp mới" để tạo rạp đầu tiên.</p>
                                 </td>
                             </tr>
-                        <% }); %>
-                    <% } else { %>
-                        <tr>
-                            <td colspan="8" style="text-align: center; padding: 3rem; color: var(--text-muted);">
-                                Chưa có cụm rạp nào trong hệ thống.
-                            </td>
-                        </tr>
-                    <% } %>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- Modal Thêm Rạp Chiếu -->
-    <div id="modalAddCinema" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 9999; justify-content: center; align-items: center; padding: 1.5rem;">
-        <div class="card" style="max-width: 500px; width: 100%; padding: 2rem; background: var(--bg-surface); border: 1px solid var(--border-color);">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.75rem;">
-                <h3 style="color: #FFFFFF; font-size: 1.25rem;">Thêm Cụm Rạp Mới</h3>
-                <button type="button" onclick="document.getElementById('modalAddCinema').style.display='none'" style="background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer;">&times;</button>
+                        <% } %>
+                    </tbody>
+                </table>
             </div>
-
-            <form action="/admin/cinemas/create" method="POST">
-                <div class="form-group" style="margin-bottom: 1rem;">
-                    <label class="form-label" style="display: block; color: var(--text-secondary); margin-bottom: 0.4rem; font-size: 0.88rem;">Tên Cụm Rạp *</label>
-                    <input type="text" name="name" class="form-control" required placeholder="Ví dụ: CineVibe Royal City">
-                </div>
-
-                <div class="form-group" style="margin-bottom: 1rem;">
-                    <label class="form-label" style="display: block; color: var(--text-secondary); margin-bottom: 0.4rem; font-size: 0.88rem;">Địa Chỉ Cơ Sở *</label>
-                    <input type="text" name="address" class="form-control" required placeholder="Ví dụ: 72A Nguyễn Trãi, Thanh Xuân">
-                </div>
-
-                <div class="form-group" style="margin-bottom: 1rem;">
-                    <label class="form-label" style="display: block; color: var(--text-secondary); margin-bottom: 0.4rem; font-size: 0.88rem;">Thành Phố</label>
-                    <input type="text" name="city" class="form-control" value="Hà Nội" placeholder="Hà Nội, TP.HCM,...">
-                </div>
-
-                <div class="form-group" style="margin-bottom: 1.5rem;">
-                    <label class="form-label" style="display: block; color: var(--text-secondary); margin-bottom: 0.4rem; font-size: 0.88rem;">Số Điện Thoại Hotline</label>
-                    <input type="text" name="phone" class="form-control" placeholder="1900xxxx">
-                </div>
-
-                <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
-                    <button type="button" onclick="document.getElementById('modalAddCinema').style.display='none'" class="btn btn-secondary">Hủy</button>
-                    <button type="submit" class="btn btn-primary">Xác Nhận Tạo Rạp</button>
-                </div>
-            </form>
         </div>
     </div>
 </main>
 
-<%- include('../partials/footer') %>
+<!-- Modal Add Cinema -->
+<div id="modalAddCinema" class="admin-modal">
+    <div class="admin-modal-content">
+        <div class="admin-modal-header">
+            <h3 class="admin-modal-title">Thêm cụm rạp mới</h3>
+            <button type="button" class="admin-modal-close" onclick="closeModal('modalAddCinema')">Đóng</button>
+        </div>
+        <form action="/admin/cinemas/create" method="POST">
+            <div class="admin-modal-body">
+                <div class="admin-form-group">
+                    <label class="admin-form-label">Tên cụm rạp *</label>
+                    <input type="text" name="name" class="admin-form-input" required placeholder="Ví dụ: CineVibe Ba Đình">
+                </div>
+                <div class="admin-form-group">
+                    <label class="admin-form-label">Địa chỉ chi tiết *</label>
+                    <input type="text" name="address" class="admin-form-input" required placeholder="Số nhà, tên đường, phường/xã...">
+                </div>
+                <div class="admin-form-grid">
+                    <div class="admin-form-group">
+                        <label class="admin-form-label">Thành phố</label>
+                        <select name="city" class="admin-form-select">
+                            <option value="Hà Nội">Hà Nội</option>
+                            <option value="TP. Hồ Chí Minh">TP. Hồ Chí Minh</option>
+                            <option value="Đà Nẵng">Đà Nẵng</option>
+                            <option value="Hải Phòng">Hải Phòng</option>
+                            <option value="Cần Thơ">Cần Thơ</option>
+                        </select>
+                    </div>
+                    <div class="admin-form-group">
+                        <label class="admin-form-label">Số điện thoại hotline</label>
+                        <input type="text" name="phone" class="admin-form-input" placeholder="1900xxxx hoặc 09xxxxxxxx">
+                    </div>
+                </div>
+            </div>
+            <div class="admin-modal-footer">
+                <button type="button" class="admin-btn admin-btn-secondary" onclick="closeModal('modalAddCinema')">Hủy</button>
+                <button type="submit" class="admin-btn admin-btn-primary">Tạo cụm rạp</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Edit Cinema -->
+<div id="modalEditCinema" class="admin-modal">
+    <div class="admin-modal-content">
+        <div class="admin-modal-header">
+            <h3 class="admin-modal-title">Cập nhật cụm rạp</h3>
+            <button type="button" class="admin-modal-close" onclick="closeModal('modalEditCinema')">Đóng</button>
+        </div>
+        <form id="formEditCinema" action="" method="POST">
+            <div class="admin-modal-body">
+                <div class="admin-form-group">
+                    <label class="admin-form-label">Tên cụm rạp *</label>
+                    <input type="text" id="edit_cinema_name" name="name" class="admin-form-input" required>
+                </div>
+                <div class="admin-form-group">
+                    <label class="admin-form-label">Địa chỉ chi tiết *</label>
+                    <input type="text" id="edit_cinema_address" name="address" class="admin-form-input" required>
+                </div>
+                <div class="admin-form-grid">
+                    <div class="admin-form-group">
+                        <label class="admin-form-label">Thành phố</label>
+                        <select id="edit_cinema_city" name="city" class="admin-form-select">
+                            <option value="Hà Nội">Hà Nội</option>
+                            <option value="TP. Hồ Chí Minh">TP. Hồ Chí Minh</option>
+                            <option value="Đà Nẵng">Đà Nẵng</option>
+                            <option value="Hải Phòng">Hải Phòng</option>
+                            <option value="Cần Thơ">Cần Thơ</option>
+                        </select>
+                    </div>
+                    <div class="admin-form-group">
+                        <label class="admin-form-label">Số điện thoại hotline</label>
+                        <input type="text" id="edit_cinema_phone" name="phone" class="admin-form-input">
+                    </div>
+                </div>
+            </div>
+            <div class="admin-modal-footer">
+                <button type="button" class="admin-btn admin-btn-secondary" onclick="closeModal('modalEditCinema')">Hủy</button>
+                <button type="submit" class="admin-btn admin-btn-primary">Lưu thay đổi</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function openModal(id) {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'flex';
+}
+function closeModal(id) {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+}
+function openEditCinemaModal(cinema) {
+    document.getElementById('formEditCinema').action = '/admin/cinemas/' + cinema.id + '/update';
+    document.getElementById('edit_cinema_name').value = cinema.name || '';
+    document.getElementById('edit_cinema_address').value = cinema.address || '';
+    document.getElementById('edit_cinema_city').value = cinema.city || 'Hà Nội';
+    document.getElementById('edit_cinema_phone').value = cinema.phone || '';
+    openModal('modalEditCinema');
+}
+</script>
+
+<%- include('partials/admin_footer') %>

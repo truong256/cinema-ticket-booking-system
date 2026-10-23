@@ -1,0 +1,23 @@
+<header class="admin-topbar">
+    <div class="admin-topbar-left">
+        <button type="button" class="admin-menu-toggle" onclick="toggleAdminSidebar()" aria-label="Mở menu quản trị">
+            Menu
+        </button>
+        <div class="admin-page-heading">
+            <h1 class="admin-page-title"><%= typeof pageTitle !== 'undefined' ? pageTitle : 'Bảng điều khiển quản trị' %></h1>
+            <p class="admin-page-subtitle"><%= typeof pageSubtitle !== 'undefined' ? pageSubtitle : 'Theo dõi hoạt động kinh doanh và quản lý hệ thống đặt vé CineVibe.' %></p>
+        </div>
+    </div>
+
+    <div class="admin-topbar-right">
+        <span class="admin-pill-badge">
+            <%= (typeof user !== 'undefined' && user) ? user.username : 'admin' %> &bull; Quản trị viên
+        </span>
+        <a href="/" class="admin-btn-action admin-btn-outline">
+            Trang chủ
+        </a>
+        <a href="/auth/logout" class="admin-btn-action admin-btn-danger-outline">
+            Đăng xuất
+        </a>
+    </div>
+</header>
