@@ -94,7 +94,7 @@ INSERT INTO showtimes (id, movie_id, room_id, start_time, end_time, price_regula
 (5, 3, 3, DATE_ADD(NOW(), INTERVAL 3 HOUR), DATE_ADD(DATE_ADD(NOW(), INTERVAL 4 HOUR), INTERVAL 55 MINUTE), 80000.00, 100000.00, 170000.00, 'scheduled'),
 (6, 4, 1, DATE_ADD(DATE_ADD(NOW(), INTERVAL 1 DAY), INTERVAL 9 HOUR), DATE_ADD(DATE_ADD(DATE_ADD(NOW(), INTERVAL 1 DAY), INTERVAL 10 HOUR), INTERVAL 36 MINUTE), 85000.00, 110000.00, 180000.00, 'scheduled'),
 (7, 5, 2, DATE_ADD(DATE_ADD(NOW(), INTERVAL 1 DAY), INTERVAL 14 HOUR), DATE_ADD(DATE_ADD(DATE_ADD(NOW(), INTERVAL 1 DAY), INTERVAL 16 HOUR), INTERVAL 18 MINUTE), 85000.00, 110000.00, 180000.00, 'scheduled')
-ON DUPLICATE KEY UPDATE status=VALUES(status);
+ON DUPLICATE KEY UPDATE status=VALUES(status), start_time=VALUES(start_time), end_time=VALUES(end_time);
 
 -- 7. Sample Bookings (Một vài booking mẫu để chứng minh hoạt động)
 INSERT INTO bookings (id, booking_code, user_id, showtime_id, total_amount, payment_status, booking_status, customer_name, customer_email, customer_phone) VALUES
