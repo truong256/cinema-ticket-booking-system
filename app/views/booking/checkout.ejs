@@ -17,16 +17,16 @@
     <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 2rem; align-items: start;" class="checkout-grid">
         <!-- Left: Payment Methods Selection -->
         <div class="card" style="padding: 2.25rem;">
-            <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 700; color: #FFFFFF; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.6rem;">
-                <i class="fas fa-wallet" style="color: var(--color-primary);"></i> Phương Thức Thanh Toán Hỗ Trợ
+            <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 700; color: #FFFFFF; margin-bottom: 1.5rem;">
+                Phương Thức Thanh Toán Hỗ Trợ
             </h3>
 
             <div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2.25rem;">
                 <!-- VNPAY QR -->
                 <label class="payment-method-card">
                     <input type="radio" name="paymentMethod" value="VNPAY_MOCK" checked style="accent-color: var(--color-primary); width: 20px; height: 20px;">
-                    <div style="width: 50px; height: 50px; border-radius: var(--radius-sm); background: rgba(2, 132, 199, 0.15); display: flex; align-items: center; justify-content: center; color: #0284c7; font-size: 1.6rem; flex-shrink: 0; border: 1px solid rgba(2, 132, 199, 0.3);">
-                        <i class="fas fa-qrcode"></i>
+                    <div style="padding: 0.4rem 0.75rem; border-radius: var(--radius-sm); background: rgba(2, 132, 199, 0.15); color: #0284c7; font-size: 0.82rem; font-weight: 800; flex-shrink: 0; border: 1px solid rgba(2, 132, 199, 0.3); font-family: var(--font-mono);">
+                        VNPAY
                     </div>
                     <div>
                         <strong style="color: #FFFFFF; font-size: 1.05rem; display: block;">Cổng VNPAY QR (Mô phỏng)</strong>
@@ -37,8 +37,8 @@
                 <!-- MoMo -->
                 <label class="payment-method-card">
                     <input type="radio" name="paymentMethod" value="MOMO_MOCK" style="accent-color: var(--color-primary); width: 20px; height: 20px;">
-                    <div style="width: 50px; height: 50px; border-radius: var(--radius-sm); background: rgba(236, 72, 153, 0.15); display: flex; align-items: center; justify-content: center; color: #ec4899; font-size: 1.6rem; flex-shrink: 0; border: 1px solid rgba(236, 72, 153, 0.3);">
-                        <i class="fas fa-mobile-screen"></i>
+                    <div style="padding: 0.4rem 0.75rem; border-radius: var(--radius-sm); background: rgba(236, 72, 153, 0.15); color: #ec4899; font-size: 0.82rem; font-weight: 800; flex-shrink: 0; border: 1px solid rgba(236, 72, 153, 0.3); font-family: var(--font-mono);">
+                        MOMO
                     </div>
                     <div>
                         <strong style="color: #FFFFFF; font-size: 1.05rem; display: block;">Ví điện tử MoMo (Mô phỏng)</strong>
@@ -49,8 +49,8 @@
                 <!-- ATM / Bank Transfer -->
                 <label class="payment-method-card">
                     <input type="radio" name="paymentMethod" value="BANK_TRANSFER" style="accent-color: var(--color-primary); width: 20px; height: 20px;">
-                    <div style="width: 50px; height: 50px; border-radius: var(--radius-sm); background: rgba(16, 185, 129, 0.15); display: flex; align-items: center; justify-content: center; color: #10b981; font-size: 1.6rem; flex-shrink: 0; border: 1px solid rgba(16, 185, 129, 0.3);">
-                        <i class="fas fa-credit-card"></i>
+                    <div style="padding: 0.4rem 0.75rem; border-radius: var(--radius-sm); background: rgba(16, 185, 129, 0.15); color: #10b981; font-size: 0.82rem; font-weight: 800; flex-shrink: 0; border: 1px solid rgba(16, 185, 129, 0.3); font-family: var(--font-mono);">
+                        ATM
                     </div>
                     <div>
                         <strong style="color: #FFFFFF; font-size: 1.05rem; display: block;">Thẻ ATM / Thẻ Ghi Nợ Nội Địa (Mô phỏng)</strong>
@@ -62,23 +62,23 @@
             <!-- Action Buttons for Simulated Payment -->
             <div style="display: flex; gap: 1rem; flex-direction: column;">
                 <button type="button" id="btnPaySuccess" class="btn btn-primary btn-lg" style="width: 100%;">
-                    <i class="fas fa-circle-check"></i> Xác Nhận Thanh Toán Thành Công (Demo Success)
+                    Xác Nhận Thanh Toán Thành Công (Demo Success)
                 </button>
 
                 <button type="button" id="btnPayFailure" class="btn btn-danger btn-lg" style="width: 100%;">
-                    <i class="fas fa-circle-xmark"></i> Mô Phỏng Thanh Toán Thất Bại / Hủy Giữ Chỗ (Demo Failure)
+                    Mô Phỏng Thanh Toán Thất Bại / Hủy Giữ Chỗ (Demo Failure)
                 </button>
             </div>
 
             <p style="text-align: center; font-size: 0.8rem; color: var(--text-muted); margin-top: 1.5rem;">
-                <i class="fas fa-lock"></i> Giao dịch được bảo vệ bằng cơ chế Transaction ACID và giám sát chặt chẽ
+                Giao dịch được bảo vệ bằng cơ chế Transaction ACID và giám sát chặt chẽ
             </p>
         </div>
 
         <!-- Right: Order Summary Sidebar -->
         <div class="card" style="padding: 2.25rem;">
-            <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 700; color: #FFFFFF; margin-bottom: 1.25rem; padding-bottom: 0.85rem; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 0.6rem;">
-                <i class="fas fa-ticket" style="color: var(--color-gold);"></i> Tóm Tắt Đơn Vé Phim
+            <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 700; color: #FFFFFF; margin-bottom: 1.25rem; padding-bottom: 0.85rem; border-bottom: 1px solid var(--border-color);">
+                Tóm Tắt Đơn Vé Phim
             </h3>
 
             <div style="margin-bottom: 1.25rem;">
@@ -151,9 +151,9 @@ document.addEventListener('DOMContentLoaded', () => {
         btnFailure.disabled = true;
 
         if (action === 'simulate_success') {
-            btnSuccess.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang xác thực giao dịch...';
+            btnSuccess.textContent = 'Đang xác thực giao dịch...';
         } else {
-            btnFailure.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang gửi yêu cầu hủy và giải phóng ghế...';
+            btnFailure.textContent = 'Đang gửi yêu cầu hủy và giải phóng ghế...';
         }
 
         try {
@@ -170,15 +170,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert(data.message || 'Lỗi xử lý giao dịch');
                 btnSuccess.disabled = false;
                 btnFailure.disabled = false;
-                btnSuccess.innerHTML = '<i class="fas fa-circle-check"></i> Xác Nhận Thanh Toán Thành Công (Demo Success)';
-                btnFailure.innerHTML = '<i class="fas fa-circle-xmark"></i> Mô Phỏng Thanh Toán Thất Bại / Hủy Giữ Chỗ (Demo Failure)';
+                btnSuccess.textContent = 'Xác Nhận Thanh Toán Thành Công (Demo Success)';
+                btnFailure.textContent = 'Mô Phỏng Thanh Toán Thất Bại / Hủy Giữ Chỗ (Demo Failure)';
             }
         } catch (e) {
             alert('Lỗi kết nối máy chủ thanh toán!');
             btnSuccess.disabled = false;
             btnFailure.disabled = false;
-            btnSuccess.innerHTML = '<i class="fas fa-circle-check"></i> Xác Nhận Thanh Toán Thành Công (Demo Success)';
-            btnFailure.innerHTML = '<i class="fas fa-circle-xmark"></i> Mô Phỏng Thanh Toán Thất Bại / Hủy Giữ Chỗ (Demo Failure)';
+            btnSuccess.textContent = 'Xác Nhận Thanh Toán Thành Công (Demo Success)';
+            btnFailure.textContent = 'Mô Phỏng Thanh Toán Thất Bại / Hủy Giữ Chỗ (Demo Failure)';
         }
     }
 

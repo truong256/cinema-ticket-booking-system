@@ -9,7 +9,6 @@
             <!-- Left Side: Register Form Panel -->
             <div class="auth-form-panel">
                 <div class="auth-brand-badge">
-                    <i class="fas fa-ticket" aria-hidden="true"></i>
                     <span>THÀNH VIÊN CINEVIBE</span>
                 </div>
 
@@ -32,21 +31,19 @@
                     <div class="auth-form-row">
                         <div class="auth-field-group">
                             <label class="auth-label" for="full_name">
-                                <i class="fas fa-id-card" aria-hidden="true"></i> Họ và tên <span class="required-star">*</span>
+                                Họ và tên <span class="required-star">*</span>
                             </label>
                             <div class="auth-input-wrapper">
                                 <input type="text" id="full_name" name="full_name" class="auth-input" required value="<%= typeof formData !== 'undefined' && formData?.full_name ? formData.full_name : '' %>" placeholder="Ví dụ: Nguyễn Văn A" autocomplete="name">
-                                <i class="fas fa-id-card auth-input-icon" aria-hidden="true"></i>
                             </div>
                         </div>
 
                         <div class="auth-field-group">
                             <label class="auth-label" for="username">
-                                <i class="fas fa-user" aria-hidden="true"></i> Tên đăng nhập <span class="required-star">*</span>
+                                Tên đăng nhập <span class="required-star">*</span>
                             </label>
                             <div class="auth-input-wrapper">
                                 <input type="text" id="username" name="username" class="auth-input" required value="<%= typeof formData !== 'undefined' && formData?.username ? formData.username : '' %>" placeholder="Tối thiểu 3 ký tự" autocomplete="username">
-                                <i class="fas fa-user auth-input-icon" aria-hidden="true"></i>
                             </div>
                         </div>
                     </div>
@@ -55,21 +52,19 @@
                     <div class="auth-form-row">
                         <div class="auth-field-group">
                             <label class="auth-label" for="email">
-                                <i class="fas fa-envelope" aria-hidden="true"></i> Email <span class="required-star">*</span>
+                                Email <span class="required-star">*</span>
                             </label>
                             <div class="auth-input-wrapper">
                                 <input type="email" id="email" name="email" class="auth-input" required value="<%= typeof formData !== 'undefined' && formData?.email ? formData.email : '' %>" placeholder="email@domain.com" autocomplete="email">
-                                <i class="fas fa-envelope auth-input-icon" aria-hidden="true"></i>
                             </div>
                         </div>
 
                         <div class="auth-field-group">
                             <label class="auth-label" for="phone">
-                                <i class="fas fa-phone" aria-hidden="true"></i> Số điện thoại
+                                Số điện thoại
                             </label>
                             <div class="auth-input-wrapper">
                                 <input type="tel" id="phone" name="phone" class="auth-input" value="<%= typeof formData !== 'undefined' && formData?.phone ? formData.phone : '' %>" placeholder="0912345678" autocomplete="tel">
-                                <i class="fas fa-phone auth-input-icon" aria-hidden="true"></i>
                             </div>
                         </div>
                     </div>
@@ -78,11 +73,10 @@
                     <div class="auth-form-row">
                         <div class="auth-field-group">
                             <label class="auth-label" for="password">
-                                <i class="fas fa-lock" aria-hidden="true"></i> Mật khẩu <span class="required-star">*</span>
+                                Mật khẩu <span class="required-star">*</span>
                             </label>
                             <div class="auth-input-wrapper">
                                 <input type="password" id="password" name="password" class="auth-input has-toggle" required placeholder="Tối thiểu 6 ký tự" autocomplete="new-password">
-                                <i class="fas fa-lock auth-input-icon" aria-hidden="true"></i>
                                 <button type="button" class="auth-password-toggle" onclick="togglePasswordVisibility('password', this)" title="Hiển thị mật khẩu" aria-label="Hiển thị mật khẩu">
                                     <i class="far fa-eye" aria-hidden="true"></i>
                                 </button>
@@ -91,11 +85,10 @@
 
                         <div class="auth-field-group">
                             <label class="auth-label" for="confirm_password">
-                                <i class="fas fa-check-double" aria-hidden="true"></i> Xác nhận mật khẩu <span class="required-star">*</span>
+                                Xác nhận mật khẩu <span class="required-star">*</span>
                             </label>
                             <div class="auth-input-wrapper">
                                 <input type="password" id="confirm_password" name="confirm_password" class="auth-input has-toggle" required placeholder="Nhập lại mật khẩu" autocomplete="new-password">
-                                <i class="fas fa-check-double auth-input-icon" aria-hidden="true"></i>
                                 <button type="button" class="auth-password-toggle" onclick="togglePasswordVisibility('confirm_password', this)" title="Hiển thị mật khẩu" aria-label="Hiển thị mật khẩu">
                                     <i class="far fa-eye" aria-hidden="true"></i>
                                 </button>
@@ -106,14 +99,12 @@
 
                     <!-- Security Notice -->
                     <div class="auth-security-notice">
-                        <i class="fas fa-shield-halved" aria-hidden="true"></i>
                         <span>Mật khẩu được mã hóa an toàn bằng thuật toán <strong>bcrypt (rounds 10)</strong>.</span>
                     </div>
 
                     <!-- Submit Button -->
                     <button type="submit" class="auth-submit-btn">
                         <span class="auth-btn-spinner" aria-hidden="true"></span>
-                        <i class="fas fa-user-plus auth-btn-icon" aria-hidden="true"></i>
                         <span class="auth-btn-text">Hoàn tất đăng ký thành viên</span>
                     </button>
                 </form>

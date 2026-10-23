@@ -7,7 +7,7 @@
     <section class="hero-banner" style="<%= heroMovie && heroMovie.poster_url ? `background-image: linear-gradient(90deg, #0B0F19 0%, rgba(11, 15, 25, 0.94) 52%, rgba(11, 15, 25, 0.4) 100%), url('${heroMovie.poster_url === '/images/dune2.jpg' ? '/images/dune2_backdrop.jpg' : heroMovie.poster_url}');` : '' %>">
         <div class="hero-content">
             <div class="hero-tag gold">
-                <i class="fas fa-crown"></i> BOM TẤN CHIẾU RẠP ĐỘC QUYỀN &bull; CINEVIBE EXCLUSIVE
+                BOM TẤN CHIẾU RẠP ĐỘC QUYỀN &bull; CINEVIBE EXCLUSIVE
             </div>
             
             <h1 class="hero-title">
@@ -15,11 +15,11 @@
             </h1>
 
             <div style="display: flex; gap: 0.75rem; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap;">
-                <span class="badge badge-gold"><i class="fas fa-star"></i> 8.6/10 IMDb</span>
+                <span class="badge badge-gold"><i class="fas fa-star" aria-hidden="true"></i> 8.6/10 IMDb</span>
                 <span class="age-badge <%= heroMovie ? heroMovie.age_rating : 'T16' %>" style="position: static; box-shadow: none;"><%= heroMovie ? heroMovie.age_rating : 'T16' %></span>
-                <span style="color: var(--text-secondary); font-size: 0.9rem;"><i class="far fa-clock"></i> <%= heroMovie ? heroMovie.duration_minutes : 166 %> phút</span>
-                <span style="color: var(--text-secondary); font-size: 0.9rem;"><i class="fas fa-film"></i> <%= heroMovie ? heroMovie.genre : 'Khoa học viễn tưởng, Hành động' %></span>
-                <span class="brand-badge gold" style="font-size: 0.7rem; padding: 0.2rem 0.5rem;"><i class="fas fa-video"></i> IMAX Laser</span>
+                <span style="color: var(--text-secondary); font-size: 0.9rem;"><%= heroMovie ? heroMovie.duration_minutes : 166 %> phút</span>
+                <span style="color: var(--text-secondary); font-size: 0.9rem;">&bull; <%= heroMovie ? heroMovie.genre : 'Khoa học viễn tưởng, Hành động' %></span>
+                <span class="brand-badge gold" style="font-size: 0.7rem; padding: 0.2rem 0.5rem;">IMAX Laser</span>
             </div>
 
             <p class="hero-desc">
@@ -28,13 +28,13 @@
 
             <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
                 <a href="/movies/<%= heroMovie ? heroMovie.id : 1 %>" class="btn btn-primary btn-lg">
-                    <i class="fas fa-ticket"></i> Đặt vé ngay
+                    Đặt vé ngay
                 </a>
                 <a href="<%= heroMovie && heroMovie.trailer_url ? heroMovie.trailer_url : 'https://www.youtube.com/watch?v=Way9Dexny3w' %>" target="_blank" class="btn btn-secondary btn-lg" title="Xem trailer trên YouTube">
-                    <i class="fab fa-youtube" style="color: var(--color-primary); font-size: 1.15rem;"></i> Xem Trailer
+                    <i class="fab fa-youtube" style="color: var(--color-primary); font-size: 1.15rem;" aria-hidden="true"></i> Xem Trailer
                 </a>
                 <a href="/movies" class="btn btn-secondary btn-lg">
-                    <i class="fas fa-clapperboard"></i> Toàn bộ phim
+                    Toàn bộ phim
                 </a>
             </div>
 
@@ -62,7 +62,7 @@
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
         <div style="display: flex; gap: 0.6rem; flex-wrap: wrap; align-items: center;">
             <span style="font-size: 0.88rem; font-weight: 700; color: var(--text-muted); margin-right: 0.35rem; text-transform: uppercase; letter-spacing: 0.5px;">
-                <i class="fas fa-filter" style="color: var(--color-gold);"></i> Thể loại:
+                Thể loại:
             </span>
             <button type="button" class="btn btn-sm btn-primary filter-tab active" data-genre="all">Tất cả</button>
             <button type="button" class="btn btn-sm btn-secondary filter-tab" data-genre="Hành động">Hành động</button>
@@ -73,7 +73,7 @@
         </div>
 
         <a href="/movies" class="btn btn-secondary btn-sm">
-            Xem toàn bộ danh mục <i class="fas fa-arrow-right"></i>
+            Xem toàn bộ danh mục
         </a>
     </div>
 
@@ -83,7 +83,7 @@
             <div>
                 <span class="brand-badge gold" style="margin-bottom: 0.4rem;">NOW SHOWING</span>
                 <h2 class="section-title">
-                    <i class="fas fa-film"></i> Phim Đang Chiếu Nổi Bật
+                    Phim Đang Chiếu Nổi Bật
                 </h2>
                 <p class="section-subtitle">Lựa chọn phim bom tấn để xem lịch chiếu thời gian thực và đặt vị trí ghế VIP</p>
             </div>
@@ -102,9 +102,9 @@
                             <span class="movie-genre"><%= movie.genre %></span>
                             <h3 class="movie-title" title="<%= movie.title %>"><%= movie.title %></h3>
                             <div class="movie-meta">
-                                <span><i class="far fa-clock"></i> <%= movie.duration_minutes %> phút</span>
+                                <span><%= movie.duration_minutes %> phút</span>
                                 <a href="/movies/<%= movie.id %>" class="btn btn-primary btn-sm">
-                                    Đặt vé <i class="fas fa-chevron-right"></i>
+                                    Đặt vé
                                 </a>
                             </div>
                         </div>
@@ -125,12 +125,12 @@
             <div>
                 <span class="brand-badge" style="margin-bottom: 0.4rem;">LỊCH CHIẾU TRỰC TUYẾN</span>
                 <h2 class="section-title">
-                    <i class="fas fa-calendar-day"></i> Suất Chiếu Sắp Diễn Ra Hôm Nay
+                    Suất Chiếu Sắp Diễn Ra Hôm Nay
                 </h2>
                 <p class="section-subtitle">Đặt chỗ tức thì với sơ đồ ghế thời gian thực và khóa giao dịch ACID</p>
             </div>
             <a href="/showtimes" class="btn btn-secondary btn-sm">
-                Toàn bộ lịch chiếu <i class="fas fa-arrow-right"></i>
+                Toàn bộ lịch chiếu
             </a>
         </div>
 
@@ -143,17 +143,17 @@
                             <%= st.movie_title %>
                         </h4>
                         <div style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 0.2rem;">
-                            <i class="fas fa-location-dot" style="color: var(--color-gold);"></i> <%= st.cinema_name %>
+                            <%= st.cinema_name %>
                         </div>
                         <div style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.65rem;">
-                            <i class="fas fa-door-open"></i> <%= st.room_name %>
+                            <%= st.room_name %>
                         </div>
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             <span style="font-size: 1rem; color: var(--color-gold); font-weight: 800; font-family: var(--font-heading);">
-                                <i class="far fa-clock"></i> <%= new Date(st.start_time).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) %>
+                                <%= new Date(st.start_time).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) %>
                             </span>
                             <a href="/booking/showtime/<%= st.id %>" class="btn btn-primary btn-sm">
-                                Chọn ghế <i class="fas fa-chevron-right"></i>
+                                Chọn ghế
                             </a>
                         </div>
                     </div>

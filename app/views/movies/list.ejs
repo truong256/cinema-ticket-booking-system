@@ -7,7 +7,7 @@
         <div>
             <div class="brand-badge gold" style="margin-bottom: 0.5rem;">CINEVIBE CATALOG</div>
             <h1 class="section-title">
-                <i class="fas fa-clapperboard"></i> Danh Sách Phim & Sự Kiện Chiếu Rạp
+                Danh Sách Phim &amp; Sự Kiện Chiếu Rạp
             </h1>
             <p class="section-subtitle">Khám phá các tác phẩm điện ảnh bom tấn đang chiếu và sắp ra mắt tại hệ thống cụm rạp trên toàn quốc</p>
         </div>
@@ -15,14 +15,14 @@
         <!-- Search Bar -->
         <div style="position: relative; min-width: 300px; max-width: 100%;">
             <input type="text" id="movieSearchInput" class="form-control" placeholder="Tìm kiếm tựa phim theo tên..." style="padding-left: 2.6rem;">
-            <i class="fas fa-search" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+            <i class="fas fa-search" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted);" aria-hidden="true"></i>
         </div>
     </div>
 
     <!-- Genre Filter Pills -->
     <div style="display: flex; gap: 0.65rem; flex-wrap: wrap; margin-bottom: 2.5rem; align-items: center;">
         <span style="font-size: 0.88rem; font-weight: 700; color: var(--text-muted); margin-right: 0.35rem; text-transform: uppercase; letter-spacing: 0.5px;">
-            <i class="fas fa-filter" style="color: var(--color-gold);"></i> Thể loại:
+            Thể loại:
         </span>
         <a href="/movies" class="btn btn-sm <%= !currentGenre ? 'btn-primary' : 'btn-secondary' %>">Tất cả</a>
         <a href="/movies?genre=Hành động" class="btn btn-sm <%= currentGenre === 'Hành động' ? 'btn-primary' : 'btn-secondary' %>">Hành động</a>
@@ -50,9 +50,9 @@
                             <%= movie.description %>
                         </p>
                         <div class="movie-meta">
-                            <span><i class="far fa-clock"></i> <%= movie.duration_minutes %> phút</span>
+                            <span><%= movie.duration_minutes %> phút</span>
                             <a href="/movies/<%= movie.id %>" class="btn btn-primary btn-sm">
-                                Chi tiết & Đặt vé <i class="fas fa-chevron-right"></i>
+                                Chi tiết &amp; Đặt vé
                             </a>
                         </div>
                     </div>
@@ -61,16 +61,13 @@
         <% } else { %>
             <!-- Empty State -->
             <div class="card" style="grid-column: 1 / -1; text-align: center; padding: 4.5rem 2rem;">
-                <div style="width: 72px; height: 72px; border-radius: 50%; background: var(--bg-surface); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; color: var(--text-muted); font-size: 2.2rem; border: 1px solid var(--border-color);">
-                    <i class="fas fa-film"></i>
-                </div>
                 <h3 style="font-family: var(--font-heading); font-size: 1.35rem; color: #FFFFFF; margin-bottom: 0.5rem; font-weight: 700;">
                     Không tìm thấy phim phù hợp
                 </h3>
                 <p style="color: var(--text-secondary); max-width: 440px; margin: 0 auto 1.5rem; font-size: 0.95rem;">
                     Không có bộ phim nào khớp với bộ lọc hoặc từ khóa tìm kiếm bạn đã chọn. Vui lòng thử lại với tiêu chí khác.
                 </p>
-                <a href="/movies" class="btn btn-secondary btn-sm"><i class="fas fa-rotate-left"></i> Xem lại toàn bộ phim</a>
+                <a href="/movies" class="btn btn-secondary btn-sm">Xem lại toàn bộ phim</a>
             </div>
         <% } %>
     </div>

@@ -5,7 +5,7 @@
     <!-- Breadcrumb & Showtime Header -->
     <div style="margin-bottom: 2rem;">
         <a href="/movies/<%= showtime.movie_id %>" style="color: var(--text-secondary); font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.4rem; transition: var(--transition-fast);">
-            <i class="fas fa-chevron-left"></i> Quay lại chi tiết phim
+            &larr; Quay lại chi tiết phim
         </a>
 
         <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 0.75rem; flex-wrap: wrap; gap: 1rem;">
@@ -15,15 +15,15 @@
                     <%= showtime.movie_title %>
                 </h1>
                 <div style="color: var(--text-secondary); font-size: 0.95rem; display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; margin-top: 0.35rem;">
-                    <span><i class="fas fa-location-dot" style="color: var(--color-gold);"></i> <%= showtime.cinema_name %></span> &bull; 
-                    <span><i class="fas fa-door-open"></i> <%= showtime.room_name %> (<%= showtime.room_type || 'Standard' %>)</span> &bull; 
-                    <span style="color: var(--color-gold); font-weight: 700;"><i class="far fa-clock"></i> <%= new Date(showtime.start_time).toLocaleString('vi-VN') %></span>
+                    <span><%= showtime.cinema_name %></span> &bull; 
+                    <span><%= showtime.room_name %> (<%= showtime.room_type || 'Standard' %>)</span> &bull; 
+                    <span style="color: var(--color-gold); font-weight: 700;"><%= new Date(showtime.start_time).toLocaleString('vi-VN') %></span>
                 </div>
             </div>
 
             <div style="display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap;">
-                <span class="badge badge-gold"><i class="fas fa-bolt"></i> Thời gian thực</span>
-                <span class="badge badge-red"><i class="fas fa-shield"></i> ACID Concurrency Safe</span>
+                <span class="badge badge-gold">Thời gian thực</span>
+                <span class="badge badge-red">ACID Concurrency Safe</span>
             </div>
         </div>
     </div>
@@ -41,7 +41,7 @@
             <div class="cinema-screen-wrap">
                 <div class="cinema-screen"></div>
                 <div class="screen-text">
-                    <i class="fas fa-film" style="color: var(--color-gold);"></i> MÀN HÌNH CHIẾU CHÍNH (SCREEN)
+                    MÀN HÌNH CHIẾU CHÍNH (SCREEN)
                 </div>
             </div>
 
@@ -95,7 +95,7 @@
         <!-- Right: Sticky Ticket Summary & Information Form -->
         <div class="summary-card">
             <h3 class="summary-title">
-                <i class="fas fa-receipt" style="color: var(--color-primary);"></i> Thông Tin Đơn Vé
+                Thông Tin Đơn Vé
             </h3>
 
             <div class="summary-row">
@@ -136,7 +136,7 @@
             <form id="bookingForm" style="margin-top: 1.5rem;">
                 <div class="form-group">
                     <label class="form-label" for="customerName">
-                        <i class="fas fa-user" style="color: var(--color-gold); margin-right: 0.35rem;"></i> Họ tên người nhận vé <span style="color: var(--color-primary);">*</span>
+                        Họ tên người nhận vé <span style="color: var(--color-primary);">*</span>
                     </label>
                     <input type="text" id="customerName" name="customerName" class="form-control" required 
                            value="<%= currentUser ? (currentUser.full_name || currentUser.username) : '' %>" 
@@ -145,7 +145,7 @@
 
                 <div class="form-group">
                     <label class="form-label" for="customerEmail">
-                        <i class="fas fa-envelope" style="color: var(--color-gold); margin-right: 0.35rem;"></i> Email nhận vé điện tử <span style="color: var(--color-primary);">*</span>
+                        Email nhận vé điện tử <span style="color: var(--color-primary);">*</span>
                     </label>
                     <input type="email" id="customerEmail" name="customerEmail" class="form-control" required 
                            value="<%= currentUser ? (currentUser.email || '') : '' %>" 
@@ -154,7 +154,7 @@
 
                 <div class="form-group">
                     <label class="form-label" for="customerPhone">
-                        <i class="fas fa-phone" style="color: var(--color-gold); margin-right: 0.35rem;"></i> Số điện thoại <span style="color: var(--color-primary);">*</span>
+                        Số điện thoại <span style="color: var(--color-primary);">*</span>
                     </label>
                     <input type="tel" id="customerPhone" name="customerPhone" class="form-control" required 
                            value="<%= currentUser ? (currentUser.phone || '') : '' %>" 
@@ -162,12 +162,12 @@
                 </div>
 
                 <button type="submit" id="btnSubmitBooking" class="btn btn-primary btn-lg" style="width: 100%; margin-top: 0.75rem;" disabled>
-                    <i class="fas fa-ticket"></i> Tiếp tục thanh toán
+                    Tiếp tục thanh toán
                 </button>
             </form>
 
             <div style="text-align: center; font-size: 0.78rem; color: var(--text-muted); margin-top: 1rem;">
-                <i class="fas fa-lock"></i> Giữ chỗ an toàn với ACID Database Lock
+                Giữ chỗ an toàn với ACID Database Lock
             </div>
         </div>
     </div>

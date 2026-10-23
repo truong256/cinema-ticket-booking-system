@@ -1253,30 +1253,17 @@ button, input, select, textarea {
 
 .step-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.25rem;
+    margin-bottom: 1rem;
 }
 
 .step-number {
     font-family: var(--font-heading);
-    font-size: 1.6rem;
+    font-size: 1.85rem;
     font-weight: 900;
     color: var(--color-gold);
     line-height: 1;
-}
-
-.step-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    background: rgba(245, 196, 81, 0.12);
-    border: 1px solid rgba(245, 196, 81, 0.25);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--color-gold);
-    font-size: 1.05rem;
+    letter-spacing: -0.5px;
 }
 
 .step-title {
@@ -1336,17 +1323,22 @@ button, input, select, textarea {
 .experience-perk-item {
     display: flex;
     align-items: flex-start;
-    gap: 0.85rem;
     color: var(--text-secondary);
     font-size: 0.92rem;
     line-height: 1.6;
+    position: relative;
+    padding-left: 1.25rem;
 }
 
-.experience-perk-item i {
-    color: var(--color-primary);
-    font-size: 1.1rem;
-    margin-top: 0.2rem;
-    flex-shrink: 0;
+.experience-perk-item::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.55rem;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-primary);
 }
 
 .experience-image-wrapper {

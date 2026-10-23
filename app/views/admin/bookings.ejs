@@ -5,9 +5,9 @@
     <div class="section-header">
         <div>
             <a href="/admin" style="color: var(--color-primary); font-size: 0.85rem; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem; margin-bottom: 0.4rem;">
-                <i class="fas fa-chevron-left"></i> Quay lại Dashboard
+                &larr; Quay lại Dashboard
             </a>
-            <h1 class="section-title"><i class="fas fa-ticket"></i> Danh Sách Đơn Đặt Vé Toàn Hệ Thống</h1>
+            <h1 class="section-title">Danh Sách Đơn Đặt Vé Toàn Hệ Thống</h1>
             <p class="section-subtitle">Theo dõi các giao dịch đặt vé, trạng thái thanh toán và thông tin khách hàng thời gian thực</p>
         </div>
     </div>
@@ -40,16 +40,16 @@
                                     <div style="font-weight: 700; color: #ffffff; font-size: 0.95rem;"><%= b.customer_name %></div>
                                 </td>
                                 <td>
-                                    <div style="color: var(--text-secondary); font-size: 0.85rem;"><i class="far fa-envelope" style="color: var(--text-muted); width: 14px;"></i> <%= b.customer_email %></div>
-                                    <div style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.15rem;"><i class="fas fa-phone-alt" style="color: var(--text-muted); width: 14px;"></i> <%= b.customer_phone %></div>
+                                    <div style="color: var(--text-secondary); font-size: 0.85rem;"><%= b.customer_email %></div>
+                                    <div style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.15rem;"><%= b.customer_phone %></div>
                                 </td>
                                 <td>
                                     <div style="color: #ffffff; font-weight: 700; font-size: 0.92rem;"><%= b.movie_title %></div>
-                                    <div style="font-size: 0.8rem; color: var(--color-gold); font-weight: 600;"><i class="fas fa-door-open"></i> <%= b.room_name %></div>
+                                    <div style="font-size: 0.8rem; color: var(--color-gold); font-weight: 600;"><%= b.room_name %></div>
                                 </td>
                                 <td>
                                     <span class="selected-seat-tag">
-                                        <i class="fas fa-couch"></i> <%= b.seat_count %> ghế
+                                        <%= b.seat_count %> ghế
                                     </span>
                                 </td>
                                 <td>
@@ -60,15 +60,15 @@
                                 <td>
                                     <% if (b.payment_status === 'completed') { %>
                                         <span class="badge badge-green">
-                                            <i class="fas fa-check-circle"></i> ĐÃ THANH TOÁN
+                                            ĐÃ THANH TOÁN
                                         </span>
                                     <% } else if (b.payment_status === 'failed') { %>
                                         <span class="badge badge-red">
-                                            <i class="fas fa-times-circle"></i> THẤT BẠI / ĐÃ HỦY
+                                            THẤT BẠI / ĐÃ HỦY
                                         </span>
                                     <% } else { %>
                                         <span class="badge badge-gold">
-                                            <i class="fas fa-clock"></i> CHỜ XỬ LÝ
+                                            CHỜ XỬ LÝ
                                         </span>
                                     <% } %>
                                 </td>
@@ -85,7 +85,6 @@
                     <% } else { %>
                         <tr>
                             <td colspan="8" style="text-align: center; padding: 3rem 1rem; color: var(--text-muted);">
-                                <i class="fas fa-ticket-alt" style="font-size: 2.5rem; color: var(--border-color); display: block; margin-bottom: 0.75rem;"></i>
                                 Hệ thống chưa ghi nhận đơn đặt vé nào.
                             </td>
                         </tr>

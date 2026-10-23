@@ -6,24 +6,24 @@
     <div class="section-header">
         <div>
             <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem;">
-                <span class="brand-badge gold"><i class="fas fa-shield-halved"></i> QUẢN TRỊ VIÊN</span>
+                <span class="brand-badge gold">QUẢN TRỊ VIÊN</span>
                 <span style="font-size: 0.85rem; color: var(--text-muted);">CineVibe - Phân Hệ Quản Trị Hệ Thống</span>
             </div>
             <h1 class="section-title">
-                <i class="fas fa-gauge-high"></i> Bảng Điều Khiển Quản Trị
+                Bảng Điều Khiển Quản Trị
             </h1>
         </div>
 
         <!-- Navigation Buttons -->
         <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
             <a href="/admin/movies" class="btn btn-secondary btn-sm">
-                <i class="fas fa-film"></i> Quản lý phim
+                Quản lý phim
             </a>
             <a href="/admin/showtimes" class="btn btn-secondary btn-sm">
-                <i class="fas fa-calendar-alt"></i> Quản lý suất chiếu
+                Quản lý suất chiếu
             </a>
             <a href="/admin/bookings" class="btn btn-secondary btn-sm">
-                <i class="fas fa-ticket"></i> Quản lý đặt vé
+                Quản lý đặt vé
             </a>
         </div>
     </div>
@@ -31,103 +31,75 @@
     <!-- 4 Key Performance Indicators (KPI Cards) -->
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
         <!-- KPI 1: Phim -->
-        <div class="card" style="border-left: 4px solid var(--color-primary); background: var(--bg-secondary);">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                <div>
-                    <div style="color: var(--text-muted); font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Phim Đang Hoạt Động</div>
-                    <div style="font-family: var(--font-heading); font-size: 2.4rem; font-weight: 800; color: #fff; margin-top: 0.25rem;">
-                        <%= stats.totalMovies %>
-                    </div>
-                </div>
-                <div style="width: 44px; height: 44px; border-radius: var(--radius-sm); background: rgba(229, 9, 20, 0.15); display: flex; align-items: center; justify-content: center; color: var(--color-primary); font-size: 1.25rem;">
-                    <i class="fas fa-film"></i>
-                </div>
+        <div class="card" style="border-left: 4px solid var(--color-primary); background: var(--bg-secondary); padding: 1.5rem 1.75rem;">
+            <div style="color: var(--text-muted); font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Phim Đang Hoạt Động</div>
+            <div style="font-family: var(--font-heading); font-size: 2.5rem; font-weight: 800; color: #fff; margin-top: 0.35rem; line-height: 1.1;">
+                <%= stats.totalMovies %>
             </div>
             <div style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 0.75rem;">
-                <i class="fas fa-circle-check" style="color: #10b981;"></i> Trong danh mục chiếu rạp
+                Trong danh mục chiếu rạp
             </div>
         </div>
 
         <!-- KPI 2: Suất Chiếu -->
-        <div class="card" style="border-left: 4px solid #06B6D4; background: var(--bg-secondary);">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                <div>
-                    <div style="color: var(--text-muted); font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Suất Chiếu Đã Lên Lịch</div>
-                    <div style="font-family: var(--font-heading); font-size: 2.4rem; font-weight: 800; color: #fff; margin-top: 0.25rem;">
-                        <%= stats.totalShowtimes %>
-                    </div>
-                </div>
-                <div style="width: 44px; height: 44px; border-radius: var(--radius-sm); background: rgba(6, 182, 212, 0.15); display: flex; align-items: center; justify-content: center; color: #06B6D4; font-size: 1.25rem;">
-                    <i class="fas fa-calendar-day"></i>
-                </div>
+        <div class="card" style="border-left: 4px solid #06B6D4; background: var(--bg-secondary); padding: 1.5rem 1.75rem;">
+            <div style="color: var(--text-muted); font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Suất Chiếu Đã Lên Lịch</div>
+            <div style="font-family: var(--font-heading); font-size: 2.5rem; font-weight: 800; color: #fff; margin-top: 0.35rem; line-height: 1.1;">
+                <%= stats.totalShowtimes %>
             </div>
             <div style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 0.75rem;">
-                <i class="fas fa-door-open" style="color: #06B6D4;"></i> Phòng chiếu đang mở bán
+                Phòng chiếu đang mở bán
             </div>
         </div>
 
         <!-- KPI 3: Vé Đã Bán -->
-        <div class="card" style="border-left: 4px solid #10B981; background: var(--bg-secondary);">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                <div>
-                    <div style="color: var(--text-muted); font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Vé Đã Bán (Paid)</div>
-                    <div style="font-family: var(--font-heading); font-size: 2.4rem; font-weight: 800; color: #fff; margin-top: 0.25rem;">
-                        <%= stats.totalTicketsSold %>
-                    </div>
-                </div>
-                <div style="width: 44px; height: 44px; border-radius: var(--radius-sm); background: rgba(16, 185, 129, 0.15); display: flex; align-items: center; justify-content: center; color: #10B981; font-size: 1.25rem;">
-                    <i class="fas fa-ticket"></i>
-                </div>
+        <div class="card" style="border-left: 4px solid #10B981; background: var(--bg-secondary); padding: 1.5rem 1.75rem;">
+            <div style="color: var(--text-muted); font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Vé Đã Bán (Paid)</div>
+            <div style="font-family: var(--font-heading); font-size: 2.5rem; font-weight: 800; color: #fff; margin-top: 0.35rem; line-height: 1.1;">
+                <%= stats.totalTicketsSold %>
             </div>
             <div style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 0.75rem;">
-                <i class="fas fa-circle-check" style="color: #10b981;"></i> Đã hoàn tất thanh toán
+                Đã hoàn tất thanh toán
             </div>
         </div>
 
         <!-- KPI 4: Doanh Thu -->
-        <div class="card" style="border-left: 4px solid var(--color-gold); background: var(--bg-secondary);">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                <div>
-                    <div style="color: var(--text-muted); font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Tổng Doanh Thu</div>
-                    <div style="font-family: var(--font-heading); font-size: 2rem; font-weight: 800; color: var(--color-gold); margin-top: 0.25rem;">
-                        <%= new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(stats.totalRevenue) %>
-                    </div>
-                </div>
-                <div style="width: 44px; height: 44px; border-radius: var(--radius-sm); background: rgba(245, 196, 81, 0.15); display: flex; align-items: center; justify-content: center; color: var(--color-gold); font-size: 1.25rem;">
-                    <i class="fas fa-coins"></i>
-                </div>
+        <div class="card" style="border-left: 4px solid var(--color-gold); background: var(--bg-secondary); padding: 1.5rem 1.75rem;">
+            <div style="color: var(--text-muted); font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Tổng Doanh Thu</div>
+            <div style="font-family: var(--font-heading); font-size: 2rem; font-weight: 800; color: var(--color-gold); margin-top: 0.35rem; line-height: 1.1;">
+                <%= new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(stats.totalRevenue) %>
             </div>
             <div style="font-size: 0.82rem; color: var(--color-gold); margin-top: 0.75rem;">
-                <i class="fas fa-database"></i> Dữ liệu ghi nhận từ MySQL
+                Dữ liệu ghi nhận từ MySQL
             </div>
         </div>
     </div>
 
     <!-- Quick Tools Links for Exam Presentation -->
     <div class="card" style="margin-bottom: 2.5rem; background: var(--bg-surface); border-color: var(--border-color);">
-        <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; color: #fff; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.6rem;">
-            <i class="fas fa-toolbox" style="color: var(--color-gold);"></i> Liên Kết Nhanh Công Cụ Giám Sát DevOps (Exam Live Demo)
+        <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; color: #fff; margin-bottom: 1.25rem;">
+            Liên Kết Nhanh Công Cụ Giám Sát DevOps (Exam Live Demo)
         </h3>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-            <a href="http://localhost:8080" target="_blank" class="card card-hover" style="padding: 1.25rem; text-align: center; border-color: var(--border-color); background: var(--bg-secondary);">
-                <i class="fas fa-database" style="font-size: 1.8rem; color: var(--color-gold); margin-bottom: 0.5rem; display: block;"></i>
+            <a href="http://localhost:8080" target="_blank" class="card card-hover" style="padding: 1.25rem; text-align: center; border-color: var(--border-color); background: var(--bg-secondary); text-decoration: none;">
+                <span style="display: inline-block; padding: 0.25rem 0.65rem; border-radius: 4px; background: rgba(245, 196, 81, 0.15); color: var(--color-gold); font-size: 0.75rem; font-weight: 700; margin-bottom: 0.5rem; font-family: var(--font-mono);">DB ADMIN</span>
                 <strong style="color: #fff; display: block; font-size: 0.95rem;">phpMyAdmin</strong>
-                <span style="font-size: 0.78rem; color: var(--text-muted);">Port :8080</span>
+                <span style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-top: 0.2rem;">Port :8080</span>
             </a>
-            <a href="http://localhost:3001" target="_blank" class="card card-hover" style="padding: 1.25rem; text-align: center; border-color: var(--border-color); background: var(--bg-secondary);">
-                <i class="fas fa-chart-line" style="font-size: 1.8rem; color: #38bdf8; margin-bottom: 0.5rem; display: block;"></i>
+            <a href="http://localhost:3001" target="_blank" class="card card-hover" style="padding: 1.25rem; text-align: center; border-color: var(--border-color); background: var(--bg-secondary); text-decoration: none;">
+                <span style="display: inline-block; padding: 0.25rem 0.65rem; border-radius: 4px; background: rgba(56, 189, 248, 0.15); color: #38bdf8; font-size: 0.75rem; font-weight: 700; margin-bottom: 0.5rem; font-family: var(--font-mono);">MONITORING</span>
                 <strong style="color: #fff; display: block; font-size: 0.95rem;">Grafana Dashboard</strong>
-                <span style="font-size: 0.78rem; color: var(--text-muted);">Port :3001</span>
+                <span style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-top: 0.2rem;">Port :3001</span>
             </a>
-            <a href="http://localhost:9090/targets" target="_blank" class="card card-hover" style="padding: 1.25rem; text-align: center; border-color: var(--border-color); background: var(--bg-secondary);">
-                <i class="fas fa-server" style="font-size: 1.8rem; color: #fb923c; margin-bottom: 0.5rem; display: block;"></i>
+            <a href="http://localhost:9090/targets" target="_blank" class="card card-hover" style="padding: 1.25rem; text-align: center; border-color: var(--border-color); background: var(--bg-secondary); text-decoration: none;">
+                <span style="display: inline-block; padding: 0.25rem 0.65rem; border-radius: 4px; background: rgba(251, 146, 60, 0.15); color: #fb923c; font-size: 0.75rem; font-weight: 700; margin-bottom: 0.5rem; font-family: var(--font-mono);">METRICS</span>
                 <strong style="color: #fff; display: block; font-size: 0.95rem;">Prometheus Targets</strong>
-                <span style="font-size: 0.78rem; color: var(--text-muted);">Port :9090</span>
+                <span style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-top: 0.2rem;">Port :9090</span>
             </a>
-            <a href="/metrics" target="_blank" class="card card-hover" style="padding: 1.25rem; text-align: center; border-color: var(--border-color); background: var(--bg-secondary);">
-                <i class="fas fa-code" style="font-size: 1.8rem; color: #a78bfa; margin-bottom: 0.5rem; display: block;"></i>
+            <a href="/metrics" target="_blank" class="card card-hover" style="padding: 1.25rem; text-align: center; border-color: var(--border-color); background: var(--bg-secondary); text-decoration: none;">
+                <span style="display: inline-block; padding: 0.25rem 0.65rem; border-radius: 4px; background: rgba(167, 139, 250, 0.15); color: #a78bfa; font-size: 0.75rem; font-weight: 700; margin-bottom: 0.5rem; font-family: var(--font-mono);">RAW DATA</span>
                 <strong style="color: #fff; display: block; font-size: 0.95rem;">App Metrics</strong>
-                <span style="font-size: 0.78rem; color: var(--text-muted);">/metrics</span>
+                <span style="font-size: 0.78rem; color: var(--text-muted); display: block; margin-top: 0.2rem;">/metrics</span>
             </a>
         </div>
     </div>
@@ -135,8 +107,8 @@
     <!-- Recent Bookings Table -->
     <div class="card" style="padding: 0; overflow: hidden; background: var(--bg-secondary); border-color: var(--border-color);">
         <div style="padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
-            <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 0.5rem;">
-                <i class="fas fa-ticket" style="color: var(--color-primary);"></i> Đơn Đặt Vé Gần Đây
+            <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; color: #fff;">
+                Đơn Đặt Vé Gần Đây
             </h3>
             <a href="/admin/bookings" class="btn btn-secondary btn-sm">Xem tất cả đơn vé</a>
         </div>
@@ -169,11 +141,11 @@
                                 </td>
                                 <td style="padding: 1rem 1.5rem;">
                                     <% if (b.payment_status === 'completed') { %>
-                                        <span class="badge badge-green"><i class="fas fa-check"></i> Hoàn tất</span>
+                                        <span class="badge badge-green">Hoàn tất</span>
                                     <% } else if (b.payment_status === 'failed') { %>
-                                        <span class="badge badge-red"><i class="fas fa-times"></i> Đã hủy</span>
+                                        <span class="badge badge-red">Đã hủy</span>
                                     <% } else { %>
-                                        <span class="badge badge-gold"><i class="fas fa-clock"></i> Pending</span>
+                                        <span class="badge badge-gold">Pending</span>
                                     <% } %>
                                 </td>
                                 <td style="padding: 1rem 1.5rem; color: var(--text-muted); font-size: 0.82rem;">
