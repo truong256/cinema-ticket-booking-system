@@ -19,10 +19,19 @@ function queryDb(sql) {
     try {
         const jsCode = `const db = require('./config/database'); db.query(${JSON.stringify(sql)}).then(r => { console.log('DB_RESULT:' + JSON.stringify(r)); process.exit(0); }).catch(e => { console.error('DB_ERROR:' + e.message); process.exit(1); });`;
         const b64 = Buffer.from(jsCode).toString('base64');
-        const cmd = `docker exec cinema-app node -e "eval(Buffer.from('${b64}','base64').toString('utf8'))"`;
-        const out = execSync(cmd, { encoding: 'utf8', timeout: 8000 });
-        const match = out.match(/DB_RESULT:(.*)/);
-        if (match) return JSON.parse(match[1]);
+        const commands = [
+            `docker compose exec -T app node -e "eval(Buffer.from('${b64}','base64').toString('utf8'))"`,
+            `docker exec cinema-app node -e "eval(Buffer.from('${b64}','base64').toString('utf8'))"`
+        ];
+        for (const cmd of commands) {
+            try {
+                const out = execSync(cmd, { encoding: 'utf8', timeout: 8000 });
+                const match = out.match(/DB_RESULT:(.*)/);
+                if (match) return JSON.parse(match[1]);
+            } catch (cmdErr) {
+                // try next command fallback
+            }
+        }
         return null;
     } catch (e) {
         return null;
@@ -80,7 +89,7 @@ class TestClient {
                     resolve({ status: res.statusCode, headers: res.headers, body: data, json });
                 });
             });
-            req.on('error', reject);
+            req.on('error', (err) => reject(new Error(`${err.code || err.message} on ${path}`)));
             if (bodyData) req.write(bodyData);
             req.end();
         });

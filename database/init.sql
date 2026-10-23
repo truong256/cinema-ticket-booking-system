@@ -18,6 +18,9 @@ CREATE TABLE IF NOT EXISTS users (
     full_name VARCHAR(100) NOT NULL,
     phone VARCHAR(20),
     role ENUM('customer', 'admin') DEFAULT 'customer',
+    reset_password_token VARCHAR(100) NULL,
+    reset_password_expires DATETIME NULL,
+    status ENUM('active', 'locked') DEFAULT 'active',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     INDEX idx_user_role (role),
@@ -31,6 +34,7 @@ CREATE TABLE IF NOT EXISTS cinemas (
     address VARCHAR(255) NOT NULL,
     city VARCHAR(50) DEFAULT 'Hà Nội',
     phone VARCHAR(20),
+    is_active TINYINT(1) DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -41,6 +45,7 @@ CREATE TABLE IF NOT EXISTS rooms (
     name VARCHAR(50) NOT NULL,
     room_type ENUM('Standard', 'VIP', 'IMAX') DEFAULT 'Standard',
     total_seats INT DEFAULT 60,
+    is_active TINYINT(1) DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (cinema_id) REFERENCES cinemas(id) ON DELETE CASCADE,
     INDEX idx_room_cinema (cinema_id)
@@ -100,11 +105,16 @@ CREATE TABLE IF NOT EXISTS showtimes (
 CREATE TABLE IF NOT EXISTS bookings (
     id INT AUTO_INCREMENT PRIMARY KEY,
     booking_code VARCHAR(30) NOT NULL UNIQUE,
+    booking_token VARCHAR(64) NULL,
     user_id INT,
     showtime_id INT NOT NULL,
     total_amount DECIMAL(12, 2) NOT NULL,
-    payment_status ENUM('pending', 'completed', 'failed', 'refunded') DEFAULT 'pending',
-    booking_status ENUM('confirmed', 'cancelled') DEFAULT 'confirmed',
+    expires_at DATETIME NULL,
+    payment_status ENUM('pending', 'completed', 'paid', 'failed', 'refunded') DEFAULT 'pending',
+    booking_status ENUM('pending', 'confirmed', 'cancelled') DEFAULT 'pending',
+    checkin_status ENUM('pending', 'checked_in') DEFAULT 'pending',
+    checkin_at DATETIME NULL,
+    checkin_by VARCHAR(50) NULL,
     customer_name VARCHAR(100) NOT NULL,
     customer_email VARCHAR(100) NOT NULL,
     customer_phone VARCHAR(20) NOT NULL,
