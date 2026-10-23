@@ -14,7 +14,7 @@
     </div>
 
     <!-- Quick Room Type Filter Bar -->
-    <div style="display: flex; gap: 0.65rem; flex-wrap: wrap; margin-bottom: 2.5rem; align-items: center;">
+    <div style="display: flex; gap: 0.65rem; flex-wrap: wrap; margin-bottom: 1.5rem; align-items: center;">
         <span style="font-size: 0.88rem; font-weight: 700; color: var(--text-muted); margin-right: 0.35rem; text-transform: uppercase; letter-spacing: 0.5px;">
             Định dạng:
         </span>
@@ -23,6 +23,30 @@
         <button type="button" class="btn btn-sm btn-secondary showtime-filter" data-type="VIP">Phòng VIP</button>
         <button type="button" class="btn btn-sm btn-secondary showtime-filter" data-type="Standard">Standard</button>
     </div>
+
+    <!-- Filter by Cinema & Date -->
+    <form action="/showtimes" method="GET" style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 2rem; align-items: center; background: var(--bg-surface); padding: 1rem 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+        <div style="flex: 1; min-width: 200px;">
+            <label style="display: block; font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.25rem; text-transform: uppercase;">Chọn rạp chiếu:</label>
+            <select name="cinema_id" class="form-control" onchange="this.form.submit()">
+                <option value="">Tất cả các rạp toàn quốc</option>
+                <% if (typeof cinemas !== 'undefined' && cinemas) { %>
+                    <% cinemas.forEach(c => { %>
+                        <option value="<%= c.id %>" <%= (typeof selectedCinema !== 'undefined' && String(selectedCinema) === String(c.id)) ? 'selected' : '' %>><%= c.name %> (<%= c.city %>)</option>
+                    <% }); %>
+                <% } %>
+            </select>
+        </div>
+        <div style="min-width: 170px;">
+            <label style="display: block; font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.25rem; text-transform: uppercase;">Chọn ngày chiếu:</label>
+            <input type="date" name="date" class="form-control" value="<%= typeof selectedDate !== 'undefined' ? selectedDate : '' %>" onchange="this.form.submit()">
+        </div>
+        <% if ((typeof selectedCinema !== 'undefined' && selectedCinema) || (typeof selectedDate !== 'undefined' && selectedDate)) { %>
+            <div style="align-self: flex-end;">
+                <a href="/showtimes" class="btn btn-secondary btn-sm" style="height: 42px; display: flex; align-items: center;">Đặt lại lọc</a>
+            </div>
+        <% } %>
+    </form>
 
     <% if (locals.error) { %>
         <div class="alert alert-danger"><%= error %></div>
