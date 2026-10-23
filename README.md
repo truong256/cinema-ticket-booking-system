@@ -4,7 +4,7 @@
 > **Mã sinh viên:** DTC245200120  
 > **Lớp:** CNTTK23E  
 > **GitHub Repository:** [https://github.com/truong256/cinema-ticket-booking-system.git](https://github.com/truong256/cinema-ticket-booking-system.git)  
-> **Mục tiêu điểm số:** 10/10 Điểm (Đáp ứng trọn vẹn 7/7 Tiêu chí Nghiệm thu)
+
 
 ---
 
