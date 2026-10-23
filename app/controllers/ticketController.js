@@ -3,6 +3,7 @@ const logger = require('../config/logger');
 
 const ticketController = {
     // 1. Xác minh thông tin vé điện tử qua mã QR Token hoặc Booking Code
+    // Không lộ thông tin riêng tư (phone, email) trên trang xác minh công khai
     verifyTicket: async (req, res) => {
         const token = req.query.token;
         const code = req.query.code;
@@ -18,12 +19,17 @@ const ticketController = {
         }
 
         try {
+            // CHỈ lấy các trường cần thiết, KHÔNG lấy customer_phone hay customer_email
             let query = `
-                SELECT b.*, s.start_time, s.end_time, (s.end_time < NOW()) as is_ended,
+                SELECT b.id, b.booking_code, b.booking_token, b.user_id, b.showtime_id,
+                       b.payment_status, b.booking_status, b.total_amount,
+                       b.checkin_status, b.checkin_at, b.checkin_by,
+                       b.customer_name,
+                       s.start_time, s.end_time, (s.end_time < NOW()) as is_ended,
                        m.title as movie_title, m.poster_url, m.duration_minutes, m.age_rating,
                        r.name as room_name, r.room_type,
                        c.name as cinema_name, c.address as cinema_address,
-                       p.payment_method, p.transaction_id, p.created_at as payment_time
+                       p.payment_method, p.created_at as payment_time
                 FROM bookings b
                 JOIN showtimes s ON b.showtime_id = s.id
                 JOIN movies m ON s.movie_id = m.id
@@ -56,7 +62,7 @@ const ticketController = {
 
             const booking = bookings[0];
 
-            // Lấy danh sách ghế của đơn
+            // Lấy danh sách ghế của đơn (không lộ thông tin cá nhân)
             const seats = await db.query(`
                 SELECT s.row_label, s.seat_number, s.seat_type, bs.price
                 FROM booking_seats bs
@@ -103,6 +109,7 @@ const ticketController = {
     },
 
     // 2. Điểm danh / Check-in vé tại quầy (dành cho Admin / Soát vé)
+    // Sử dụng DB Transaction + Atomic Conditional UPDATE chống 2 request check-in đồng thời cùng thành công
     checkinTicket: async (req, res) => {
         const { bookingId, token } = req.body;
 
@@ -113,27 +120,35 @@ const ticketController = {
             });
         }
 
+        if (!bookingId && !token) {
+            return res.status(400).json({ success: false, message: 'Thiếu thông tin vé cần check-in' });
+        }
+
+        const connection = await db.getConnection();
         try {
-            let bookingQuery = 'SELECT * FROM bookings WHERE ';
+            await connection.beginTransaction();
+
+            // Bước 1: Lock dòng bản ghi bằng FOR UPDATE để chống đồng thời
+            let bookingQuery = 'SELECT id, booking_code, payment_status, booking_status, checkin_status, checkin_at, checkin_by FROM bookings WHERE ';
             const params = [];
             if (bookingId) {
-                bookingQuery += 'id = ?';
+                bookingQuery += 'id = ? FOR UPDATE';
                 params.push(bookingId);
-            } else if (token) {
-                bookingQuery += 'booking_token = ?';
-                params.push(token);
             } else {
-                return res.status(400).json({ success: false, message: 'Thiếu thông tin vé cần check-in' });
+                bookingQuery += 'booking_token = ? FOR UPDATE';
+                params.push(token);
             }
 
-            const bookings = await db.query(bookingQuery, params);
+            const [bookings] = await connection.query(bookingQuery, params);
             if (bookings.length === 0) {
+                await connection.rollback();
                 return res.status(404).json({ success: false, message: 'Không tìm thấy vé trong hệ thống' });
             }
 
             const booking = bookings[0];
 
             if (booking.payment_status !== 'completed' || booking.booking_status === 'cancelled') {
+                await connection.rollback();
                 return res.status(400).json({
                     success: false,
                     message: 'Vé chưa thanh toán hoặc đã bị hủy, không thể check-in'
@@ -141,6 +156,7 @@ const ticketController = {
             }
 
             if (booking.checkin_status === 'checked_in') {
+                await connection.rollback();
                 return res.status(400).json({
                     success: false,
                     message: `Vé này đã được check-in lúc ${new Date(booking.checkin_at).toLocaleString('vi-VN')} bởi ${booking.checkin_by || 'nhân viên'}`
@@ -148,11 +164,25 @@ const ticketController = {
             }
 
             const checkinBy = req.session.user.username || 'admin';
-            await db.query(`
+
+            // Bước 2: Atomic conditional UPDATE - chỉ update nếu vé CHƯA check-in
+            // WHERE checkin_status = 'pending' ngăn 2 request đồng thời đều thành công
+            const [updateResult] = await connection.query(`
                 UPDATE bookings 
                 SET checkin_status = 'checked_in', checkin_at = NOW(), checkin_by = ?, updated_at = NOW()
-                WHERE id = ?
+                WHERE id = ? AND checkin_status = 'pending' AND payment_status = 'completed'
             `, [checkinBy, booking.id]);
+
+            if (updateResult.affectedRows === 0) {
+                // Race condition: vé vừa được check-in bởi request khác trong cùng khoảng thời gian
+                await connection.rollback();
+                return res.status(400).json({
+                    success: false,
+                    message: 'Vé này vừa được check-in bởi nhân viên khác ngay lúc này'
+                });
+            }
+
+            await connection.commit();
 
             logger.info(`Ticket checked-in successfully: ${booking.booking_code} (ID: ${booking.id}) by ${checkinBy}`);
 
@@ -164,8 +194,11 @@ const ticketController = {
             });
 
         } catch (error) {
+            await connection.rollback();
             logger.error(`Error checking-in ticket: ${error.message}`);
             res.status(500).json({ success: false, message: 'Lỗi hệ thống khi check-in vé' });
+        } finally {
+            connection.release();
         }
     }
 };

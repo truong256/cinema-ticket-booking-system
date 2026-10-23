@@ -117,6 +117,36 @@ const adminController = {
         }
     },
 
+    updateMovie: async (req, res) => {
+        const movieId = req.params.id;
+        const { title, description, duration_minutes, release_date, poster_url, trailer_url, genre, age_rating } = req.body;
+        if (!title || !duration_minutes) {
+            return res.redirect('/admin/movies?error=' + encodeURIComponent('Tiêu đề và thời lượng không được để trống'));
+        }
+        try {
+            await db.query(`
+                UPDATE movies SET title=?, description=?, duration_minutes=?, release_date=?,
+                poster_url=?, trailer_url=?, genre=?, age_rating=?, updated_at=NOW()
+                WHERE id=?
+            `, [
+                title.trim(),
+                description ? description.trim() : '',
+                parseInt(duration_minutes, 10),
+                release_date || null,
+                poster_url ? poster_url.trim() : '',
+                trailer_url ? trailer_url.trim() : '',
+                genre ? genre.trim() : 'Hành Động',
+                age_rating || 'P',
+                movieId
+            ]);
+            logger.info(`Admin updated movie ID: ${movieId}`);
+            res.redirect('/admin/movies?success=' + encodeURIComponent('Cập nhật thông tin phim thành công!'));
+        } catch (error) {
+            logger.error(`Error updating movie: ${error.message}`);
+            res.redirect('/admin/movies?error=' + encodeURIComponent('Lỗi cập nhật: ' + error.message));
+        }
+    },
+
     toggleMovieStatus: async (req, res) => {
         const movieId = req.params.id;
         try {
@@ -248,6 +278,70 @@ const adminController = {
         }
     },
 
+    updateShowtime: async (req, res) => {
+        const showtimeId = req.params.id;
+        const { start_time, price_regular, price_vip, price_couple } = req.body;
+
+        if (!start_time) {
+            return res.redirect('/admin/showtimes?error=' + encodeURIComponent('Vui lòng nhập thời gian bắt đầu'));
+        }
+
+        try {
+            // Chỉ cho phép sửa khi chưa bán vé nào
+            const soldSeats = await db.query(`
+                SELECT COUNT(*) as cnt FROM booking_seats bs
+                JOIN bookings b ON bs.booking_id = b.id
+                WHERE bs.showtime_id = ? AND b.payment_status = 'completed'
+            `, [showtimeId]);
+
+            if (soldSeats[0].cnt > 0) {
+                return res.redirect('/admin/showtimes?error=' + encodeURIComponent('Không thể sửa suất chiếu đã có vé được bán'));
+            }
+
+            // Lấy thời lượng phim để tính end_time
+            const showtimes = await db.query('SELECT movie_id, room_id FROM showtimes WHERE id = ?', [showtimeId]);
+            if (showtimes.length === 0) {
+                return res.redirect('/admin/showtimes?error=' + encodeURIComponent('Suất chiếu không tồn tại'));
+            }
+
+            const st = showtimes[0];
+            const movie = await db.query('SELECT duration_minutes FROM movies WHERE id = ?', [st.movie_id]);
+            const duration = movie[0]?.duration_minutes || 120;
+            const startDate = new Date(start_time);
+            const endDate = new Date(startDate.getTime() + duration * 60000);
+
+            // Kiểm tra xung đột phòng (trừ chính suất chiếu này)
+            const conflicts = await db.query(`
+                SELECT id FROM showtimes
+                WHERE room_id = ? AND id != ? AND status != 'cancelled'
+                  AND start_time < DATE_ADD(?, INTERVAL 15 MINUTE)
+                  AND DATE_ADD(end_time, INTERVAL 15 MINUTE) > ?
+                LIMIT 1
+            `, [st.room_id, showtimeId, endDate, startDate]);
+
+            if (conflicts.length > 0) {
+                return res.redirect('/admin/showtimes?error=' + encodeURIComponent('Xung đột lịch chiếu: Phòng này đã có suất chiếu khác trong khoảng thời gian này'));
+            }
+
+            await db.query(`
+                UPDATE showtimes SET start_time=?, end_time=?, price_regular=?, price_vip=?, price_couple=?, updated_at=NOW()
+                WHERE id=?
+            `, [
+                startDate, endDate,
+                parseFloat(price_regular) || 85000,
+                parseFloat(price_vip) || 110000,
+                parseFloat(price_couple) || 180000,
+                showtimeId
+            ]);
+
+            logger.info(`Admin updated showtime ID: ${showtimeId}`);
+            res.redirect('/admin/showtimes?success=' + encodeURIComponent('Cập nhật suất chiếu thành công!'));
+        } catch (error) {
+            logger.error(`Error updating showtime: ${error.message}`);
+            res.redirect('/admin/showtimes?error=' + encodeURIComponent('Lỗi cập nhật: ' + error.message));
+        }
+    },
+
     cancelShowtime: async (req, res) => {
         const showtimeId = req.params.id;
         try {
@@ -303,6 +397,23 @@ const adminController = {
         }
     },
 
+    updateCinema: async (req, res) => {
+        const cinemaId = req.params.id;
+        const { name, address, city, phone } = req.body;
+        if (!name || !address) {
+            return res.redirect('/admin/cinemas?error=' + encodeURIComponent('Tên rạp và địa chỉ không được để trống'));
+        }
+        try {
+            await db.query('UPDATE cinemas SET name=?, address=?, city=?, phone=?, updated_at=NOW() WHERE id=?',
+                [name.trim(), address.trim(), city ? city.trim() : '', phone ? phone.trim() : '', cinemaId]);
+            logger.info(`Admin updated cinema ID: ${cinemaId}`);
+            res.redirect('/admin/cinemas?success=' + encodeURIComponent('Cập nhật rạp thành công!'));
+        } catch (error) {
+            logger.error(`Error updating cinema: ${error.message}`);
+            res.redirect('/admin/cinemas?error=' + encodeURIComponent('Lỗi: ' + error.message));
+        }
+    },
+
     toggleCinemaStatus: async (req, res) => {
         const cinemaId = req.params.id;
         try {
@@ -337,6 +448,23 @@ const adminController = {
         } catch (error) {
             logger.error(`Error loading rooms: ${error.message}`);
             res.redirect('/admin');
+        }
+    },
+
+    updateRoom: async (req, res) => {
+        const roomId = req.params.id;
+        const { name, room_type } = req.body;
+        if (!name) {
+            return res.redirect('/admin/rooms?error=' + encodeURIComponent('Tên phòng không được để trống'));
+        }
+        try {
+            await db.query('UPDATE rooms SET name=?, room_type=?, updated_at=NOW() WHERE id=?',
+                [name.trim(), room_type || 'Standard', roomId]);
+            logger.info(`Admin updated room ID: ${roomId}`);
+            res.redirect('/admin/rooms?success=' + encodeURIComponent('Cập nhật phòng chiếu thành công!'));
+        } catch (error) {
+            logger.error(`Error updating room: ${error.message}`);
+            res.redirect('/admin/rooms?error=' + encodeURIComponent('Lỗi: ' + error.message));
         }
     },
 

@@ -164,15 +164,16 @@ const emailService = {
                 return { success: true, simulated: false, messageId: info.messageId };
             } else {
                 // Chế độ Sandbox / Demo: Ghi nhận thông tin email vào file log sandbox
+                // KHÔNG ghi verify URL có chứa booking_token vào log (tránh lộ token)
                 const sandboxLogDir = path.join(__dirname, '../logs');
                 if (!fs.existsSync(sandboxLogDir)) {
                     fs.mkdirSync(sandboxLogDir, { recursive: true });
                 }
                 const sandboxLogPath = path.join(sandboxLogDir, 'email_sandbox.log');
-                const logEntry = `[${new Date().toISOString()}] EMAIL SENT TO: ${booking.customer_email} | SUBJECT: ${emailSubject} | CODE: ${booking.booking_code} | VERIFY_URL: ${verifyUrl}\n`;
+                const logEntry = `[${new Date().toISOString()}] EMAIL TO: ${booking.customer_email} | SUBJECT: ${emailSubject} | BOOKING: ${booking.booking_code}\n`;
                 fs.appendFileSync(sandboxLogPath, logEntry, 'utf8');
 
-                logger.info(`[Email Sandbox] Email generated for ${booking.customer_email} (Booking: ${booking.booking_code}). Logged to ${sandboxLogPath}`);
+                logger.info(`[Email Sandbox] Email generated for Booking ${booking.booking_code}. Logged to ${sandboxLogPath}`);
                 return { success: true, simulated: true, bookingCode: booking.booking_code };
             }
         } catch (error) {

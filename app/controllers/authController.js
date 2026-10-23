@@ -367,17 +367,42 @@ const authController = {
             const users = await db.query('SELECT id, username, email FROM users WHERE email = ? LIMIT 1', [email.trim()]);
             if (users.length > 0) {
                 const user = users[0];
-                const resetToken = crypto.randomBytes(32).toString('hex');
+                // Tạo token ngẫu nhiên plain-text (gửi qua email)
+                const rawToken = crypto.randomBytes(32).toString('hex');
+                // Lưu HASH của token vào DB (không lưu plain text)
+                const tokenHash = crypto.createHash('sha256').update(rawToken).digest('hex');
                 const expires = new Date(Date.now() + 60 * 60 * 1000); // 1 giờ
 
                 await db.query(`
                     UPDATE users 
                     SET reset_password_token = ?, reset_password_expires = ?
                     WHERE id = ?
-                `, [resetToken, expires, user.id]);
+                `, [tokenHash, expires, user.id]);
 
-                const resetLink = `${req.protocol}://${req.get('host')}/auth/reset-password/${resetToken}`;
-                logger.info(`[Password Reset] Token generated for user ${user.username} (${user.email}): ${resetLink}`);
+                // KHÔNG log token thực hoặc URL reset (có thể gây lộ thông tin trong log files)
+                logger.info(`[Password Reset] Token generated for user ${user.username}. Valid for 60 minutes.`);
+
+                // Trong môi trường sandbox/demo: ghi link vào file log riêng (không phải application log)
+                if (!process.env.SMTP_HOST) {
+                    try {
+                        const fs = require('fs');
+                        const path = require('path');
+                        const resetLink = `${req.protocol}://${req.get('host')}/auth/reset-password/${rawToken}`;
+                        const entry = `[${new Date().toISOString()}] PASSWORD RESET - User: ${user.username} | Email: ${user.email} | Link: ${resetLink}\n`;
+                        
+                        // Thử ghi vào /tmp (luôn writable trong container Linux) hoặc thư mục logs
+                        const tmpLog = '/tmp/password_reset_sandbox.log';
+                        try {
+                            fs.appendFileSync(tmpLog, entry, 'utf8');
+                        } catch (e) {
+                            const localLogDir = path.join(__dirname, '../logs');
+                            if (!fs.existsSync(localLogDir)) fs.mkdirSync(localLogDir, { recursive: true });
+                            fs.appendFileSync(path.join(localLogDir, 'password_reset_sandbox.log'), entry, 'utf8');
+                        }
+                    } catch (sandboxErr) {
+                        logger.warn(`Could not write reset sandbox log: ${sandboxErr.message}`);
+                    }
+                }
             }
 
             // Luôn thông báo thành công chung để chống enumeration user
@@ -397,13 +422,15 @@ const authController = {
     },
 
     renderResetPassword: async (req, res) => {
-        const token = req.params.token;
+        const rawToken = req.params.token;
         try {
+            // So sánh với HASH của token (token plain text chỉ tồn tại trong email)
+            const tokenHash = crypto.createHash('sha256').update(rawToken).digest('hex');
             const users = await db.query(`
                 SELECT id FROM users 
                 WHERE reset_password_token = ? AND reset_password_expires > NOW()
                 LIMIT 1
-            `, [token]);
+            `, [tokenHash]);
 
             if (users.length === 0) {
                 return res.render('auth/reset-password', {
@@ -414,9 +441,10 @@ const authController = {
                 });
             }
 
+            // Truyền raw token vào form (không truyền hash)
             res.render('auth/reset-password', {
                 title: 'Đặt Lại Mật Khẩu - CINEVIBE',
-                token,
+                token: rawToken,
                 error: null,
                 success: null
             });
@@ -431,13 +459,13 @@ const authController = {
     },
 
     handleResetPassword: async (req, res) => {
-        const token = req.params.token;
+        const rawToken = req.params.token;
         const { password, confirm_password } = req.body;
 
         if (!password || password.length < 6) {
             return res.render('auth/reset-password', {
                 title: 'Đặt Lại Mật Khẩu',
-                token,
+                token: rawToken,
                 error: 'Mật khẩu mới phải có ít nhất 6 ký tự',
                 success: null
             });
@@ -446,18 +474,20 @@ const authController = {
         if (password !== confirm_password) {
             return res.render('auth/reset-password', {
                 title: 'Đặt Lại Mật Khẩu',
-                token,
+                token: rawToken,
                 error: 'Mật khẩu xác nhận không khớp',
                 success: null
             });
         }
 
         try {
+            // So sánh với HASH của token, không lưu plain token trong DB
+            const tokenHash = crypto.createHash('sha256').update(rawToken).digest('hex');
             const users = await db.query(`
                 SELECT id, username FROM users 
                 WHERE reset_password_token = ? AND reset_password_expires > NOW()
                 LIMIT 1
-            `, [token]);
+            `, [tokenHash]);
 
             if (users.length === 0) {
                 return res.render('auth/reset-password', {
@@ -472,6 +502,7 @@ const authController = {
             const salt = await bcrypt.genSalt(10);
             const hashedPassword = await bcrypt.hash(password, salt);
 
+            // Xóa token ngay sau khi dùng để chống tái sử dụng
             await db.query(`
                 UPDATE users 
                 SET password_hash = ?, reset_password_token = NULL, reset_password_expires = NULL, updated_at = NOW()
@@ -484,7 +515,7 @@ const authController = {
             logger.error(`Handle reset password error: ${error.message}`);
             res.render('auth/reset-password', {
                 title: 'Đặt Lại Mật Khẩu',
-                token,
+                token: rawToken,
                 error: 'Không thể cập nhật mật khẩu lúc này, vui lòng thử lại',
                 success: null
             });

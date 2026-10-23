@@ -15,34 +15,40 @@ function generateBookingCode() {
     return code;
 }
 
-// Hàm dọn dẹp các đơn giữ chỗ đã hết hạn (Lazy cleanup 10 phút)
+// Hàm dọn dẹp các đơn giữ chỗ đã hết hạn - atomic transaction để tránh race condition với thanh toán
 async function releaseExpiredBookings() {
     try {
-        const expiredBookings = await db.query(`
-            SELECT id, booking_code FROM bookings 
+        // Bước 1: Cập nhật atomic các booking hết hạn nhưng chưa thanh toán
+        const updateResult = await db.query(`
+            UPDATE bookings 
+            SET payment_status = 'failed', booking_status = 'cancelled', updated_at = NOW()
             WHERE payment_status = 'pending' 
               AND expires_at IS NOT NULL 
               AND expires_at < NOW()
         `);
 
-        if (expiredBookings.length > 0) {
-            const expiredIds = expiredBookings.map(b => b.id);
+        if (updateResult && updateResult.affectedRows > 0) {
+            // Xóa ghế của các đơn vừa bị hủy
+            // Chỉ xóa nơi booking_status = 'cancelled' VÀ payment_status = 'failed' (không đụng completed)
             await db.query(`
-                UPDATE bookings 
-                SET payment_status = 'failed', booking_status = 'cancelled', updated_at = NOW() 
-                WHERE id IN (?)
-            `, [expiredIds]);
-
-            await db.query(`
-                DELETE FROM booking_seats WHERE booking_id IN (?)
-            `, [expiredIds]);
-
-            logger.info(`Auto-released ${expiredBookings.length} expired pending bookings: ${expiredBookings.map(b => b.booking_code).join(', ')}`);
+                DELETE bs FROM booking_seats bs
+                JOIN bookings b ON bs.booking_id = b.id
+                WHERE b.payment_status = 'failed' AND b.booking_status = 'cancelled'
+                  AND b.expires_at IS NOT NULL AND b.expires_at < NOW()
+            `);
+            logger.info(`Auto-released ${updateResult.affectedRows} expired pending bookings`);
         }
     } catch (err) {
         logger.error(`Error in releaseExpiredBookings: ${err.message}`);
     }
 }
+
+// Cleanup định kỳ mỗi 2 phút (không chỉ lazy cleanup khi có request)
+setInterval(() => {
+    releaseExpiredBookings().catch(err => {
+        logger.error(`Periodic cleanup error: ${err.message}`);
+    });
+}, 2 * 60 * 1000); // 2 phút
 
 // Kiểm tra quyền sở hữu vé (IDOR protection)
 function checkBookingOwnership(req, booking) {
@@ -414,13 +420,14 @@ const bookingController = {
             }
 
             // Kiểm tra nếu đơn đã hết hạn giữ chỗ (10 phút)
-            const [expiryCheck] = await db.query(`
+            const expiryRows = await db.query(`
                 SELECT (expires_at IS NOT NULL AND expires_at < NOW()) as is_expired,
                        TIMESTAMPDIFF(SECOND, NOW(), expires_at) as remaining_seconds
                 FROM bookings WHERE id = ?
             `, [bookingId]);
 
-            if (expiryCheck && expiryCheck.length > 0 && expiryCheck[0].is_expired) {
+            const expiryInfo = expiryRows && expiryRows[0];
+            if (expiryInfo && expiryInfo.is_expired) {
                 await db.query(`
                     UPDATE bookings SET payment_status = 'failed', booking_status = 'cancelled', updated_at = NOW() WHERE id = ?
                 `, [bookingId]);
@@ -433,8 +440,8 @@ const bookingController = {
             }
 
             // Tính số giây còn lại cho bộ đếm 10 phút
-            const remainingSeconds = (expiryCheck && expiryCheck.length > 0 && expiryCheck[0].remaining_seconds !== null)
-                ? Math.max(0, expiryCheck[0].remaining_seconds)
+            const remainingSeconds = (expiryInfo && expiryInfo.remaining_seconds !== null)
+                ? Math.max(0, expiryInfo.remaining_seconds)
                 : 600;
 
             // Lấy danh sách ghế đã chọn
@@ -478,6 +485,12 @@ const bookingController = {
                 message: 'Phương thức thanh toán không hợp lệ'
             });
         }
+
+        let normalizedDbMethod = 'VNPAY_MOCK';
+        if (selectedMethod.includes('MOMO')) normalizedDbMethod = 'MOMO_MOCK';
+        else if (selectedMethod.includes('ATM') || selectedMethod.includes('BANK')) normalizedDbMethod = 'BANK_TRANSFER';
+        else if (selectedMethod.includes('CASH')) normalizedDbMethod = 'CASH';
+        else normalizedDbMethod = 'VNPAY_MOCK';
 
         if (!allowedActions.includes(paymentAction)) {
             return res.status(400).json({
@@ -561,7 +574,7 @@ const bookingController = {
                 await connection.query(`
                     INSERT INTO payments (booking_id, payment_method, transaction_id, amount, status, response_data)
                     VALUES (?, ?, ?, ?, 'success', ?)
-                `, [bookingId, selectedMethod, txnId, booking.total_amount, JSON.stringify({
+                `, [bookingId, normalizedDbMethod, txnId, booking.total_amount, JSON.stringify({
                     responseCode: '00',
                     message: 'Giao dịch thanh toán giả lập thành công',
                     bankCode: selectedMethod.includes('MOMO') ? 'MOMO_PAY' : 'NCB_GATEWAY',
@@ -610,7 +623,7 @@ const bookingController = {
                 await connection.query(`
                     INSERT INTO payments (booking_id, payment_method, transaction_id, amount, status, response_data)
                     VALUES (?, ?, ?, ?, 'failed', ?)
-                `, [bookingId, selectedMethod, txnId, booking.total_amount, JSON.stringify({
+                `, [bookingId, normalizedDbMethod, txnId, booking.total_amount, JSON.stringify({
                     responseCode: paymentAction === 'simulate_cancel' ? '24' : '51',
                     message: paymentAction === 'simulate_cancel' 
                         ? 'Khách hàng chủ động hủy giao dịch' 

@@ -12,22 +12,26 @@ router.get('/', adminController.getDashboard);
 // 2. Quản lý Phim
 router.get('/movies', adminController.getMovies);
 router.post('/movies/create', adminController.createMovie);
+router.post('/movies/:id/update', adminController.updateMovie);
 router.post('/movies/:id/toggle', adminController.toggleMovieStatus);
 router.post('/movies/:id/delete', adminController.deleteMovie);
 
 // 3. Quản lý Suất chiếu
 router.get('/showtimes', adminController.getShowtimes);
 router.post('/showtimes/create', adminController.createShowtime);
+router.post('/showtimes/:id/update', adminController.updateShowtime);
 router.post('/showtimes/:id/cancel', adminController.cancelShowtime);
 
 // 4. Quản lý Cụm Rạp
 router.get('/cinemas', adminController.getCinemas);
 router.post('/cinemas/create', adminController.createCinema);
+router.post('/cinemas/:id/update', adminController.updateCinema);
 router.post('/cinemas/:id/toggle', adminController.toggleCinemaStatus);
 
 // 5. Quản lý Phòng chiếu & Sơ đồ Ghế
 router.get('/rooms', adminController.getRooms);
 router.post('/rooms/create', adminController.createRoom);
+router.post('/rooms/:id/update', adminController.updateRoom);
 router.get('/rooms/:id/seats', adminController.getRoomSeats);
 router.post('/seats/:id/toggle', adminController.toggleSeatStatus);
 
