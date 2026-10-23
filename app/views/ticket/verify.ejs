@@ -1,0 +1,207 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<main class="main-wrapper" style="max-width: 800px;">
+    <!-- Page Header -->
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <span class="brand-badge gold" style="margin-bottom: 0.5rem;">CỔNG XÁC MINH VÉ ĐIỆN TỬ CINEVIBE</span>
+        <h1 style="font-family: var(--font-heading); font-size: 2.2rem; font-weight: 800; color: #FFFFFF; letter-spacing: -0.5px;">
+            Kiểm Tra & Soát Vé Điện Tử
+        </h1>
+        <p style="color: var(--text-secondary); font-size: 0.95rem; margin-top: 0.25rem;">
+            Hệ thống xác thực mã QR thời gian thực và quản lý check-in vào phòng chiếu
+        </p>
+    </div>
+
+    <% if (!booking) { %>
+        <!-- Case Not Found -->
+        <div class="card" style="padding: 3rem; text-align: center;">
+            <div style="display: inline-block; background: rgba(239, 68, 68, 0.15); color: #EF4444; border: 1px solid rgba(239, 68, 68, 0.3); border-radius: var(--radius-sm); padding: 0.5rem 1rem; font-weight: 800; margin-bottom: 1.25rem;">
+                MÃ VÉ KHÔNG HỢP LỆ
+            </div>
+            <h2 style="font-size: 1.4rem; color: #FFFFFF; margin-bottom: 0.75rem;">Không Tìm Thấy Thông Tin Vé</h2>
+            <p style="color: var(--text-secondary); max-width: 480px; margin: 0 auto 1.75rem;">
+                <%= message || 'Mã xác minh không tồn tại hoặc đã bị chỉnh sửa sai lệch. Vui lòng quét lại mã QR trên vé điện tử gốc.' %>
+            </p>
+            <a href="/" class="btn btn-primary">Trở về Trang Chủ</a>
+        </div>
+    <% } else { %>
+        <!-- Status Banner -->
+        <div style="margin-bottom: 1.75rem;">
+            <% if (ticketStatus === 'valid') { %>
+                <div class="alert alert-success" style="padding: 1.25rem 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;" id="ticketAlert">
+                    <div>
+                        <strong style="font-size: 1.15rem; color: #FFFFFF; display: block;">VÉ HỢP LỆ — SẴN SÀNG VÀO RẠP</strong>
+                        <span style="font-size: 0.88rem; color: var(--text-secondary);"><%= message %></span>
+                    </div>
+                    <span class="badge badge-green" style="font-size: 0.88rem; padding: 0.4rem 0.85rem;" id="badgeStatus">CONFIRMED</span>
+                </div>
+            <% } else if (ticketStatus === 'already_used') { %>
+                <div class="alert" style="background: rgba(59, 130, 246, 0.15); border: 1px solid rgba(59, 130, 246, 0.4); padding: 1.25rem 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                    <div>
+                        <strong style="font-size: 1.15rem; color: #60A5FA; display: block;">VÉ ĐÃ CHECK-IN VÀO RẠP</strong>
+                        <span style="font-size: 0.88rem; color: var(--text-secondary);"><%= message %></span>
+                    </div>
+                    <span class="badge badge-blue" style="font-size: 0.88rem; padding: 0.4rem 0.85rem;">CHECKED-IN</span>
+                </div>
+            <% } else { %>
+                <div class="alert alert-danger" style="padding: 1.25rem 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                    <div>
+                        <strong style="font-size: 1.15rem; color: #F87171; display: block;">VÉ KHÔNG KHẢ DỤNG</strong>
+                        <span style="font-size: 0.88rem; color: var(--text-secondary);"><%= message %></span>
+                    </div>
+                    <span class="badge badge-danger" style="font-size: 0.88rem; padding: 0.4rem 0.85rem;"><%= ticketStatus.toUpperCase() %></span>
+                </div>
+            <% } %>
+        </div>
+
+        <!-- Ticket Detail Card -->
+        <div class="card" style="padding: 2.5rem; border-radius: var(--radius-card); background: #0E1422; border: 1px solid var(--border-color); box-shadow: var(--shadow-elevated);">
+            <!-- Header Info -->
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem; margin-bottom: 1.75rem; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <span class="brand-badge gold">MÃ VÉ ĐIỆN TỬ</span>
+                    <div style="font-size: 1.5rem; font-weight: 800; color: #FFFFFF; font-family: var(--font-mono); margin-top: 0.35rem;">
+                        <%= booking.booking_code %>
+                    </div>
+                </div>
+                <div style="text-align: right;">
+                    <span style="font-size: 0.82rem; color: var(--text-muted); display: block;">Thời gian thanh toán:</span>
+                    <strong style="color: #FFFFFF; font-size: 0.95rem;">
+                        <%= booking.payment_time ? new Date(booking.payment_time).toLocaleString('vi-VN') : 'Đã xác nhận' %>
+                    </strong>
+                </div>
+            </div>
+
+            <!-- Movie & Showtime Info -->
+            <div style="margin-bottom: 2rem;">
+                <h2 style="font-family: var(--font-heading); font-size: 1.85rem; font-weight: 800; color: #FFFFFF; margin-bottom: 0.4rem;">
+                    <%= booking.movie_title %>
+                </h2>
+                <div style="color: var(--color-gold); font-size: 1.05rem; font-weight: 600; margin-bottom: 1.25rem;">
+                    <%= booking.cinema_name %> &bull; <%= booking.room_name %> (<%= booking.room_type %>)
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; background: var(--bg-surface); padding: 1.25rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                    <div>
+                        <span style="color: var(--text-muted); display: block; font-size: 0.82rem;">Suất chiếu:</span>
+                        <strong style="color: #FFFFFF; font-size: 1.05rem;"><%= new Date(booking.start_time).toLocaleString('vi-VN') %></strong>
+                    </div>
+                    <div>
+                        <span style="color: var(--text-muted); display: block; font-size: 0.82rem;">Thời lượng / Độ tuổi:</span>
+                        <strong style="color: #FFFFFF;"><%= booking.duration_minutes %> phút &bull; <%= booking.age_rating %></strong>
+                    </div>
+                    <div>
+                        <span style="color: var(--text-muted); display: block; font-size: 0.82rem;">Khách hàng:</span>
+                        <strong style="color: #FFFFFF;"><%= booking.customer_name %></strong>
+                    </div>
+                    <div>
+                        <span style="color: var(--text-muted); display: block; font-size: 0.82rem;">Số điện thoại:</span>
+                        <strong style="color: #FFFFFF;"><%= booking.customer_phone %></strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seats Breakdown -->
+            <div style="margin-bottom: 2rem;">
+                <div style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 0.65rem; font-weight: 600;">
+                    Vị trí ghế ngồi (<%= seats.length %> ghế):
+                </div>
+                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                    <% seats.forEach(s => { %>
+                        <span class="selected-seat-tag" style="font-size: 0.95rem; padding: 0.4rem 0.85rem;">
+                            <%= s.row_label %><%= s.seat_number %> (<%= s.seat_type %>) &bull; <%= Number(s.price).toLocaleString('vi-VN') %> đ
+                        </span>
+                    <% }); %>
+                </div>
+            </div>
+
+            <!-- Total Amount & Payment Info -->
+            <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                <div>
+                    <span style="font-size: 0.82rem; color: var(--text-muted); display: block;">Hình thức thanh toán:</span>
+                    <strong style="color: #FFFFFF;"><%= booking.payment_method || 'VNPAY / Thẻ trực tuyến' %></strong>
+                </div>
+                <div style="text-align: right;">
+                    <span style="font-size: 0.82rem; color: var(--text-muted); display: block;">Tổng tiền:</span>
+                    <span class="total-price" style="font-size: 1.8rem;">
+                        <%= Number(booking.total_amount).toLocaleString('vi-VN') %> đ
+                    </span>
+                </div>
+            </div>
+
+            <!-- Check-in Management Section for Admin / Staff -->
+            <% if (currentUser && currentUser.role === 'admin') { %>
+                <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(245, 196, 81, 0.08); border: 1px dashed var(--color-gold); border-radius: var(--radius-sm);" id="adminCheckinBox">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                        <div>
+                            <strong style="color: var(--color-gold); font-size: 1rem; display: block;">Khu vực Soát vé Quản trị viên</strong>
+                            <span style="font-size: 0.84rem; color: var(--text-secondary);">
+                                Quản trị viên hiện tại: <strong><%= currentUser.username %></strong>
+                            </span>
+                        </div>
+
+                        <% if (ticketStatus === 'valid') { %>
+                            <button type="button" class="btn btn-primary" id="btnCheckinTicket" onclick="handleTicketCheckin('<%= booking.id %>')">
+                                Xác Nhận Soát Vé (Check-in Ngay)
+                            </button>
+                        <% } else if (booking.checkin_status === 'checked_in') { %>
+                            <div style="color: #10B981; font-weight: 700; font-size: 0.95rem;">
+                                Vé đã được điểm danh vào phòng
+                            </div>
+                        <% } else { %>
+                            <div style="color: #EF4444; font-size: 0.88rem;">
+                                Không thể soát vé do vé không hợp lệ hoặc chưa thanh toán
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="/" class="btn btn-secondary">Trang Chủ</a>
+            <% if (currentUser && currentUser.role === 'admin') { %>
+                <a href="/admin/bookings" class="btn btn-secondary" style="margin-left: 0.75rem;">Quản Lý Đơn Vé Admin</a>
+            <% } %>
+        </div>
+    <% } %>
+</main>
+
+<script>
+async function handleTicketCheckin(bookingId) {
+    const btn = document.getElementById('btnCheckinTicket');
+    if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Đang xử lý check-in...';
+    }
+
+    try {
+        const res = await fetch('/ticket/checkin', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ bookingId: parseInt(bookingId, 10) })
+        });
+
+        const data = await res.json();
+        if (data.success) {
+            alert('Soát vé thành công: ' + data.message);
+            window.location.reload();
+        } else {
+            alert('Lỗi soát vé: ' + (data.message || 'Không thể thực hiện'));
+            if (btn) {
+                btn.disabled = false;
+                btn.textContent = 'Xác Nhận Soát Vé (Check-in Ngay)';
+            }
+        }
+    } catch (e) {
+        alert('Lỗi kết nối khi gửi yêu cầu check-in!');
+        if (btn) {
+            btn.disabled = false;
+            btn.textContent = 'Xác Nhận Soát Vé (Check-in Ngay)';
+        }
+    }
+}
+</script>
+
+<%- include('../partials/footer') %>
