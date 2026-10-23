@@ -16,6 +16,7 @@ const authRoutes = require('./routes/authRoutes');
 const movieRoutes = require('./routes/movieRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const ticketRoutes = require('./routes/ticketRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -96,6 +97,7 @@ app.use('/auth', authRoutes);
 app.use('/movies', movieRoutes);
 app.use('/booking', bookingRoutes);
 app.use('/admin', adminRoutes);
+app.use('/ticket', ticketRoutes);
 
 // About / Information page
 app.get('/about', (req, res) => {

@@ -15,6 +15,17 @@
         </button>
     </div>
 
+    <!-- Admin Navigation Tabs -->
+    <div style="display: flex; gap: 0.5rem; margin-bottom: 2rem; flex-wrap: wrap;">
+        <a href="/admin" class="btn btn-secondary btn-sm">Dashboard</a>
+        <a href="/admin/movies" class="btn btn-secondary btn-sm">Phim</a>
+        <a href="/admin/showtimes" class="btn btn-primary btn-sm">Suất chiếu</a>
+        <a href="/admin/cinemas" class="btn btn-secondary btn-sm">Cụm rạp</a>
+        <a href="/admin/rooms" class="btn btn-secondary btn-sm">Phòng & Ghế</a>
+        <a href="/admin/bookings" class="btn btn-secondary btn-sm">Đơn đặt vé</a>
+        <a href="/admin/users" class="btn btn-secondary btn-sm">Khách hàng</a>
+    </div>
+
     <% if (error) { %>
         <div class="alert alert-danger"><%= error %></div>
     <% } %>
@@ -68,14 +79,27 @@
                                     <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">Standard / VIP / Couple</div>
                                 </td>
                                 <td>
-                                    <span class="badge badge-green">
-                                        <%= st.status %>
-                                    </span>
+                                    <% if (st.status === 'scheduled') { %>
+                                        <span class="badge badge-green">MỞ BÁN</span>
+                                    <% } else if (st.status === 'cancelled') { %>
+                                        <span class="badge badge-red">ĐÃ HỦY</span>
+                                    <% } else { %>
+                                        <span class="badge badge-gold"><%= st.status %></span>
+                                    <% } %>
                                 </td>
                                 <td style="text-align: right;">
-                                    <a href="/booking/showtime/<%= st.id %>" class="btn btn-secondary btn-sm" target="_blank" style="padding: 0.45rem 0.85rem;">
-                                        Sơ đồ ghế
-                                    </a>
+                                    <div style="display: inline-flex; gap: 0.35rem;">
+                                        <a href="/booking/showtime/<%= st.id %>" class="btn btn-secondary btn-sm" target="_blank" style="padding: 0.45rem 0.85rem;">
+                                            Sơ đồ ghế
+                                        </a>
+                                        <% if (st.status === 'scheduled') { %>
+                                            <form action="/admin/showtimes/<%= st.id %>/cancel" method="POST" style="display: inline;" onsubmit="return confirm('Bạn có chắc chắn muốn HỦY suất chiếu này không? Khách hàng sẽ không thể đặt vé tiếp.')">
+                                                <button type="submit" class="btn btn-danger btn-sm" style="padding: 0.45rem 0.65rem;">
+                                                    Hủy
+                                                </button>
+                                            </form>
+                                        <% } %>
+                                    </div>
                                 </td>
                             </tr>
                         <% }); %>

@@ -15,6 +15,17 @@
         </button>
     </div>
 
+    <!-- Admin Navigation Tabs -->
+    <div style="display: flex; gap: 0.5rem; margin-bottom: 2rem; flex-wrap: wrap;">
+        <a href="/admin" class="btn btn-secondary btn-sm">Dashboard</a>
+        <a href="/admin/movies" class="btn btn-primary btn-sm">Phim</a>
+        <a href="/admin/showtimes" class="btn btn-secondary btn-sm">Suất chiếu</a>
+        <a href="/admin/cinemas" class="btn btn-secondary btn-sm">Cụm rạp</a>
+        <a href="/admin/rooms" class="btn btn-secondary btn-sm">Phòng & Ghế</a>
+        <a href="/admin/bookings" class="btn btn-secondary btn-sm">Đơn đặt vé</a>
+        <a href="/admin/users" class="btn btn-secondary btn-sm">Khách hàng</a>
+    </div>
+
     <% if (error) { %>
         <div class="alert alert-danger"><%= error %></div>
     <% } %>
