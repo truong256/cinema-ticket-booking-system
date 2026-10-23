@@ -4,10 +4,9 @@
 <main class="main-wrapper" style="max-width: 800px;">
     <!-- Alert Success -->
     <div class="alert alert-success" style="margin-bottom: 2.5rem; padding: 1.25rem 1.5rem;">
-        <i class="fas fa-circle-check" style="font-size: 1.8rem; color: #10B981; flex-shrink: 0;"></i>
         <div>
-            <strong style="font-size: 1.1rem; color: #FFFFFF;">Thanh toán thành công! Chúc bạn có trải nghiệm xem phim tuyệt vời!</strong>
-            <div style="font-size: 0.88rem; color: var(--text-secondary); margin-top: 0.2rem;">
+            <strong style="font-size: 1.1rem; color: #FFFFFF; display: block;">Thanh toán thành công! Chúc bạn có trải nghiệm xem phim tuyệt vời!</strong>
+            <div style="font-size: 0.88rem; color: var(--text-secondary); margin-top: 0.25rem;">
                 Vé điện tử đã được kích hoạt thành công trên hệ thống CineVibe và đã được lưu vào tài khoản của bạn.
             </div>
         </div>
@@ -22,12 +21,11 @@
         <!-- Top Ticket Header -->
         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 1.5rem; margin-bottom: 1.75rem; flex-wrap: wrap; gap: 1rem;">
             <div class="brand-logo">
-                <i class="fas fa-film" style="color: var(--color-primary);"></i>
                 <span>CINE<span style="color: var(--color-primary);">VIBE</span></span>
                 <span class="brand-badge gold">E-TICKET</span>
             </div>
             <div style="text-align: right;">
-                <span class="badge badge-green"><i class="fas fa-check"></i> HỢP LỆ (CONFIRMED)</span>
+                <span class="badge badge-green">HỢP LỆ (CONFIRMED)</span>
                 <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.35rem;">
                     Mã vé: <strong style="color: #FFFFFF; letter-spacing: 0.5px; font-family: var(--font-mono);"><%= booking.booking_code %></strong>
                 </div>
@@ -41,7 +39,7 @@
                     <%= booking.movie_title %>
                 </h2>
                 <div style="font-size: 0.95rem; color: var(--color-gold); font-weight: 600; margin-bottom: 1.25rem;">
-                    <i class="fas fa-location-dot"></i> <%= booking.cinema_name %> &bull; <%= booking.room_name %>
+                    <%= booking.cinema_name %> &bull; <%= booking.room_name %>
                 </div>
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; font-size: 0.92rem;">
@@ -126,13 +124,13 @@
     <!-- Action Toolbar -->
     <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2.25rem; flex-wrap: wrap;">
         <button type="button" onclick="window.print()" class="btn btn-secondary">
-            <i class="fas fa-print"></i> In vé điện tử
+            In vé điện tử
         </button>
         <a href="/booking/history" class="btn btn-secondary">
-            <i class="fas fa-clock-rotate-left"></i> Xem lịch sử đặt vé
+            Xem lịch sử đặt vé
         </a>
         <a href="/movies" class="btn btn-primary">
-            <i class="fas fa-ticket"></i> Đặt thêm phim khác
+            Đặt thêm phim khác
         </a>
     </div>
 </main>

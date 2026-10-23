@@ -10,53 +10,52 @@
                 Khám phá điện ảnh, chọn ghế yêu thích và đặt vé dễ dàng cùng CINEVIBE.
             </p>
             <div style="display: flex; gap: 0.5rem; align-items: center; color: var(--text-muted); font-size: 0.85rem;">
-                <i class="fas fa-shield-halved" style="color: #10B981;"></i>
-                <span>Đặt vé trực tuyến an toàn & giữ chỗ tức thì</span>
+                <span>Đặt vé trực tuyến an toàn &amp; giữ chỗ tức thì</span>
             </div>
         </div>
 
         <!-- Cột 2: Khám Phá -->
         <div class="footer-links-col">
-            <h4 style="font-family: var(--font-heading); margin-bottom: 1.25rem; color: #FFFFFF; font-size: 1.05rem; display: flex; align-items: center; gap: 0.5rem;">
-                <i class="fas fa-compass" style="color: var(--color-primary);"></i> Khám Phá
+            <h4 style="font-family: var(--font-heading); margin-bottom: 1.25rem; color: #FFFFFF; font-size: 1.05rem;">
+                Khám Phá
             </h4>
             <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.65rem; font-size: 0.92rem; color: var(--text-secondary); padding: 0; margin: 0;">
-                <li><a href="/" style="transition: var(--transition-fast);"><i class="fas fa-chevron-right" style="font-size: 0.72rem; color: var(--color-primary); margin-right: 0.4rem;"></i> Trang chủ</a></li>
-                <li><a href="/movies" style="transition: var(--transition-fast);"><i class="fas fa-chevron-right" style="font-size: 0.72rem; color: var(--color-primary); margin-right: 0.4rem;"></i> Phim đang chiếu</a></li>
-                <li><a href="/showtimes" style="transition: var(--transition-fast);"><i class="fas fa-chevron-right" style="font-size: 0.72rem; color: var(--color-primary); margin-right: 0.4rem;"></i> Lịch chiếu</a></li>
-                <li><a href="/about" style="transition: var(--transition-fast);"><i class="fas fa-chevron-right" style="font-size: 0.72rem; color: var(--color-primary); margin-right: 0.4rem;"></i> Giới thiệu</a></li>
+                <li><a href="/" style="transition: var(--transition-fast);">Trang chủ</a></li>
+                <li><a href="/movies" style="transition: var(--transition-fast);">Phim đang chiếu</a></li>
+                <li><a href="/showtimes" style="transition: var(--transition-fast);">Lịch chiếu</a></li>
+                <li><a href="/about" style="transition: var(--transition-fast);">Giới thiệu</a></li>
             </ul>
         </div>
 
         <!-- Cột 3: Tài Khoản -->
         <div class="footer-links-col">
-            <h4 style="font-family: var(--font-heading); margin-bottom: 1.25rem; color: #FFFFFF; font-size: 1.05rem; display: flex; align-items: center; gap: 0.5rem;">
-                <i class="fas fa-user-circle" style="color: var(--color-gold);"></i> Tài Khoản
+            <h4 style="font-family: var(--font-heading); margin-bottom: 1.25rem; color: #FFFFFF; font-size: 1.05rem;">
+                Tài Khoản
             </h4>
             <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.65rem; font-size: 0.92rem; color: var(--text-secondary); padding: 0; margin: 0;">
                 <% if (typeof currentUser !== 'undefined' && currentUser) { %>
-                    <li><a href="/booking/history" style="transition: var(--transition-fast);"><i class="fas fa-chevron-right" style="font-size: 0.72rem; color: var(--color-gold); margin-right: 0.4rem;"></i> Lịch sử đặt vé</a></li>
+                    <li><a href="/booking/history" style="transition: var(--transition-fast);">Lịch sử đặt vé</a></li>
                     <% if (currentUser.role === 'admin') { %>
-                        <li><a href="/admin" style="transition: var(--transition-fast); color: var(--color-gold);"><i class="fas fa-chevron-right" style="font-size: 0.72rem; color: var(--color-gold); margin-right: 0.4rem;"></i> Quản trị hệ thống</a></li>
+                        <li><a href="/admin" style="transition: var(--transition-fast); color: var(--color-gold);">Quản trị hệ thống</a></li>
                     <% } %>
-                    <li><a href="/auth/logout" style="transition: var(--transition-fast);"><i class="fas fa-chevron-right" style="font-size: 0.72rem; color: var(--color-gold); margin-right: 0.4rem;"></i> Đăng xuất</a></li>
+                    <li><a href="/auth/logout" style="transition: var(--transition-fast);">Đăng xuất</a></li>
                 <% } else { %>
-                    <li><a href="/auth/login" style="transition: var(--transition-fast);"><i class="fas fa-chevron-right" style="font-size: 0.72rem; color: var(--color-gold); margin-right: 0.4rem;"></i> Đăng nhập</a></li>
-                    <li><a href="/auth/register" style="transition: var(--transition-fast);"><i class="fas fa-chevron-right" style="font-size: 0.72rem; color: var(--color-gold); margin-right: 0.4rem;"></i> Đăng ký</a></li>
-                    <li><a href="/auth/login?redirect=/booking/history" style="transition: var(--transition-fast);"><i class="fas fa-chevron-right" style="font-size: 0.72rem; color: var(--color-gold); margin-right: 0.4rem;"></i> Tra cứu vé đã đặt</a></li>
+                    <li><a href="/auth/login" style="transition: var(--transition-fast);">Đăng nhập</a></li>
+                    <li><a href="/auth/register" style="transition: var(--transition-fast);">Đăng ký</a></li>
+                    <li><a href="/auth/login?redirect=/booking/history" style="transition: var(--transition-fast);">Tra cứu vé đã đặt</a></li>
                 <% } %>
             </ul>
         </div>
 
         <!-- Cột 4: Hỗ Trợ -->
         <div class="footer-links-col">
-            <h4 style="font-family: var(--font-heading); margin-bottom: 1.25rem; color: #FFFFFF; font-size: 1.05rem; display: flex; align-items: center; gap: 0.5rem;">
-                <i class="fas fa-circle-question" style="color: #38bdf8;"></i> Hỗ Trợ
+            <h4 style="font-family: var(--font-heading); margin-bottom: 1.25rem; color: #FFFFFF; font-size: 1.05rem;">
+                Hỗ Trợ
             </h4>
             <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.65rem; font-size: 0.92rem; color: var(--text-secondary); padding: 0; margin: 0;">
-                <li><a href="/about#booking-process" style="transition: var(--transition-fast);"><i class="fas fa-chevron-right" style="font-size: 0.72rem; color: #38bdf8; margin-right: 0.4rem;"></i> Quy trình đặt vé</a></li>
-                <li><a href="/about#seat-guide" style="transition: var(--transition-fast);"><i class="fas fa-chevron-right" style="font-size: 0.72rem; color: #38bdf8; margin-right: 0.4rem;"></i> Hướng dẫn chọn ghế</a></li>
-                <li><a href="/about#experience" style="transition: var(--transition-fast);"><i class="fas fa-chevron-right" style="font-size: 0.72rem; color: #38bdf8; margin-right: 0.4rem;"></i> Trải nghiệm rạp chiếu</a></li>
+                <li><a href="/about#booking-process" style="transition: var(--transition-fast);">Quy trình đặt vé</a></li>
+                <li><a href="/about#seat-guide" style="transition: var(--transition-fast);">Hướng dẫn chọn ghế</a></li>
+                <li><a href="/about#experience" style="transition: var(--transition-fast);">Trải nghiệm rạp chiếu</a></li>
             </ul>
         </div>
     </div>

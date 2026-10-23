@@ -220,7 +220,7 @@
 .auth-input {
     width: 100%;
     height: 48px;
-    padding: 0 1rem 0 2.75rem;
+    padding: 0 1rem;
     background-color: #131A26; /* Deep surface */
     border: 1px solid #334155; /* Defined, crisp border */
     border-radius: 10px;

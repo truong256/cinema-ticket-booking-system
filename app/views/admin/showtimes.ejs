@@ -5,21 +5,21 @@
     <div class="section-header">
         <div>
             <a href="/admin" style="color: var(--color-primary); font-size: 0.85rem; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem; margin-bottom: 0.4rem;">
-                <i class="fas fa-chevron-left"></i> Quay lại Dashboard
+                &larr; Quay lại Dashboard
             </a>
-            <h1 class="section-title"><i class="fas fa-calendar-alt"></i> Quản Lý Suất Chiếu</h1>
+            <h1 class="section-title">Quản Lý Suất Chiếu</h1>
             <p class="section-subtitle">Lên lịch chiếu phim, phân bổ phòng chiếu và thiết lập biểu giá vé theo thời gian thực</p>
         </div>
         <button class="btn btn-primary" onclick="document.getElementById('modalAddShowtime').style.display='flex'">
-            <i class="fas fa-plus"></i> Thêm suất chiếu mới
+            Thêm suất chiếu mới
         </button>
     </div>
 
     <% if (error) { %>
-        <div class="alert alert-danger"><i class="fas fa-exclamation-circle"></i> <%= error %></div>
+        <div class="alert alert-danger"><%= error %></div>
     <% } %>
     <% if (success) { %>
-        <div class="alert alert-success"><i class="fas fa-check-circle"></i> <%= success %></div>
+        <div class="alert alert-success"><%= success %></div>
     <% } %>
 
     <!-- Showtimes Table Card -->
@@ -47,11 +47,10 @@
                                 </td>
                                 <td>
                                     <div style="color: var(--text-primary); font-weight: 600; font-size: 0.92rem;"><%= st.cinema_name %></div>
-                                    <div style="font-size: 0.8rem; color: var(--color-gold); font-weight: 600;"><i class="fas fa-door-open"></i> <%= st.room_name %></div>
+                                    <div style="font-size: 0.8rem; color: var(--color-gold); font-weight: 600;"><%= st.room_name %></div>
                                 </td>
                                 <td>
-                                    <div style="color: #ffffff; font-weight: 600; display: flex; align-items: center; gap: 0.35rem;">
-                                        <i class="far fa-clock" style="color: var(--color-primary);"></i>
+                                    <div style="color: #ffffff; font-weight: 600;">
                                         <%= new Date(st.start_time).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) %>
                                     </div>
                                     <div style="font-size: 0.8rem; color: var(--text-muted);">
@@ -70,12 +69,12 @@
                                 </td>
                                 <td>
                                     <span class="badge badge-green">
-                                        <i class="fas fa-check-circle"></i> <%= st.status %>
+                                        <%= st.status %>
                                     </span>
                                 </td>
                                 <td style="text-align: right;">
                                     <a href="/booking/showtime/<%= st.id %>" class="btn btn-secondary btn-sm" target="_blank" style="padding: 0.45rem 0.85rem;">
-                                        <i class="fas fa-couch" style="color: var(--color-gold);"></i> Ghế
+                                        Sơ đồ ghế
                                     </a>
                                 </td>
                             </tr>
@@ -83,7 +82,6 @@
                     <% } else { %>
                         <tr>
                             <td colspan="7" style="text-align: center; padding: 3rem 1rem; color: var(--text-muted);">
-                                <i class="fas fa-calendar-times" style="font-size: 2.5rem; color: var(--border-color); display: block; margin-bottom: 0.75rem;"></i>
                                 Chưa có suất chiếu nào. Nhấn "Thêm suất chiếu mới" để thiết lập lịch chiếu.
                             </td>
                         </tr>
@@ -97,12 +95,7 @@
     <div id="modalAddShowtime" class="modal-overlay">
         <div class="modal-content-card">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);">
-                <div style="display: flex; align-items: center; gap: 0.6rem;">
-                    <div style="width: 36px; height: 36px; border-radius: 8px; background: rgba(229, 9, 20, 0.15); border: 1px solid rgba(229, 9, 20, 0.35); display: flex; align-items: center; justify-content: center; color: var(--color-primary);">
-                        <i class="fas fa-calendar-plus"></i>
-                    </div>
-                    <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 700; color: #ffffff; margin: 0;">Tạo Suất Chiếu Mới</h3>
-                </div>
+                <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 700; color: #ffffff; margin: 0;">Tạo Suất Chiếu Mới</h3>
                 <button type="button" onclick="document.getElementById('modalAddShowtime').style.display='none'" style="background: none; border: none; color: var(--text-secondary); font-size: 1.5rem; cursor: pointer; line-height: 1; transition: var(--transition);" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--text-secondary)'">&times;</button>
             </div>
 
@@ -153,7 +146,7 @@
 
                 <div style="display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1.75rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
                     <button type="button" onclick="document.getElementById('modalAddShowtime').style.display='none'" class="btn btn-secondary">Hủy</button>
-                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Tạo suất chiếu</button>
+                    <button type="submit" class="btn btn-primary">Tạo suất chiếu</button>
                 </div>
             </form>
         </div>

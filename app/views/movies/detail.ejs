@@ -5,7 +5,7 @@
     <!-- Breadcrumb -->
     <div style="margin-bottom: 1.5rem;">
         <a href="/movies" style="color: var(--text-secondary); font-size: 0.9rem; display: inline-flex; align-items: center; gap: 0.4rem; transition: var(--transition-fast);">
-            <i class="fas fa-chevron-left"></i> Quay lại danh sách phim
+            &larr; Quay lại danh sách phim
         </a>
     </div>
 
@@ -27,10 +27,10 @@
             <!-- Right Movie Details -->
             <div>
                 <div style="display: flex; gap: 0.65rem; align-items: center; margin-bottom: 0.85rem; flex-wrap: wrap;">
-                    <span class="badge badge-gold"><i class="fas fa-film"></i> <%= movie.genre %></span>
-                    <span style="color: var(--text-secondary); font-size: 0.9rem;"><i class="far fa-clock"></i> <%= movie.duration_minutes %> phút</span>
-                    <span style="color: var(--text-secondary); font-size: 0.9rem;"><i class="far fa-calendar-alt"></i> Khởi chiếu: <%= new Date(movie.release_date).toLocaleDateString('vi-VN') %></span>
-                    <span class="badge badge-green"><i class="fas fa-circle-check"></i> Đang chiếu rạp</span>
+                    <span class="badge badge-gold"><%= movie.genre %></span>
+                    <span style="color: var(--text-secondary); font-size: 0.9rem;"><%= movie.duration_minutes %> phút</span>
+                    <span style="color: var(--text-secondary); font-size: 0.9rem;">&bull; Khởi chiếu: <%= new Date(movie.release_date).toLocaleDateString('vi-VN') %></span>
+                    <span class="badge badge-green">Đang chiếu rạp</span>
                 </div>
 
                 <h1 style="font-family: var(--font-heading); font-size: 2.75rem; font-weight: 800; margin-bottom: 1.25rem; color: #FFFFFF; letter-spacing: -0.5px; line-height: 1.2;">
@@ -39,7 +39,7 @@
 
                 <div style="margin-bottom: 2rem;">
                     <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--color-gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.6rem;">
-                        <i class="fas fa-align-left" style="margin-right: 0.35rem;"></i> Nội Dung Tóm Tắt
+                        Nội Dung Tóm Tắt
                     </h3>
                     <p style="color: var(--text-secondary); font-size: 1.05rem; line-height: 1.8;">
                         <%= movie.description %>
@@ -49,11 +49,11 @@
                 <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
                     <% if (movie.trailer_url) { %>
                         <a href="<%= movie.trailer_url %>" target="_blank" class="btn btn-secondary btn-lg" title="Xem trailer trên YouTube">
-                            <i class="fab fa-youtube" style="color: var(--color-primary); font-size: 1.2rem;"></i> Xem Trailer chính thức
+                            <i class="fab fa-youtube" style="color: var(--color-primary); font-size: 1.2rem;" aria-hidden="true"></i> Xem Trailer chính thức
                         </a>
                     <% } %>
                     <a href="#showtimesSection" class="btn btn-primary btn-lg">
-                        <i class="fas fa-ticket"></i> Chọn suất chiếu & đặt vé
+                        Chọn suất chiếu &amp; đặt vé
                     </a>
                 </div>
             </div>
@@ -66,7 +66,7 @@
             <div>
                 <span class="brand-badge gold" style="margin-bottom: 0.4rem;">LỊCH CHIẾU KHẢ DỤNG</span>
                 <h2 class="section-title">
-                    <i class="fas fa-calendar-check"></i> Các Suất Chiếu Theo Ngày & Phòng Chiếu
+                    Các Suất Chiếu Theo Ngày &amp; Phòng Chiếu
                 </h2>
                 <p class="section-subtitle">Lựa chọn khung giờ và loại phòng chiếu (IMAX, VIP, Dolby Atmos) để tiến hành chọn ghế</p>
             </div>
@@ -77,9 +77,6 @@
                 <% for (const [date, showtimesList] of Object.entries(groupedShowtimes)) { %>
                     <div class="card" style="padding: 1.75rem;">
                         <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.85rem;">
-                            <div style="width: 38px; height: 38px; border-radius: var(--radius-sm); background: var(--bg-surface); display: flex; align-items: center; justify-content: center; color: var(--color-gold); font-size: 1.1rem; border: 1px solid var(--border-color);">
-                                <i class="fas fa-calendar-day"></i>
-                            </div>
                             <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 700; color: #FFFFFF; text-transform: capitalize;">
                                 <%= date %>
                             </h3>
@@ -107,10 +104,10 @@
                                         </div>
 
                                         <div style="font-size: 0.9rem; color: #FFFFFF; margin-bottom: 0.35rem; font-weight: 600;">
-                                            <i class="fas fa-location-dot" style="color: var(--color-gold); width: 16px;"></i> <%= st.cinema_name %>
+                                            <%= st.cinema_name %>
                                         </div>
                                         <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.25rem;">
-                                            <i class="fas fa-door-open" style="width: 16px;"></i> <%= st.room_name %>
+                                            <%= st.room_name %>
                                         </div>
 
                                         <div style="background: var(--bg-secondary); padding: 0.65rem 0.85rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); margin-bottom: 1.25rem; font-size: 0.84rem; display: flex; justify-content: space-between;">
@@ -120,7 +117,7 @@
                                     </div>
 
                                     <a href="/booking/showtime/<%= st.id %>" class="btn btn-primary" style="width: 100%;">
-                                        <i class="fas fa-chair"></i> Chọn ghế ngồi ngay
+                                        Chọn ghế ngồi ngay
                                     </a>
                                 </div>
                             <% }); %>
@@ -130,7 +127,6 @@
             </div>
         <% } else { %>
             <div class="card" style="text-align: center; padding: 4rem 2rem;">
-                <i class="fas fa-clock fa-3x" style="color: var(--text-muted); margin-bottom: 1rem;"></i>
                 <h3 style="color: #FFFFFF; margin-bottom: 0.5rem; font-size: 1.25rem; font-weight: 700;">Chưa có suất chiếu nào sắp tới</h3>
                 <p style="color: var(--text-secondary); font-size: 0.95rem;">Các suất chiếu tiếp theo cho bộ phim này đang được quản trị viên lên lịch. Vui lòng quay lại sau.</p>
                 <a href="/movies" class="btn btn-secondary btn-sm" style="margin-top: 1.25rem;">Xem các phim khác</a>
