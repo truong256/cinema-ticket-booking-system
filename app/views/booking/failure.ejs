@@ -10,8 +10,9 @@
         </h1>
 
         <p style="color: var(--text-secondary); font-size: 1.05rem; margin-bottom: 2rem; line-height: 1.7;">
-            Giao dịch thanh toán đã bị hủy bỏ hoặc cổng thanh toán không xác nhận được kết quả. 
-            Theo cơ chế toàn vẹn dữ liệu ACID của CineVibe, <strong>các ghế bạn vừa giữ chỗ đã được tự động giải phóng ngay lập tức</strong> để đảm bảo không bị khóa ghế ảo.
+            <%= (typeof errorMessage !== 'undefined' && errorMessage) 
+                ? errorMessage 
+                : 'Giao dịch thanh toán đã bị hủy bỏ hoặc cổng thanh toán không xác nhận được kết quả. Theo cơ chế toàn vẹn dữ liệu ACID của CineVibe, các ghế bạn vừa giữ chỗ đã được tự động giải phóng ngay lập tức để đảm bảo không bị khóa ghế ảo.' %>
         </p>
 
         <% if (booking) { %>

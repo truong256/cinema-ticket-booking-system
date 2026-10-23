@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
             totalPriceEl.textContent = '0 đ';
             if (submitBtn) {
                 submitBtn.disabled = true;
-                submitBtn.innerHTML = '<i class="fas fa-ticket"></i> Tiếp tục thanh toán';
+                submitBtn.textContent = 'Tiếp tục thanh toán';
             }
             return;
         }
@@ -79,10 +79,10 @@ document.addEventListener('DOMContentLoaded', () => {
             total += item.price;
             const tag = document.createElement('span');
             tag.className = 'selected-seat-tag';
-            tag.innerHTML = `<span>${item.label} (${item.type})</span> <i class="fas fa-times" style="cursor:pointer; opacity:0.7;" title="Bỏ chọn"></i>`;
+            tag.innerHTML = `<span>${item.label} (${item.type})</span> <span style="cursor:pointer; opacity:0.7; font-weight: bold; margin-left: 6px;" title="Bỏ chọn">&times;</span>`;
             
-            // Cho phép click vào icon x để bỏ chọn ghế
-            tag.querySelector('i').addEventListener('click', (ev) => {
+            // Cho phép click vào x để bỏ chọn ghế
+            tag.querySelector('span:last-child').addEventListener('click', (ev) => {
                 ev.stopPropagation();
                 const seatElem = document.querySelector(`.seat[data-id="${item.id}"]`);
                 if (seatElem) seatElem.classList.remove('selected');
@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
         totalPriceEl.textContent = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total);
         if (submitBtn) {
             submitBtn.disabled = false;
-            submitBtn.innerHTML = `<i class="fas fa-ticket"></i> Thanh toán (${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total)})`;
+            submitBtn.textContent = `Thanh toán (${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total)})`;
         }
     }
 
@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const seatIds = Array.from(selectedSeats.keys());
 
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang giữ chỗ và khóa giao dịch...';
+            submitBtn.textContent = 'Đang giữ chỗ và khóa giao dịch...';
 
             try {
                 const response = await fetch('/booking/create', {
