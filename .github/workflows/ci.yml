@@ -136,9 +136,9 @@ jobs:
       - name: Test Database Migration Runner
         run: |
           echo "Testing standalone database migration..."
-          docker compose exec -T cinema-app npm run migrate
+          docker compose exec -T app npm run migrate
           echo "Testing migration idempotency (running twice)..."
-          docker compose exec -T cinema-app npm run migrate
+          docker compose exec -T app npm run migrate
           echo "Migration idempotency verified successfully."
 
       - name: Install Test Dependencies
@@ -154,8 +154,8 @@ jobs:
       - name: Collect Docker Logs on Failure
         if: failure()
         run: |
-          docker compose logs cinema-app --tail=100
-          docker compose logs cinema-mysql --tail=50
+          docker compose logs app --tail=100
+          docker compose logs mysql --tail=50
 
       - name: Shutdown Docker Services
         if: always()
