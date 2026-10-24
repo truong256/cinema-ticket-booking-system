@@ -199,15 +199,134 @@ Truy cập Grafana tại [http://localhost:3001](http://localhost:3001) -> Chọ
 
 ---
 
-## 10. BẢNG TỔNG HỢP 7 TIÊU CHÍ NGHIỆM THU (10/10 ĐIỂM)
+## 10. CẤU TRÚC THƯ MỤC HỆ THỐNG
 
-| STT | Tiêu chí đánh giá của đề thi | Điểm | Trạng thái | Minh chứng thực tế |
-|:---:|---|:---:|:---:|---|
-| 1 | GitHub đầy đủ source, cấu hình, 3 commit ý nghĩa, README | 1.5 | **PASS** | Repository công khai, đúng 3 commit chuẩn đề bài: (1) `feat: triển khai website đặt vé và nginx reverse proxy`, (2) `feat: tích hợp prometheus grafana và dashboard giám sát`, (3) `feat: tích hợp loki promtail và truy vấn logql` |
-| 2 | Website + MySQL + phpMyAdmin hoạt động | 1.5 | **PASS** | Web tiếng Việt, chọn ghế mượt mà, phpMyAdmin cổng 8080 |
-| 3 | Nginx reverse proxy và HTTPS/security headers (Commit 1) | 1.5 | **PASS** | Cổng 80/443, proxy headers, 6 security headers (`feat: triển khai website đặt vé và nginx reverse proxy`) |
-| 4 | Prometheus + Grafana giám sát container/web/DB (Commit 2) | 1.5 | **PASS** | Scrape App/DB, Dashboard JSON tự nạp với 10+ panels (`feat: tích hợp prometheus grafana và dashboard giám sát`) |
-| 5 | Loki + Promtail, 3 LogQL hoạt động (Commit 3) | 1.5 | **PASS** | Log từ volume chia sẻ, 3 câu LogQL chạy trực tiếp trên Grafana Explore (`feat: tích hợp loki promtail và truy vấn logql`) |
-| 6 | Áp dụng ít nhất 3–4 biện pháp hardening | 1.5 | **PASS** | Áp dụng đầy đủ 6 biện pháp bảo mật CIS Benchmark |
-| 7 | Docker Compose hoàn chỉnh, demo rõ ràng, báo cáo > 10 trang | 1.0 | **PASS** | 1 lệnh docker compose up, báo cáo PDF & DOCX > 10 trang chuẩn Bộ Giáo Dục |
-| | **TỔNG ĐIỂM** | **10.0 / 10.0** | **XUẤT SẮC** | |
+Dưới đây là sơ đồ chi tiết cấu trúc tổ chức thư mục và các tệp tin của toàn bộ dự án:
+
+```plaintext
+cinema-ticket-booking-system/
+├── .github/
+│   └── workflows/
+│       └── ci.yml                     # Pipeline kiểm thử & lint tự động (CI/CD GitHub Actions)
+├── .dockerignore                       # Khai báo loại trừ khi build Docker image
+├── .env                                # Biến môi trường hệ thống (DB, Ports, Secrets)
+├── .env.example                        # Mẫu cấu hình biến môi trường chuẩn
+├── .gitignore                          # Cấu hình bỏ qua tệp tin theo dõi Git
+├── .gitleaks.toml                      # Cấu hình quy tắc quét rò rỉ secret / mật khẩu
+├── docker-compose.yml                  # Điều phối 10 dịch vụ container toàn hệ thống
+├── README.md                           # Tài liệu hướng dẫn cài đặt & vận hành dự án
+│
+├── app/                                # Mã nguồn ứng dụng Web Đặt vé (Node.js + Express + EJS)
+│   ├── config/
+│   │   ├── database.js                 # Kết nối CSDL MySQL (Connection Pool & Promises)
+│   │   ├── logger.js                   # Cấu hình ghi log ứng dụng (Winston logging)
+│   │   ├── metrics.js                  # Cấu hình Prometheus metrics (prom-client)
+│   │   └── migration.js                # Tự động đồng bộ cấu trúc bảng khi ứng dụng khởi động
+│   ├── controllers/
+│   │   ├── adminController.js          # Nghiệp vụ quản trị: phim, rạp, phòng, suất chiếu, vé
+│   │   ├── authController.js           # Nghiệp vụ xác thực: đăng nhập, đăng ký, đổi mật khẩu
+│   │   ├── bookingController.js        # Nghiệp vụ chọn ghế, giữ chỗ, thanh toán & hủy vé
+│   │   ├── movieController.js          # Nghiệp vụ danh sách phim, chi tiết phim & lọc thể loại
+│   │   └── ticketController.js         # Nghiệp vụ tra cứu vé & xác thực QR code
+│   ├── middlewares/
+│   │   ├── auth.js                     # Kiểm tra trạng thái đăng nhập & phân quyền Admin
+│   │   └── metricsMiddleware.js        # Đo lường thời gian phản hồi HTTP & đếm số lượng request
+│   ├── public/                         # Tài nguyên tĩnh phục vụ giao diện người dùng
+│   │   ├── css/                        # Bảng định kiểu CSS giao diện Dark Modern
+│   │   │   ├── admin.css               # Giao diện trang quản trị Admin Dashboard
+│   │   │   ├── auth.css                # Giao diện Đăng nhập / Đăng ký
+│   │   │   ├── seats.css               # Giao diện sơ đồ ghế trực quan theo từng loại phòng
+│   │   │   └── style.css               # CSS toàn cục, header, footer & responsive
+│   │   ├── images/                     # Ảnh poster, banner rạp phim & asset đồ họa
+│   │   └── js/                         # JavaScript tương tác phía Client
+│   │       ├── auth.js                 # Validate biểu mẫu, hiển thị lỗi đăng nhập/đăng ký
+│   │       └── seats.js                # Xử lý chọn/hủy ghế tương tác, tính tổng tiền vé
+│   ├── routes/
+│   │   ├── adminRoutes.js              # Định tuyến trang quản trị (/admin/*)
+│   │   ├── authRoutes.js               # Định tuyến xác thực người dùng (/auth/*)
+│   │   ├── bookingRoutes.js            # Định tuyến luồng đặt vé & thanh toán (/booking/*)
+│   │   ├── movieRoutes.js              # Định tuyến danh sách & chi tiết phim (/movies/*)
+│   │   └── ticketRoutes.js             # Định tuyến tra cứu & xác thực vé (/tickets/*)
+│   ├── scripts/
+│   │   └── generate_posters.js         # Script tự động tạo poster phim mẫu
+│   ├── services/
+│   │   ├── emailService.js             # Dịch vụ gửi email thông báo vé điện tử
+│   │   └── qrService.js                # Dịch vụ tạo mã QR vé điện tử
+│   ├── views/                          # Giao diện máy chủ dựng sẵn (EJS Templates)
+│   │   ├── admin/                      # Giao diện quản trị (Dashboard, Phim, Suất chiếu, Vé, ...)
+│   │   │   └── partials/               # Các phần giao diện dùng chung trong trang quản trị
+│   │   ├── auth/                       # Các trang đăng nhập, đăng ký, hồ sơ, quên mật khẩu
+│   │   ├── booking/                    # Sơ đồ chọn ghế, trang thanh toán, kết quả thành công/thất bại
+│   │   ├── movies/                     # Danh sách phim, lọc phim, chi tiết phim
+│   │   ├── partials/                   # Thành phần dùng chung (header, navbar, footer)
+│   │   ├── showtimes/                  # Danh sách lịch chiếu phim theo rạp & ngày
+│   │   ├── ticket/                     # Trang xác thực vé điện tử qua mã QR
+│   │   ├── about.ejs                   # Trang giới thiệu hệ thống rạp
+│   │   ├── error.ejs                   # Trang thông báo lỗi thân thiện (404, 500, 409)
+│   │   └── index.ejs                   # Trang chủ hiển thị phim đang chiếu & sắp chiếu
+│   ├── Dockerfile                      # Image build đa tầng Node.js non-root
+│   ├── package.json                    # Khai báo thư viện & dependencies Node.js
+│   └── server.js                       # Điểm khởi chạy chính của Web Application
+│
+├── database/                           # Khởi tạo CSDL MySQL
+│   ├── migrations/
+│   │   └── 01_complete_system.sql     # Script migration bổ sung cấu trúc CSDL hoàn chỉnh
+│   ├── 01-exporter-user.sh             # Script cấp quyền giám sát cho MySQL Exporter
+│   ├── init.sql                        # Lược đồ bảng, ràng buộc toàn vẹn & khóa duy nhất
+│   └── seed.sql                        # Dữ liệu mẫu ban đầu (phim, rạp, phòng, suất chiếu, user)
+│
+├── docs/                               # Tài liệu học phần & báo cáo đồ án
+│   ├── screenshots/                    # Ảnh chụp bằng chứng kiểm thử & giao diện đa thiết bị
+│   ├── BAO_CAO_DE_11_NGUYEN_DUY_TRUONG.docx  # Báo cáo đồ án định dạng Microsoft Word
+│   ├── BAO_CAO_DE_11_NGUYEN_DUY_TRUONG.pdf   # Báo cáo đồ án xuất bản định dạng PDF
+│   ├── final_completion_report.md      # Báo cáo tổng kết tiến độ hoàn thiện
+│   ├── generate_report.py              # Mã nguồn sinh tự động tài liệu báo cáo
+│   └── INSTALLATION_AND_VERIFICATION.md # Hướng dẫn kiểm tra nghiệm thu chi tiết
+│
+├── logging/                            # Cấu hình hệ thống thu thập & quản lý nhật ký tập trung
+│   ├── loki/
+│   │   └── loki-config.yml             # Cấu hình lưu trữ và index của Loki Server
+│   ├── promtail/
+│   │   └── promtail-config.yml         # Cấu hình thu thập log từ volume của App và Nginx
+│   └── LOGQL_QUERIES.md                # Danh mục 3 câu truy vấn LogQL mẫu theo yêu cầu đề tài
+│
+├── monitoring/                         # Cấu hình hệ thống giám sát hiệu năng
+│   ├── grafana/
+│   │   ├── dashboards/
+│   │   │   └── cinema-monitoring-dashboard.json  # Dashboard Grafana dựng sẵn (10+ panels)
+│   │   └── provisioning/
+│   │       ├── dashboards/dashboards.yml         # Tự động nạp dashboard khi khởi động
+│   │       └── datasources/datasources.yml       # Tự động nạp Prometheus & Loki datasource
+│   ├── mysql-exporter/
+│   │   ├── .my.cnf                     # Thông tin đăng nhập an toàn cho MySQL Exporter
+│   │   └── .my.cnf.example             # Mẫu cấu hình thông tin đăng nhập
+│   └── prometheus/
+│       └── prometheus.yml              # Cấu hình scrape targets (App, MySQL Exporter, cAdvisor)
+│
+├── nginx/                              # Cấu hình Nginx Reverse Proxy & SSL
+│   ├── conf.d/
+│   │   └── default.conf                # Proxy pass port 3000, SSL HTTPS, Security Headers
+│   ├── ssl/                            # Chứng chỉ số SSL/TLS tự ký (Self-signed)
+│   │   ├── cinema.crt                  # Chứng chỉ SSL public
+│   │   ├── cinema.key                  # Khóa bí mật riêng tư (Private key)
+│   │   ├── generate-certs.sh           # Script tái sinh chứng chỉ SSL bằng OpenSSL
+│   │   └── README.md                   # Hướng dẫn tạo và cài đặt chứng chỉ SSL
+│   └── nginx.conf                      # Cấu hình tối ưu Nginx lõi và định dạng log chuẩn
+│
+└── tests/                              # Bộ kiểm thử tự động & xác thực hệ thống
+    ├── capture_admin_redesign.js       # Kiểm thử và chụp ảnh màn hình giao diện quản trị
+    ├── capture_chapter2_evidence.js    # Tự động thu thập ảnh minh chứng cho báo cáo
+    ├── comprehensive_browser_test.js   # Kiểm thử E2E luồng đặt vé và thanh toán
+    ├── comprehensive_test_suite.js     # Bộ test toàn diện chức năng và bảo mật
+    ├── final_acceptance_test.js        # Script kiểm thử nghiệm thu 7/7 tiêu chí đề bài
+    ├── generate_chapter2_visuals.js    # Sinh hình ảnh minh họa cho báo cáo
+    ├── system_comprehensive_validation.js # Xác thực sức khỏe toàn bộ 10 container và route
+    ├── take_about_and_footer_screenshots.js # Chụp màn hình trang giới thiệu và chân trang
+    ├── take_after_screenshots.js       # Chụp màn hình sau khi tối ưu giao diện
+    ├── take_screenshots.js             # Chụp ảnh các điểm dừng chính của hệ thống
+    ├── test_auth_functional_flows.js   # Kiểm thử luồng xác thực đăng nhập/đăng ký
+    ├── test_auth_redesign.js           # Kiểm thử UI/UX giao diện đăng nhập/đăng ký
+    ├── test_results.json               # Kết quả kiểm thử tự động dạng JSON
+    ├── test_runner.js                  # Điều phối chạy toàn bộ kịch bản kiểm thử
+    └── validate_ui_and_routes.js       # Kiểm tra phản hồi HTTP các đường dẫn của hệ thống
+```
