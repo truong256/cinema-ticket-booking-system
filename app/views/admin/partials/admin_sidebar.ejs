@@ -1,0 +1,49 @@
+<aside class="admin-sidebar" id="adminSidebar">
+    <div class="admin-sidebar-header">
+        <a href="/admin" class="admin-brand">
+            <div class="admin-brand-title">CINE<span>VIBE</span></div>
+            <div class="admin-brand-subtitle">Quản trị hệ thống</div>
+        </a>
+        <button type="button" class="admin-sidebar-close" onclick="toggleAdminSidebar()" aria-label="Đóng menu">
+            Đóng
+        </button>
+    </div>
+
+    <nav class="admin-sidebar-nav">
+        <div class="admin-nav-group-label">Chức năng chính</div>
+        <a href="/admin" class="admin-nav-item <%= (typeof activeTab !== 'undefined' && activeTab === 'dashboard') ? 'active' : '' %>">
+            <span>Tổng quan</span>
+        </a>
+        <a href="/admin/movies" class="admin-nav-item <%= (typeof activeTab !== 'undefined' && activeTab === 'movies') ? 'active' : '' %>">
+            <span>Quản lý phim</span>
+        </a>
+        <a href="/admin/showtimes" class="admin-nav-item <%= (typeof activeTab !== 'undefined' && activeTab === 'showtimes') ? 'active' : '' %>">
+            <span>Suất chiếu</span>
+        </a>
+        <a href="/admin/cinemas" class="admin-nav-item <%= (typeof activeTab !== 'undefined' && activeTab === 'cinemas') ? 'active' : '' %>">
+            <span>Cụm rạp</span>
+        </a>
+        <a href="/admin/rooms" class="admin-nav-item <%= (typeof activeTab !== 'undefined' && (activeTab === 'rooms' || activeTab === 'seats')) ? 'active' : '' %>">
+            <span>Phòng và ghế</span>
+        </a>
+
+        <div class="admin-nav-group-label" style="margin-top: 1rem;">Giao dịch & Người dùng</div>
+        <a href="/admin/bookings" class="admin-nav-item <%= (typeof activeTab !== 'undefined' && activeTab === 'bookings') ? 'active' : '' %>">
+            <span>Đơn đặt vé</span>
+        </a>
+        <a href="/admin/users" class="admin-nav-item <%= (typeof activeTab !== 'undefined' && activeTab === 'users') ? 'active' : '' %>">
+            <span>Khách hàng</span>
+        </a>
+    </nav>
+
+    <div class="admin-sidebar-footer">
+        <div class="admin-user-info">
+            <span class="admin-user-name"><%= (typeof user !== 'undefined' && user) ? (user.full_name || user.username) : 'Quản trị viên' %></span>
+            <span class="admin-user-role">Quản trị viên</span>
+        </div>
+        <div class="admin-footer-links">
+            <a href="/" class="admin-footer-link">Trang chủ</a>
+            <a href="/auth/logout" class="admin-footer-link">Đăng xuất</a>
+        </div>
+    </div>
+</aside>

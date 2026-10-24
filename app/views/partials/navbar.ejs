@@ -2,7 +2,6 @@
     <div class="nav-container">
         <!-- Brand Logo -->
         <a href="/" class="brand-logo" title="CineVibe Cinema">
-            <i class="fas fa-film"></i>
             <span>CINE<span style="color: var(--color-primary);">VIBE</span></span>
         </a>
 
@@ -44,9 +43,9 @@
             </li>
             <li class="mobile-only-auth" style="display: none; border-top: 1px solid var(--border-color); padding-top: 0.75rem; margin-top: 0.5rem;">
                 <% if (typeof currentUser !== 'undefined' && currentUser) { %>
-                    <div style="margin-bottom: 0.6rem; color: var(--color-gold); font-size: 0.9rem; font-weight: 600;">
-                        <%= currentUser.full_name || currentUser.username %>
-                    </div>
+                    <a href="/auth/profile" style="display: block; margin-bottom: 0.6rem; color: var(--color-gold); font-size: 0.9rem; font-weight: 600; text-decoration: none;">
+                        <%= currentUser.full_name || currentUser.username %> (Hồ sơ)
+                    </a>
                     <a href="/auth/logout" class="btn btn-secondary btn-sm" style="width: 100%; display: flex; justify-content: center; align-items: center; gap: 0.35rem;">
                         Đăng xuất
                     </a>
@@ -63,11 +62,11 @@
         <div class="nav-actions">
             <% if (typeof currentUser !== 'undefined' && currentUser) { %>
                 <div style="display: flex; align-items: center; gap: 0.75rem;">
-                    <div style="display: flex; align-items: center; gap: 0.5rem; background: var(--bg-surface); padding: 0.35rem 0.85rem; border-radius: var(--radius-full); border: 1px solid var(--border-color);">
+                    <a href="/auth/profile" style="display: flex; align-items: center; gap: 0.5rem; background: var(--bg-surface); padding: 0.35rem 0.85rem; border-radius: var(--radius-full); border: 1px solid var(--border-color); text-decoration: none;" title="Xem hồ sơ cá nhân">
                         <span style="font-size: 0.88rem; font-weight: 600; color: var(--text-primary);">
                             <%= currentUser.full_name || currentUser.username %>
                         </span>
-                    </div>
+                    </a>
                     <a href="/auth/logout" class="btn btn-secondary btn-sm" title="Đăng xuất khỏi hệ thống">
                         Đăng xuất
                     </a>

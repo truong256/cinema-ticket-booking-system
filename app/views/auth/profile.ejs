@@ -1,0 +1,146 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<main class="main-wrapper" style="max-width: 950px;">
+    <!-- Page Header -->
+    <div style="text-align: center; margin-bottom: 2.5rem;">
+        <span class="brand-badge gold" style="margin-bottom: 0.5rem;">TRUNG TÂM TÀI KHOẢN KHÁCH HÀNG</span>
+        <h1 style="font-family: var(--font-heading); font-size: 2.2rem; font-weight: 800; color: #FFFFFF; letter-spacing: -0.5px;">
+            Hồ Sơ Cá Nhân & Bảo Mật
+        </h1>
+        <p style="color: var(--text-secondary); font-size: 0.95rem; margin-top: 0.25rem;">
+            Quản lý thông tin tài khoản, cập nhật bảo mật và theo dõi đặc quyền thành viên CineVibe
+        </p>
+    </div>
+
+    <!-- Alert Notifications -->
+    <% if (typeof error !== 'undefined' && error) { %>
+        <div class="alert alert-danger" style="margin-bottom: 1.75rem; padding: 1rem 1.25rem;">
+            <strong>Lỗi:</strong> <%= error %>
+        </div>
+    <% } %>
+    <% if (typeof success !== 'undefined' && success) { %>
+        <div class="alert alert-success" style="margin-bottom: 1.75rem; padding: 1rem 1.25rem;">
+            <strong>Thành công:</strong> <%= success %>
+        </div>
+    <% } %>
+
+    <!-- KPI Summary Row -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; margin-bottom: 2.25rem;">
+        <div class="card" style="padding: 1.5rem; border-left: 3px solid var(--color-gold);">
+            <span style="font-size: 0.82rem; color: var(--text-muted); text-transform: uppercase;">Tổng số đơn vé</span>
+            <div style="font-size: 1.8rem; font-weight: 800; color: #FFFFFF; font-family: var(--font-heading); margin-top: 0.35rem;">
+                <%= stats.total_bookings || 0 %>
+            </div>
+            <span style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.25rem; display: block;">Bao gồm cả vé đã đặt</span>
+        </div>
+
+        <div class="card" style="padding: 1.5rem; border-left: 3px solid #10B981;">
+            <span style="font-size: 0.82rem; color: var(--text-muted); text-transform: uppercase;">Vé đã thanh toán thành công</span>
+            <div style="font-size: 1.8rem; font-weight: 800; color: #10B981; font-family: var(--font-heading); margin-top: 0.35rem;">
+                <%= stats.completed_bookings || 0 %>
+            </div>
+            <span style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.25rem; display: block;">Sẵn sàng vào rạp xem phim</span>
+        </div>
+
+        <div class="card" style="padding: 1.5rem; border-left: 3px solid var(--color-primary);">
+            <span style="font-size: 0.82rem; color: var(--text-muted); text-transform: uppercase;">Tổng chi tiêu tích lũy</span>
+            <div style="font-size: 1.8rem; font-weight: 800; color: var(--color-gold); font-family: var(--font-heading); margin-top: 0.35rem;">
+                <%= Number(stats.total_spent || 0).toLocaleString('vi-VN') %> đ
+            </div>
+            <a href="/booking/history" style="font-size: 0.82rem; color: var(--color-primary); margin-top: 0.25rem; display: block; text-decoration: underline;">
+                Xem lịch sử đặt vé &rarr;
+            </a>
+        </div>
+    </div>
+
+    <!-- 2-Column Profile Layout -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start;" class="profile-grid">
+        <!-- Left: Edit Profile Info -->
+        <div class="card" style="padding: 2.25rem;">
+            <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 700; color: #FFFFFF; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-color);">
+                Thông Tin Cá Nhân
+            </h3>
+
+            <form action="/auth/profile" method="POST">
+                <div class="form-group" style="margin-bottom: 1.25rem;">
+                    <label class="form-label" style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary); font-size: 0.88rem;">
+                        Tên đăng nhập
+                    </label>
+                    <input type="text" class="form-control" value="<%= user.username %>" disabled style="background: rgba(255,255,255,0.05); color: var(--text-muted); cursor: not-allowed;">
+                    <span style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem; display: block;">Tên đăng nhập không thể thay đổi</span>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 1.25rem;">
+                    <label class="form-label" style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary); font-size: 0.88rem;">
+                        Địa chỉ Email
+                    </label>
+                    <input type="email" class="form-control" value="<%= user.email %>" disabled style="background: rgba(255,255,255,0.05); color: var(--text-muted); cursor: not-allowed;">
+                    <span style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem; display: block;">Email nhận mã vé điện tử định danh</span>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 1.25rem;">
+                    <label class="form-label" for="full_name" style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary); font-size: 0.88rem;">
+                        Họ và tên hiển thị <span style="color: var(--color-primary);">*</span>
+                    </label>
+                    <input type="text" id="full_name" name="full_name" class="form-control" value="<%= user.full_name %>" required>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 1.75rem;">
+                    <label class="form-label" for="phone" style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary); font-size: 0.88rem;">
+                        Số điện thoại liên hệ
+                    </label>
+                    <input type="tel" id="phone" name="phone" class="form-control" value="<%= user.phone || '' %>" placeholder="Ví dụ: 0912345678">
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    Lưu Thay Đổi Thông Tin
+                </button>
+            </form>
+        </div>
+
+        <!-- Right: Change Password -->
+        <div class="card" style="padding: 2.25rem;">
+            <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 700; color: #FFFFFF; margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-color);">
+                Đổi Mật Khẩu
+            </h3>
+
+            <form action="/auth/change-password" method="POST">
+                <div class="form-group" style="margin-bottom: 1.25rem;">
+                    <label class="form-label" for="current_password" style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary); font-size: 0.88rem;">
+                        Mật khẩu hiện tại <span style="color: var(--color-primary);">*</span>
+                    </label>
+                    <input type="password" id="current_password" name="current_password" class="form-control" required placeholder="Nhập mật khẩu đang dùng">
+                </div>
+
+                <div class="form-group" style="margin-bottom: 1.25rem;">
+                    <label class="form-label" for="new_password" style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary); font-size: 0.88rem;">
+                        Mật khẩu mới <span style="color: var(--color-primary);">*</span>
+                    </label>
+                    <input type="password" id="new_password" name="new_password" class="form-control" required minlength="6" placeholder="Tối thiểu 6 ký tự">
+                </div>
+
+                <div class="form-group" style="margin-bottom: 1.75rem;">
+                    <label class="form-label" for="confirm_password" style="display: block; margin-bottom: 0.5rem; color: var(--text-secondary); font-size: 0.88rem;">
+                        Xác nhận mật khẩu mới <span style="color: var(--color-primary);">*</span>
+                    </label>
+                    <input type="password" id="confirm_password" name="confirm_password" class="form-control" required minlength="6" placeholder="Nhập lại mật khẩu mới">
+                </div>
+
+                <button type="submit" class="btn btn-secondary" style="width: 100%;">
+                    Cập Nhật Mật Khẩu
+                </button>
+            </form>
+        </div>
+    </div>
+</main>
+
+<style>
+@media (max-width: 768px) {
+    .profile-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+</style>
+
+<%- include('../partials/footer') %>

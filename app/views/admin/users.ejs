@@ -1,0 +1,117 @@
+<%- include('partials/admin_header', { title: 'Quản Lý Khách Hàng - CineVibe' }) %>
+<%- include('partials/admin_sidebar', { activeTab: 'users' }) %>
+
+<main class="admin-main-wrapper">
+    <%- include('partials/admin_topbar', { 
+        pageTitle: 'Quản lý khách hàng & người dùng', 
+        pageSubtitle: 'Danh sách tài khoản, giám sát hành vi, thống kê chi tiêu và phân quyền hệ thống.' 
+    }) %>
+
+    <div class="admin-content">
+        <% if (typeof error !== 'undefined' && error) { %>
+            <div class="admin-alert admin-alert-danger"><%= error %></div>
+        <% } %>
+        <% if (typeof success !== 'undefined' && success) { %>
+            <div class="admin-alert admin-alert-success"><%= success %></div>
+        <% } %>
+
+        <!-- Search Form -->
+        <div class="admin-card" style="padding: 1.25rem 1.5rem; margin-bottom: 1.75rem;">
+            <form action="/admin/users" method="GET" class="admin-filter-bar" style="margin-bottom: 0;">
+                <div class="admin-search-box" style="flex: 1;">
+                    <input type="text" name="search" class="admin-search-input" value="<%= search || '' %>" placeholder="Tìm theo tên đăng nhập, email, họ tên, SĐT...">
+                </div>
+                <div style="display: flex; gap: 0.75rem;">
+                    <button type="submit" class="admin-btn admin-btn-primary">Tìm kiếm</button>
+                    <% if (search) { %>
+                        <a href="/admin/users" class="admin-btn admin-btn-secondary">Đặt lại</a>
+                    <% } %>
+                </div>
+            </form>
+        </div>
+
+        <div class="admin-card" style="padding: 0; overflow: hidden;">
+            <div class="admin-table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 60px;">ID</th>
+                            <th>Tên đăng nhập</th>
+                            <th>Họ và tên</th>
+                            <th>Email & Số điện thoại</th>
+                            <th>Vai trò</th>
+                            <th>Số đơn vé</th>
+                            <th>Tổng chi tiêu</th>
+                            <th>Trạng thái</th>
+                            <th style="text-align: right;">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (users && users.length > 0) { %>
+                            <% users.forEach(u => { %>
+                                <tr>
+                                    <td style="color: var(--admin-text-muted); font-weight: 700;">#<%= u.id %></td>
+                                    <td>
+                                        <strong style="color: #FFFFFF; font-family: 'JetBrains Mono', monospace;"><%= u.username %></strong>
+                                    </td>
+                                    <td>
+                                        <div style="font-weight: 700; color: #FFFFFF;"><%= u.full_name %></div>
+                                        <div style="font-size: 0.76rem; color: var(--admin-text-muted);">
+                                            Ngày tạo: <%= new Date(u.created_at).toLocaleDateString('vi-VN') %>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style="color: var(--admin-text-secondary); font-size: 0.88rem;"><%= u.email %></div>
+                                        <div style="color: var(--admin-text-muted); font-size: 0.78rem; margin-top: 0.15rem;"><%= u.phone || 'Chưa cập nhật' %></div>
+                                    </td>
+                                    <td>
+                                        <% if (u.role === 'admin') { %>
+                                            <span class="admin-tag admin-tag-warning">Quản trị viên</span>
+                                        <% } else { %>
+                                            <span class="admin-tag admin-tag-info">Khách hàng</span>
+                                        <% } %>
+                                    </td>
+                                    <td>
+                                        <span style="font-weight: 700; color: #FFFFFF;"><%= u.booking_count %></span> <span style="font-size: 0.75rem; color: var(--admin-text-muted);">đơn</span>
+                                    </td>
+                                    <td>
+                                        <span style="font-weight: 800; color: var(--admin-accent-gold);">
+                                            <%= Number(u.total_spent).toLocaleString('vi-VN') %> đ
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <% if (u.status === 'locked') { %>
+                                            <span class="admin-tag admin-tag-danger">Đã khóa</span>
+                                        <% } else { %>
+                                            <span class="admin-tag admin-tag-success">Hoạt động</span>
+                                        <% } %>
+                                    </td>
+                                    <td style="text-align: right;">
+                                        <% if (u.role !== 'admin') { %>
+                                            <form action="/admin/users/<%= u.id %>/toggle-lock" method="POST" style="display: inline-block;" onsubmit="return confirm('Bạn có chắc chắn muốn <%= u.status === 'locked' ? 'MỞ KHÓA' : 'TẠM KHÓA' %> tài khoản <%= u.username %>?')">
+                                                <button type="submit" class="admin-btn <%= u.status === 'locked' ? 'admin-btn-secondary' : 'admin-btn-danger' %> admin-btn-sm">
+                                                    <%= u.status === 'locked' ? 'Mở khóa' : 'Khóa tài khoản' %>
+                                                </button>
+                                            </form>
+                                        <% } else { %>
+                                            <span style="font-size: 0.75rem; color: var(--admin-text-muted);">Mặc định</span>
+                                        <% } %>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="9" class="admin-empty-state">
+                                    <div class="admin-empty-state-title">Không tìm thấy người dùng</div>
+                                    <p>Thử tìm kiếm với từ khóa khác.</p>
+                                </td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+
+<%- include('partials/admin_footer') %>

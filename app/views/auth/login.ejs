@@ -46,9 +46,14 @@
 
                     <!-- Password Field -->
                     <div class="auth-field-group">
-                        <label class="auth-label" for="password">
-                            Mật khẩu <span class="required-star">*</span>
-                        </label>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+                            <label class="auth-label" for="password" style="margin-bottom: 0;">
+                                Mật khẩu <span class="required-star">*</span>
+                            </label>
+                            <a href="/auth/forgot-password" style="font-size: 0.8rem; color: var(--color-gold); text-decoration: none;">
+                                Quên mật khẩu?
+                            </a>
+                        </div>
                         <div class="auth-input-wrapper">
                             <input type="password" id="password" name="password" class="auth-input has-toggle" required autocomplete="current-password">
                             <button type="button" class="auth-password-toggle" onclick="togglePasswordVisibility('password', this)" title="Hiển thị mật khẩu" aria-label="Hiển thị mật khẩu">

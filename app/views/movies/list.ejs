@@ -16,7 +16,19 @@
         <div style="position: relative; min-width: 300px; max-width: 100%;">
             <input type="text" id="movieSearchInput" class="form-control" placeholder="Tìm kiếm tựa phim theo tên..." style="padding-left: 2.6rem;">
             <i class="fas fa-search" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted);" aria-hidden="true"></i>
-        </div>
+    </div>
+
+    <!-- Status Tabs (Đang Chiếu / Sắp Chiếu) -->
+    <div style="display: flex; gap: 0.65rem; margin-bottom: 1.25rem; flex-wrap: wrap;">
+        <a href="/movies" class="btn btn-sm <%= (!locals.currentStatus) ? 'btn-primary' : 'btn-secondary' %>">
+            Tất cả phim
+        </a>
+        <a href="/movies?status=now_showing" class="btn btn-sm <%= (locals.currentStatus === 'now_showing') ? 'btn-primary' : 'btn-secondary' %>">
+            Phim đang chiếu
+        </a>
+        <a href="/movies?status=coming_soon" class="btn btn-sm <%= (locals.currentStatus === 'coming_soon') ? 'btn-primary' : 'btn-secondary' %>">
+            Phim sắp chiếu
+        </a>
     </div>
 
     <!-- Genre Filter Pills -->

@@ -1,98 +1,143 @@
-<%- include('../partials/header') %>
-<%- include('../partials/navbar') %>
+<%- include('partials/admin_header', { title: 'Quản Lý Đơn Đặt Vé - CineVibe' }) %>
+<%- include('partials/admin_sidebar', { activeTab: 'bookings' }) %>
 
-<main class="main-wrapper">
-    <div class="section-header">
-        <div>
-            <a href="/admin" style="color: var(--color-primary); font-size: 0.85rem; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem; margin-bottom: 0.4rem;">
-                &larr; Quay lại Dashboard
-            </a>
-            <h1 class="section-title">Danh Sách Đơn Đặt Vé Toàn Hệ Thống</h1>
-            <p class="section-subtitle">Theo dõi các giao dịch đặt vé, trạng thái thanh toán và thông tin khách hàng thời gian thực</p>
+<main class="admin-main-wrapper">
+    <%- include('partials/admin_topbar', { 
+        pageTitle: 'Quản lý đơn đặt vé', 
+        pageSubtitle: 'Danh Sách Đơn Đặt Vé Toàn Hệ Thống • Theo dõi thanh toán, soát vé điện tử và xử lý hủy đơn.' 
+    }) %>
+
+    <div class="admin-content">
+        <% if (typeof error !== 'undefined' && error) { %>
+            <div class="admin-alert admin-alert-danger"><%= error %></div>
+        <% } %>
+        <% if (typeof success !== 'undefined' && success) { %>
+            <div class="admin-alert admin-alert-success"><%= success %></div>
+        <% } %>
+
+        <!-- Search & Filter Bar -->
+        <div class="admin-card" style="padding: 1.25rem 1.5rem; margin-bottom: 1.75rem;">
+            <form action="/admin/bookings" method="GET" class="admin-filter-bar" style="margin-bottom: 0;">
+                <div class="admin-search-box" style="flex: 1;">
+                    <input type="text" name="search" class="admin-search-input" value="<%= typeof search !== 'undefined' ? search : '' %>" placeholder="Tìm theo mã vé (BKG-...), tên, email, SĐT khách...">
+                </div>
+
+                <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+                    <select name="status" class="admin-select">
+                        <option value="all" <%= (typeof status === 'undefined' || status === 'all') ? 'selected' : '' %>>Tất cả trạng thái</option>
+                        <option value="completed" <%= (typeof status !== 'undefined' && status === 'completed') ? 'selected' : '' %>>Đã thanh toán (Paid)</option>
+                        <option value="pending" <%= (typeof status !== 'undefined' && status === 'pending') ? 'selected' : '' %>>Đang giữ chỗ (Pending)</option>
+                        <option value="cancelled" <%= (typeof status !== 'undefined' && status === 'cancelled') ? 'selected' : '' %>>Đã hủy / Hoàn tiền</option>
+                    </select>
+
+                    <button type="submit" class="admin-btn admin-btn-primary">Lọc đơn</button>
+                    <% if ((typeof search !== 'undefined' && search) || (typeof status !== 'undefined' && status !== 'all')) { %>
+                        <a href="/admin/bookings" class="admin-btn admin-btn-secondary">Đặt lại</a>
+                    <% } %>
+                </div>
+            </form>
         </div>
-    </div>
 
-    <div class="card" style="padding: 0; overflow: hidden; margin-bottom: 2.5rem;">
-        <div class="table-responsive">
-            <table class="cinema-table">
-                <thead>
-                    <tr>
-                        <th>Mã Đơn</th>
-                        <th>Khách Hàng</th>
-                        <th>Thông Tin Liên Hệ</th>
-                        <th>Tác Phẩm & Phòng Chiếu</th>
-                        <th>Số Lượng Ghế</th>
-                        <th>Tổng Doanh Thu</th>
-                        <th>Trạng Thái</th>
-                        <th>Thời Gian Đặt</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% if (bookings && bookings.length > 0) { %>
-                        <% bookings.forEach(b => { %>
+        <div class="admin-card" style="padding: 0; overflow: hidden;">
+            <div class="admin-table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Mã đơn</th>
+                            <th>Khách hàng</th>
+                            <th>Phim & Rạp</th>
+                            <th>Vị trí ghế</th>
+                            <th>Tổng tiền</th>
+                            <th>Thanh toán</th>
+                            <th>Soát vé</th>
+                            <th>Thời gian</th>
+                            <th style="text-align: right;">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (bookings && bookings.length > 0) { %>
+                            <% bookings.forEach(b => { %>
+                                <tr>
+                                    <td>
+                                        <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.88rem; font-weight: 700; color: #FFFFFF;">
+                                            <%= b.booking_code %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div style="font-weight: 700; color: #FFFFFF; font-size: 0.92rem;"><%= b.customer_name %></div>
+                                        <div style="color: var(--admin-text-muted); font-size: 0.76rem;"><%= b.customer_phone %></div>
+                                    </td>
+                                    <td>
+                                        <div style="color: #FFFFFF; font-weight: 600;"><%= b.movie_title %></div>
+                                        <div style="font-size: 0.76rem; color: var(--admin-accent-gold); font-weight: 600;"><%= b.cinema_name %> &bull; <%= b.room_name %></div>
+                                    </td>
+                                    <td>
+                                        <span class="admin-pill-badge" title="<%= b.seat_names || '' %>">
+                                            <%= b.seat_count %> ghế: <%= b.seat_names ? (b.seat_names.length > 20 ? b.seat_names.substring(0, 20) + '...' : b.seat_names) : '' %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span style="font-weight: 800; color: var(--admin-accent-gold); font-size: 0.95rem;">
+                                            <%= Number(b.total_amount).toLocaleString('vi-VN') %> đ
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <% if (b.payment_status === 'completed' || b.payment_status === 'paid') { %>
+                                            <span class="admin-tag admin-tag-success">Đã thanh toán</span>
+                                        <% } else if (b.payment_status === 'refunded') { %>
+                                            <span class="admin-tag admin-tag-warning">Đã hoàn tiền</span>
+                                        <% } else if (b.payment_status === 'failed' || b.booking_status === 'cancelled') { %>
+                                            <span class="admin-tag admin-tag-danger">Đã hủy</span>
+                                        <% } else { %>
+                                            <span class="admin-tag admin-tag-warning">Đang giữ chỗ</span>
+                                        <% } %>
+                                    </td>
+                                    <td>
+                                        <% if (b.checkin_status === 'checked_in') { %>
+                                            <span class="admin-tag admin-tag-info" title="Check-in: <%= b.checkin_at ? new Date(b.checkin_at).toLocaleString('vi-VN') : '' %>">
+                                                Đã check-in
+                                            </span>
+                                        <% } else { %>
+                                            <span style="color: var(--admin-text-muted); font-size: 0.78rem;">Chưa vào rạp</span>
+                                        <% } %>
+                                    </td>
+                                    <td>
+                                        <div style="font-size: 0.8rem; color: #FFFFFF;">
+                                            <%= new Date(b.created_at).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) %>
+                                        </div>
+                                        <div style="font-size: 0.74rem; color: var(--admin-text-muted);">
+                                            <%= new Date(b.created_at).toLocaleDateString('vi-VN') %>
+                                        </div>
+                                    </td>
+                                    <td style="text-align: right;">
+                                        <div class="admin-action-btn-group">
+                                            <a href="/ticket/verify?token=<%= encodeURIComponent(b.booking_token || b.booking_code) %>" class="admin-btn admin-btn-secondary admin-btn-sm" target="_blank">
+                                                Soát vé
+                                            </a>
+                                            <% if (b.payment_status === 'completed' || b.payment_status === 'pending') { %>
+                                                <form action="/admin/bookings/<%= b.id %>/cancel" method="POST" style="display: inline;" onsubmit="return confirm('Bạn có chắc chắn muốn HỦY đơn vé <%= b.booking_code %> và giải phóng ghế cho khách khác?')">
+                                                    <button type="submit" class="admin-btn admin-btn-danger admin-btn-sm">
+                                                        <%= b.payment_status === 'completed' ? 'Hoàn vé' : 'Hủy' %>
+                                                    </button>
+                                                </form>
+                                            <% } %>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        <% } else { %>
                             <tr>
-                                <td>
-                                    <span style="font-family: monospace; font-size: 0.95rem; font-weight: 700; color: #ffffff; background: rgba(255,255,255,0.06); padding: 0.25rem 0.5rem; border-radius: 4px; border: 1px solid var(--border-color);">
-                                        <%= b.booking_code %>
-                                    </span>
-                                </td>
-                                <td>
-                                    <div style="font-weight: 700; color: #ffffff; font-size: 0.95rem;"><%= b.customer_name %></div>
-                                </td>
-                                <td>
-                                    <div style="color: var(--text-secondary); font-size: 0.85rem;"><%= b.customer_email %></div>
-                                    <div style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.15rem;"><%= b.customer_phone %></div>
-                                </td>
-                                <td>
-                                    <div style="color: #ffffff; font-weight: 700; font-size: 0.92rem;"><%= b.movie_title %></div>
-                                    <div style="font-size: 0.8rem; color: var(--color-gold); font-weight: 600;"><%= b.room_name %></div>
-                                </td>
-                                <td>
-                                    <span class="selected-seat-tag">
-                                        <%= b.seat_count %> ghế
-                                    </span>
-                                </td>
-                                <td>
-                                    <span style="font-weight: 800; color: var(--color-gold); font-size: 1rem;">
-                                        <%= new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(b.total_amount) %>
-                                    </span>
-                                </td>
-                                <td>
-                                    <% if (b.payment_status === 'completed') { %>
-                                        <span class="badge badge-green">
-                                            ĐÃ THANH TOÁN
-                                        </span>
-                                    <% } else if (b.payment_status === 'failed') { %>
-                                        <span class="badge badge-red">
-                                            THẤT BẠI / ĐÃ HỦY
-                                        </span>
-                                    <% } else { %>
-                                        <span class="badge badge-gold">
-                                            CHỜ XỬ LÝ
-                                        </span>
-                                    <% } %>
-                                </td>
-                                <td>
-                                    <div style="font-size: 0.85rem; color: var(--text-primary); font-weight: 500;">
-                                        <%= new Date(b.created_at).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) %>
-                                    </div>
-                                    <div style="font-size: 0.78rem; color: var(--text-muted);">
-                                        <%= new Date(b.created_at).toLocaleDateString('vi-VN') %>
-                                    </div>
+                                <td colspan="9" class="admin-empty-state">
+                                    <div class="admin-empty-state-title">Không tìm thấy đơn vé nào</div>
+                                    <p>Thử điều chỉnh từ khóa tìm kiếm hoặc đặt lại bộ lọc trạng thái.</p>
                                 </td>
                             </tr>
-                        <% }); %>
-                    <% } else { %>
-                        <tr>
-                            <td colspan="8" style="text-align: center; padding: 3rem 1rem; color: var(--text-muted);">
-                                Hệ thống chưa ghi nhận đơn đặt vé nào.
-                            </td>
-                        </tr>
-                    <% } %>
-                </tbody>
-            </table>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </main>
 
-<%- include('../partials/footer') %>
+<%- include('partials/admin_footer') %>

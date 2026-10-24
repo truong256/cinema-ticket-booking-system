@@ -1,0 +1,192 @@
+<%- include('partials/admin_header', { title: 'Quản Lý Phòng Chiếu & Ghế - CineVibe' }) %>
+<%- include('partials/admin_sidebar', { activeTab: 'rooms' }) %>
+
+<main class="admin-main-wrapper">
+    <%- include('partials/admin_topbar', { 
+        pageTitle: 'Quản lý phòng chiếu & ghế ngồi', 
+        pageSubtitle: 'Danh sách các phòng chiếu, định dạng phòng Standard/VIP/IMAX và sơ đồ ghế tương ứng.' 
+    }) %>
+
+    <div class="admin-content">
+        <% if (typeof error !== 'undefined' && error) { %>
+            <div class="admin-alert admin-alert-danger"><%= error %></div>
+        <% } %>
+        <% if (typeof success !== 'undefined' && success) { %>
+            <div class="admin-alert admin-alert-success"><%= success %></div>
+        <% } %>
+
+        <div class="admin-filter-bar">
+            <div>
+                <span class="admin-pill-badge">Tổng số: <%= rooms ? rooms.length : 0 %> phòng chiếu</span>
+            </div>
+            <button type="button" class="admin-btn admin-btn-primary" onclick="openModal('modalAddRoom')">
+                Thêm phòng chiếu mới
+            </button>
+        </div>
+
+        <div class="admin-card" style="padding: 0; overflow: hidden;">
+            <div class="admin-table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 60px;">ID</th>
+                            <th>Cụm rạp</th>
+                            <th>Tên phòng chiếu</th>
+                            <th>Định dạng</th>
+                            <th>Tổng ghế</th>
+                            <th>Ghế bị khóa</th>
+                            <th>Trạng thái</th>
+                            <th style="text-align: right;">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (rooms && rooms.length > 0) { %>
+                            <% rooms.forEach(r => { %>
+                                <tr>
+                                    <td style="color: var(--admin-text-muted); font-weight: 700;">#<%= r.id %></td>
+                                    <td>
+                                        <div style="font-weight: 700; color: #FFFFFF;"><%= r.cinema_name %></div>
+                                    </td>
+                                    <td>
+                                        <span style="font-weight: 700; color: var(--admin-accent-gold); font-size: 0.95rem;"><%= r.name %></span>
+                                    </td>
+                                    <td>
+                                        <span class="admin-tag <%= r.room_type === 'IMAX' ? 'admin-tag-warning' : (r.room_type === 'VIP' ? 'admin-tag-success' : 'admin-tag-info') %>">
+                                            <%= r.room_type %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <strong style="color: #FFFFFF;"><%= r.actual_seats || r.total_seats %></strong> <span style="font-size: 0.75rem; color: var(--admin-text-muted);">ghế</span>
+                                    </td>
+                                    <td>
+                                        <% if (r.locked_seats > 0) { %>
+                                            <span class="admin-tag admin-tag-danger"><%= r.locked_seats %> ghế khóa</span>
+                                        <% } else { %>
+                                            <span style="color: var(--admin-text-muted); font-size: 0.82rem;">0 ghế</span>
+                                        <% } %>
+                                    </td>
+                                    <td>
+                                        <% if (r.is_active) { %>
+                                            <span class="admin-tag admin-tag-success">Hoạt động</span>
+                                        <% } else { %>
+                                            <span class="admin-tag admin-tag-danger">Tạm dừng</span>
+                                        <% } %>
+                                    </td>
+                                    <td style="text-align: right;">
+                                        <div class="admin-action-btn-group">
+                                            <a href="/admin/rooms/<%= r.id %>/seats" class="admin-btn admin-btn-primary admin-btn-sm">
+                                                Sơ đồ ghế
+                                            </a>
+                                            <button type="button" class="admin-btn admin-btn-secondary admin-btn-sm" onclick='openEditRoomModal(<%= JSON.stringify(r) %>)'>
+                                                Sửa
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="8" class="admin-empty-state">
+                                    <div class="admin-empty-state-title">Chưa có phòng chiếu nào</div>
+                                    <p>Nhấn "Thêm phòng chiếu mới" để khởi tạo phòng và sơ đồ ghế tự động.</p>
+                                </td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Modal Add Room -->
+<div id="modalAddRoom" class="admin-modal">
+    <div class="admin-modal-content">
+        <div class="admin-modal-header">
+            <h3 class="admin-modal-title">Thêm phòng chiếu mới</h3>
+            <button type="button" class="admin-modal-close" onclick="closeModal('modalAddRoom')">Đóng</button>
+        </div>
+        <form action="/admin/rooms/create" method="POST">
+            <div class="admin-modal-body">
+                <div class="admin-form-group">
+                    <label class="admin-form-label">Chọn cụm rạp *</label>
+                    <select name="cinema_id" class="admin-form-select" required>
+                        <% if (cinemas && cinemas.length > 0) { %>
+                            <% cinemas.forEach(c => { %>
+                                <option value="<%= c.id %>"><%= c.name %></option>
+                            <% }); %>
+                        <% } %>
+                    </select>
+                </div>
+                <div class="admin-form-group">
+                    <label class="admin-form-label">Tên phòng chiếu *</label>
+                    <input type="text" name="name" class="admin-form-input" required placeholder="Ví dụ: Phòng 04 - IMAX Laser">
+                </div>
+                <div class="admin-form-group">
+                    <label class="admin-form-label">Loại phòng chiếu</label>
+                    <select name="room_type" class="admin-form-select">
+                        <option value="Standard">Standard (Chuẩn)</option>
+                        <option value="VIP">VIP (Ghế Sofa da)</option>
+                        <option value="IMAX">IMAX (Màn chiếu siêu rộng)</option>
+                    </select>
+                    <span style="font-size: 0.75rem; color: var(--admin-text-muted); margin-top: 0.35rem; display: block;">
+                        Hệ thống tự động khởi tạo ma trận 60 ghế (A-B: Thường, C-E: VIP, F: Đôi)
+                    </span>
+                </div>
+            </div>
+            <div class="admin-modal-footer">
+                <button type="button" class="admin-btn admin-btn-secondary" onclick="closeModal('modalAddRoom')">Hủy</button>
+                <button type="submit" class="admin-btn admin-btn-primary">Tạo phòng chiếu</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Edit Room -->
+<div id="modalEditRoom" class="admin-modal">
+    <div class="admin-modal-content">
+        <div class="admin-modal-header">
+            <h3 class="admin-modal-title">Cập nhật phòng chiếu</h3>
+            <button type="button" class="admin-modal-close" onclick="closeModal('modalEditRoom')">Đóng</button>
+        </div>
+        <form id="formEditRoom" action="" method="POST">
+            <div class="admin-modal-body">
+                <div class="admin-form-group">
+                    <label class="admin-form-label">Tên phòng chiếu *</label>
+                    <input type="text" id="edit_room_name" name="name" class="admin-form-input" required>
+                </div>
+                <div class="admin-form-group">
+                    <label class="admin-form-label">Loại phòng chiếu</label>
+                    <select id="edit_room_type" name="room_type" class="admin-form-select">
+                        <option value="Standard">Standard (Chuẩn)</option>
+                        <option value="VIP">VIP (Ghế Sofa da)</option>
+                        <option value="IMAX">IMAX (Màn chiếu siêu rộng)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="admin-modal-footer">
+                <button type="button" class="admin-btn admin-btn-secondary" onclick="closeModal('modalEditRoom')">Hủy</button>
+                <button type="submit" class="admin-btn admin-btn-primary">Lưu thay đổi</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function openModal(id) {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'flex';
+}
+function closeModal(id) {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+}
+function openEditRoomModal(room) {
+    document.getElementById('formEditRoom').action = '/admin/rooms/' + room.id + '/update';
+    document.getElementById('edit_room_name').value = room.name || '';
+    document.getElementById('edit_room_type').value = room.room_type || 'Standard';
+    openModal('modalEditRoom');
+}
+</script>
+
+<%- include('partials/admin_footer') %>

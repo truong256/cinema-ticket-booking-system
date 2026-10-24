@@ -1,130 +1,141 @@
-<%- include('../partials/header') %>
-<%- include('../partials/navbar') %>
+<%- include('partials/admin_header', { title: 'Quản Lý Danh Sách Phim - CineVibe' }) %>
+<%- include('partials/admin_sidebar', { activeTab: 'movies' }) %>
 
-<main class="main-wrapper">
-    <div class="section-header">
-        <div>
-            <a href="/admin" style="color: var(--color-primary); font-size: 0.85rem; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem; margin-bottom: 0.4rem;">
-                &larr; Quay lại Dashboard
-            </a>
-            <h1 class="section-title">Quản Lý Danh Sách Phim</h1>
-            <p class="section-subtitle">Thêm mới, bật/tắt hiển thị và quản lý các tác phẩm điện ảnh trong hệ thống CINEVIBE</p>
+<main class="admin-main-wrapper">
+    <%- include('partials/admin_topbar', { 
+        pageTitle: 'Quản lý danh sách phim', 
+        pageSubtitle: 'Thêm mới, cập nhật thông tin và quản lý hiển thị các tác phẩm điện ảnh.' 
+    }) %>
+
+    <div class="admin-content">
+        <% if (error) { %>
+            <div class="admin-alert admin-alert-danger"><%= error %></div>
+        <% } %>
+        <% if (success) { %>
+            <div class="admin-alert admin-alert-success"><%= success %></div>
+        <% } %>
+
+        <div class="admin-filter-bar">
+            <div>
+                <span class="admin-pill-badge">Tổng số: <%= movies ? movies.length : 0 %> phim</span>
+            </div>
+            <button type="button" class="admin-btn admin-btn-primary" onclick="openModal('modalAddMovie')">
+                Thêm phim mới
+            </button>
         </div>
-        <button class="btn btn-primary" onclick="document.getElementById('modalAddMovie').style.display='flex'">
-            Thêm phim mới
-        </button>
-    </div>
 
-    <% if (error) { %>
-        <div class="alert alert-danger"><%= error %></div>
-    <% } %>
-    <% if (success) { %>
-        <div class="alert alert-success"><%= success %></div>
-    <% } %>
-
-    <!-- Movies Table Card -->
-    <div class="card" style="padding: 0; overflow: hidden; margin-bottom: 2.5rem;">
-        <div class="table-responsive">
-            <table class="cinema-table">
-                <thead>
-                    <tr>
-                        <th style="width: 60px;">ID</th>
-                        <th style="width: 80px;">Poster</th>
-                        <th>Tên Phim</th>
-                        <th>Thể Loại</th>
-                        <th>Thời Lượng</th>
-                        <th>Độ Tuổi</th>
-                        <th>Trạng Thái</th>
-                        <th style="text-align: right;">Hành Động</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% if (movies && movies.length > 0) { %>
-                        <% movies.forEach(m => { %>
+        <div class="admin-card" style="padding: 0; overflow: hidden;">
+            <div class="admin-table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 60px;">ID</th>
+                            <th style="width: 70px;">Poster</th>
+                            <th>Tên phim</th>
+                            <th>Thể loại</th>
+                            <th>Thời lượng</th>
+                            <th>Độ tuổi</th>
+                            <th>Trạng thái</th>
+                            <th style="text-align: right;">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (movies && movies.length > 0) { %>
+                            <% movies.forEach(m => { %>
+                                <tr>
+                                    <td style="color: var(--admin-text-muted); font-weight: 700;">#<%= m.id %></td>
+                                    <td>
+                                        <img src="<%= m.poster_url %>" alt="<%= m.title %>" class="admin-movie-poster" onerror="this.src='/images/dune2.jpg'">
+                                    </td>
+                                    <td>
+                                        <div style="font-weight: 700; color: #FFFFFF; font-size: 0.95rem; margin-bottom: 0.2rem;"><%= m.title %></div>
+                                        <div style="font-size: 0.78rem; color: var(--admin-text-muted);">
+                                            Khởi chiếu: <%= m.release_date ? new Date(m.release_date).toLocaleDateString('vi-VN') : 'Sắp chiếu' %>
+                                        </div>
+                                    </td>
+                                    <td style="color: var(--admin-text-secondary);"><%= m.genre %></td>
+                                    <td>
+                                        <strong><%= m.duration_minutes %></strong> <span style="font-size: 0.75rem; color: var(--admin-text-muted);">phút</span>
+                                    </td>
+                                    <td>
+                                        <span class="admin-tag admin-tag-muted"><%= m.age_rating || 'P' %></span>
+                                    </td>
+                                    <td>
+                                        <% if (m.is_active) { %>
+                                            <span class="admin-tag admin-tag-success">Đang chiếu</span>
+                                        <% } else { %>
+                                            <span class="admin-tag admin-tag-danger">Đã ẩn</span>
+                                        <% } %>
+                                    </td>
+                                    <td style="text-align: right;">
+                                        <div class="admin-action-btn-group">
+                                            <button type="button" class="admin-btn admin-btn-secondary admin-btn-sm" onclick='openEditMovieModal(<%= JSON.stringify(m) %>)'>
+                                                Sửa
+                                            </button>
+                                            <form action="/admin/movies/<%= m.id %>/toggle" method="POST" style="display: inline;">
+                                                <button type="submit" class="admin-btn admin-btn-secondary admin-btn-sm">
+                                                    <%= m.is_active ? 'Ẩn' : 'Hiện' %>
+                                                </button>
+                                            </form>
+                                            <form action="/admin/movies/<%= m.id %>/delete" method="POST" style="display: inline;" onsubmit="return confirm('Bạn có chắc chắn muốn xóa phim này?')">
+                                                <button type="submit" class="admin-btn admin-btn-danger admin-btn-sm">
+                                                    Xóa
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        <% } else { %>
                             <tr>
-                                <td style="color: var(--text-muted); font-weight: 600;">#<%= m.id %></td>
-                                <td>
-                                    <img src="<%= m.poster_url %>" alt="<%= m.title %>" style="width: 46px; height: 68px; border-radius: 6px; object-fit: cover; border: 1px solid var(--border-color); display: block;" onerror="this.src='/images/dune2.jpg'">
-                                </td>
-                                <td>
-                                    <div style="font-weight: 700; color: #ffffff; font-size: 0.98rem; margin-bottom: 0.2rem;"><%= m.title %></div>
-                                    <div style="font-size: 0.8rem; color: var(--text-muted);"><%= m.release_date ? new Date(m.release_date).toLocaleDateString('vi-VN') : 'Sắp chiếu' %></div>
-                                </td>
-                                <td style="color: var(--text-secondary); font-weight: 500;"><%= m.genre %></td>
-                                <td><span style="color: var(--text-primary); font-weight: 600;"><%= m.duration_minutes %></span> <span style="font-size: 0.8rem; color: var(--text-muted);">phút</span></td>
-                                <td>
-                                    <span class="age-badge <%= m.age_rating %>" style="position: static; display: inline-block;"><%= m.age_rating %></span>
-                                </td>
-                                <td>
-                                    <% if (m.is_active) { %>
-                                        <span class="badge badge-green">Đang hiển thị</span>
-                                    <% } else { %>
-                                        <span class="badge badge-red">Đã ẩn</span>
-                                    <% } %>
-                                </td>
-                                <td style="text-align: right;">
-                                    <div style="display: inline-flex; gap: 0.5rem;">
-                                        <form action="/admin/movies/<%= m.id %>/toggle" method="POST" style="display: inline;">
-                                            <button type="submit" class="btn btn-secondary btn-sm" title="Bật/Tắt hiển thị" aria-label="Bật hoặc tắt hiển thị" style="padding: 0.4rem 0.65rem;">
-                                                <i class="fas <%= m.is_active ? 'fa-eye-slash' : 'fa-eye' %>"></i>
-                                            </button>
-                                        </form>
-                                        <form action="/admin/movies/<%= m.id %>/delete" method="POST" style="display: inline;" onsubmit="return confirm('Bạn có chắc muốn xóa phim này?')">
-                                            <button type="submit" class="btn btn-secondary btn-sm" title="Xóa phim (chỉ xóa nếu không có suất chiếu)" aria-label="Xóa phim" style="color: #fca5a5; border-color: rgba(239, 68, 68, 0.4); padding: 0.4rem 0.65rem;">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </form>
-                                    </div>
+                                <td colspan="8" class="admin-empty-state">
+                                    <div class="admin-empty-state-title">Chưa có phim nào</div>
+                                    <p>Nhấn "Thêm phim mới" để tạo phim đầu tiên vào danh mục.</p>
                                 </td>
                             </tr>
-                        <% }); %>
-                    <% } else { %>
-                        <tr>
-                            <td colspan="8" style="text-align: center; padding: 3rem 1rem; color: var(--text-muted);">
-                                Chưa có phim nào trong cơ sở dữ liệu. Nhấn "Thêm phim mới" để khởi tạo.
-                            </td>
-                        </tr>
-                    <% } %>
-                </tbody>
-            </table>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
+</main>
 
-    <!-- Modal Add Movie (Dark Cinema Luxury) -->
-    <div id="modalAddMovie" class="modal-overlay">
-        <div class="modal-content-card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);">
-                <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 700; color: #ffffff; margin: 0;">Thêm Phim Mới</h3>
-                <button type="button" onclick="document.getElementById('modalAddMovie').style.display='none'" style="background: none; border: none; color: var(--text-secondary); font-size: 1.5rem; cursor: pointer; line-height: 1; transition: var(--transition);" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--text-secondary)'">&times;</button>
-            </div>
-
-            <form action="/admin/movies/create" method="POST">
-                <div class="form-group">
-                    <label class="form-label">Tên phim <span style="color: var(--color-primary);">*</span></label>
-                    <input type="text" name="title" class="form-control" required placeholder="Nhập tên phim chính thức">
+<!-- Modal Add Movie (Zero Icons, Text-First) -->
+<div id="modalAddMovie" class="admin-modal">
+    <div class="admin-modal-content">
+        <div class="admin-modal-header">
+            <h3 class="admin-modal-title">Thêm phim mới</h3>
+            <button type="button" class="admin-modal-close" onclick="closeModal('modalAddMovie')">Đóng</button>
+        </div>
+        <form action="/admin/movies/create" method="POST">
+            <div class="admin-modal-body">
+                <div class="admin-form-group">
+                    <label class="admin-form-label">Tên phim *</label>
+                    <input type="text" name="title" class="admin-form-input" required placeholder="Nhập tên phim">
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Tóm tắt nội dung <span style="color: var(--color-primary);">*</span></label>
-                    <textarea name="description" class="form-control" rows="3" required placeholder="Nội dung tóm tắt cốt truyện..."></textarea>
+                <div class="admin-form-group">
+                    <label class="admin-form-label">Tóm tắt nội dung *</label>
+                    <textarea name="description" class="admin-form-textarea" rows="3" required placeholder="Mô tả cốt truyện..."></textarea>
                 </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <div class="form-group">
-                        <label class="form-label">Thời lượng (phút) <span style="color: var(--color-primary);">*</span></label>
-                        <input type="number" name="duration_minutes" class="form-control" required value="120" min="1">
+                <div class="admin-form-grid">
+                    <div class="admin-form-group">
+                        <label class="admin-form-label">Thời lượng (phút) *</label>
+                        <input type="number" name="duration_minutes" class="admin-form-input" required value="120" min="1">
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Ngày khởi chiếu <span style="color: var(--color-primary);">*</span></label>
-                        <input type="date" name="release_date" class="form-control" required value="2026-04-01">
+                    <div class="admin-form-group">
+                        <label class="admin-form-label">Ngày khởi chiếu *</label>
+                        <input type="date" name="release_date" class="admin-form-input" required value="2026-04-01">
                     </div>
                 </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <div class="form-group">
-                        <label class="form-label">Thể loại <span style="color: var(--color-primary);">*</span></label>
-                        <input type="text" name="genre" class="form-control" required placeholder="Hành động, Phiêu lưu">
+                <div class="admin-form-grid">
+                    <div class="admin-form-group">
+                        <label class="admin-form-label">Thể loại *</label>
+                        <input type="text" name="genre" class="admin-form-input" required placeholder="Hành động, Phiêu lưu">
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Phân loại độ tuổi</label>
-                        <select name="age_rating" class="form-control">
+                    <div class="admin-form-group">
+                        <label class="admin-form-label">Phân loại độ tuổi</label>
+                        <select name="age_rating" class="admin-form-select">
                             <option value="P">P — Mọi lứa tuổi</option>
                             <option value="K">K — Dưới 13 tuổi có người lớn</option>
                             <option value="T16">T16 — Khán giả từ 16 tuổi</option>
@@ -132,22 +143,105 @@
                         </select>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Poster URL</label>
-                    <input type="text" name="poster_url" class="form-control" value="/images/dune2.jpg" placeholder="/images/dune2.jpg hoặc https://...">
+                <div class="admin-form-group">
+                    <label class="admin-form-label">Poster URL</label>
+                    <input type="text" name="poster_url" class="admin-form-input" value="/images/dune2.jpg" placeholder="/images/... hoặc URL">
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Trailer Youtube URL</label>
-                    <input type="url" name="trailer_url" class="form-control" placeholder="https://www.youtube.com/watch?v=...">
+                <div class="admin-form-group">
+                    <label class="admin-form-label">Trailer URL</label>
+                    <input type="url" name="trailer_url" class="admin-form-input" placeholder="https://www.youtube.com/watch?v=...">
                 </div>
-
-                <div style="display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1.75rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
-                    <button type="button" onclick="document.getElementById('modalAddMovie').style.display='none'" class="btn btn-secondary">Hủy</button>
-                    <button type="submit" class="btn btn-primary">Lưu phim</button>
-                </div>
-            </form>
-        </div>
+            </div>
+            <div class="admin-modal-footer">
+                <button type="button" class="admin-btn admin-btn-secondary" onclick="closeModal('modalAddMovie')">Hủy</button>
+                <button type="submit" class="admin-btn admin-btn-primary">Lưu phim</button>
+            </div>
+        </form>
     </div>
-</main>
+</div>
 
-<%- include('../partials/footer') %>
+<!-- Modal Edit Movie -->
+<div id="modalEditMovie" class="admin-modal">
+    <div class="admin-modal-content">
+        <div class="admin-modal-header">
+            <h3 class="admin-modal-title">Cập nhật thông tin phim</h3>
+            <button type="button" class="admin-modal-close" onclick="closeModal('modalEditMovie')">Đóng</button>
+        </div>
+        <form id="formEditMovie" action="" method="POST">
+            <div class="admin-modal-body">
+                <div class="admin-form-group">
+                    <label class="admin-form-label">Tên phim *</label>
+                    <input type="text" id="edit_title" name="title" class="admin-form-input" required>
+                </div>
+                <div class="admin-form-group">
+                    <label class="admin-form-label">Tóm tắt nội dung *</label>
+                    <textarea id="edit_description" name="description" class="admin-form-textarea" rows="3" required></textarea>
+                </div>
+                <div class="admin-form-grid">
+                    <div class="admin-form-group">
+                        <label class="admin-form-label">Thời lượng (phút) *</label>
+                        <input type="number" id="edit_duration_minutes" name="duration_minutes" class="admin-form-input" required min="1">
+                    </div>
+                    <div class="admin-form-group">
+                        <label class="admin-form-label">Ngày khởi chiếu *</label>
+                        <input type="date" id="edit_release_date" name="release_date" class="admin-form-input" required>
+                    </div>
+                </div>
+                <div class="admin-form-grid">
+                    <div class="admin-form-group">
+                        <label class="admin-form-label">Thể loại *</label>
+                        <input type="text" id="edit_genre" name="genre" class="admin-form-input" required>
+                    </div>
+                    <div class="admin-form-group">
+                        <label class="admin-form-label">Phân loại độ tuổi</label>
+                        <select id="edit_age_rating" name="age_rating" class="admin-form-select">
+                            <option value="P">P — Mọi lứa tuổi</option>
+                            <option value="K">K — Dưới 13 tuổi có người lớn</option>
+                            <option value="T16">T16 — Khán giả từ 16 tuổi</option>
+                            <option value="T18">T18 — Khán giả từ 18 tuổi</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="admin-form-group">
+                    <label class="admin-form-label">Poster URL</label>
+                    <input type="text" id="edit_poster_url" name="poster_url" class="admin-form-input">
+                </div>
+                <div class="admin-form-group">
+                    <label class="admin-form-label">Trailer URL</label>
+                    <input type="url" id="edit_trailer_url" name="trailer_url" class="admin-form-input">
+                </div>
+            </div>
+            <div class="admin-modal-footer">
+                <button type="button" class="admin-btn admin-btn-secondary" onclick="closeModal('modalEditMovie')">Hủy</button>
+                <button type="submit" class="admin-btn admin-btn-primary">Lưu thay đổi</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function openModal(id) {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'flex';
+}
+function closeModal(id) {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+}
+function openEditMovieModal(movie) {
+    document.getElementById('formEditMovie').action = '/admin/movies/' + movie.id + '/update';
+    document.getElementById('edit_title').value = movie.title || '';
+    document.getElementById('edit_description').value = movie.description || '';
+    document.getElementById('edit_duration_minutes').value = movie.duration_minutes || 120;
+    if (movie.release_date) {
+        document.getElementById('edit_release_date').value = movie.release_date.split('T')[0];
+    }
+    document.getElementById('edit_genre').value = movie.genre || '';
+    document.getElementById('edit_age_rating').value = movie.age_rating || 'P';
+    document.getElementById('edit_poster_url').value = movie.poster_url || '';
+    document.getElementById('edit_trailer_url').value = movie.trailer_url || '';
+    openModal('modalEditMovie');
+}
+</script>
+
+<%- include('partials/admin_footer') %>

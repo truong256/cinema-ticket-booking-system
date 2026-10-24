@@ -1,156 +1,233 @@
-<%- include('../partials/header') %>
-<%- include('../partials/navbar') %>
+<%- include('partials/admin_header', { title: 'Quản Lý Suất Chiếu - CineVibe' }) %>
+<%- include('partials/admin_sidebar', { activeTab: 'showtimes' }) %>
 
-<main class="main-wrapper">
-    <div class="section-header">
-        <div>
-            <a href="/admin" style="color: var(--color-primary); font-size: 0.85rem; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem; margin-bottom: 0.4rem;">
-                &larr; Quay lại Dashboard
-            </a>
-            <h1 class="section-title">Quản Lý Suất Chiếu</h1>
-            <p class="section-subtitle">Lên lịch chiếu phim, phân bổ phòng chiếu và thiết lập biểu giá vé theo thời gian thực</p>
+<main class="admin-main-wrapper">
+    <%- include('partials/admin_topbar', { 
+        pageTitle: 'Quản lý suất chiếu', 
+        pageSubtitle: 'Lên lịch chiếu phim, phân bổ phòng chiếu và thiết lập biểu giá vé theo thời gian thực.' 
+    }) %>
+
+    <div class="admin-content">
+        <% if (error) { %>
+            <div class="admin-alert admin-alert-danger"><%= error %></div>
+        <% } %>
+        <% if (success) { %>
+            <div class="admin-alert admin-alert-success"><%= success %></div>
+        <% } %>
+
+        <div class="admin-filter-bar">
+            <div>
+                <span class="admin-pill-badge">Tổng số: <%= showtimes ? showtimes.length : 0 %> suất chiếu</span>
+            </div>
+            <button type="button" class="admin-btn admin-btn-primary" onclick="openModal('modalAddShowtime')">
+                Thêm suất chiếu mới
+            </button>
         </div>
-        <button class="btn btn-primary" onclick="document.getElementById('modalAddShowtime').style.display='flex'">
-            Thêm suất chiếu mới
-        </button>
-    </div>
 
-    <% if (error) { %>
-        <div class="alert alert-danger"><%= error %></div>
-    <% } %>
-    <% if (success) { %>
-        <div class="alert alert-success"><%= success %></div>
-    <% } %>
-
-    <!-- Showtimes Table Card -->
-    <div class="card" style="padding: 0; overflow: hidden; margin-bottom: 2.5rem;">
-        <div class="table-responsive">
-            <table class="cinema-table">
-                <thead>
-                    <tr>
-                        <th style="width: 60px;">ID</th>
-                        <th>Tên Phim</th>
-                        <th>Cụm Rạp & Phòng</th>
-                        <th>Thời Gian Chiếu</th>
-                        <th>Biểu Giá (Thường / VIP / Đôi)</th>
-                        <th>Trạng Thái</th>
-                        <th style="text-align: right;">Sơ Đồ Ghế</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% if (showtimes && showtimes.length > 0) { %>
-                        <% showtimes.forEach(st => { %>
+        <div class="admin-card" style="padding: 0; overflow: hidden;">
+            <div class="admin-table-container">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 60px;">ID</th>
+                            <th>Tên phim</th>
+                            <th>Cụm rạp & Phòng</th>
+                            <th>Thời gian chiếu</th>
+                            <th>Biểu giá (Thường / VIP / Đôi)</th>
+                            <th>Trạng thái</th>
+                            <th style="text-align: right;">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (showtimes && showtimes.length > 0) { %>
+                            <% showtimes.forEach(st => { %>
+                                <tr>
+                                    <td style="color: var(--admin-text-muted); font-weight: 700;">#<%= st.id %></td>
+                                    <td>
+                                        <div style="font-weight: 700; color: #FFFFFF; font-size: 0.95rem;"><%= st.movie_title %></div>
+                                        <div style="font-size: 0.76rem; color: var(--admin-text-muted);"><%= st.duration_minutes %> phút</div>
+                                    </td>
+                                    <td>
+                                        <div style="font-weight: 600; color: #FFFFFF;"><%= st.cinema_name %></div>
+                                        <div style="font-size: 0.78rem; color: var(--admin-accent-gold); font-weight: 600;"><%= st.room_name %></div>
+                                    </td>
+                                    <td>
+                                        <div style="font-weight: 700; color: #FFFFFF;">
+                                            <%= new Date(st.start_time).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) %>
+                                        </div>
+                                        <div style="font-size: 0.78rem; color: var(--admin-text-muted);">
+                                            <%= new Date(st.start_time).toLocaleDateString('vi-VN') %>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style="font-size: 0.84rem; font-weight: 600;">
+                                            <span style="color: #FFFFFF;"><%= Number(st.price_regular).toLocaleString('vi-VN') %> đ</span>
+                                            <span style="color: var(--admin-border); margin: 0 0.2rem;">/</span>
+                                            <span style="color: var(--admin-accent-gold);"><%= Number(st.price_vip).toLocaleString('vi-VN') %> đ</span>
+                                            <span style="color: var(--admin-border); margin: 0 0.2rem;">/</span>
+                                            <span style="color: #F472B6;"><%= Number(st.price_couple).toLocaleString('vi-VN') %> đ</span>
+                                        </div>
+                                        <div style="font-size: 0.7rem; color: var(--admin-text-muted); text-transform: uppercase;">Thường / VIP / Couple</div>
+                                    </td>
+                                    <td>
+                                        <% if (st.status === 'scheduled') { %>
+                                            <span class="admin-tag admin-tag-success">Mở bán</span>
+                                        <% } else if (st.status === 'cancelled') { %>
+                                            <span class="admin-tag admin-tag-danger">Đã hủy</span>
+                                        <% } else { %>
+                                            <span class="admin-tag admin-tag-warning"><%= st.status %></span>
+                                        <% } %>
+                                    </td>
+                                    <td style="text-align: right;">
+                                        <div class="admin-action-btn-group">
+                                            <a href="/booking/showtime/<%= st.id %>" class="admin-btn admin-btn-secondary admin-btn-sm" target="_blank">
+                                                Xem ghế
+                                            </a>
+                                            <% if (st.status === 'scheduled') { %>
+                                                <button type="button" class="admin-btn admin-btn-secondary admin-btn-sm" onclick='openEditShowtimeModal(<%= JSON.stringify(st) %>)'>
+                                                    Sửa
+                                                </button>
+                                                <form action="/admin/showtimes/<%= st.id %>/cancel" method="POST" style="display: inline;" onsubmit="return confirm('Bạn có chắc chắn muốn HỦY suất chiếu này không? Khách hàng sẽ không thể đặt vé tiếp.')">
+                                                    <button type="submit" class="admin-btn admin-btn-danger admin-btn-sm">
+                                                        Hủy
+                                                    </button>
+                                                </form>
+                                            <% } %>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }); %>
+                        <% } else { %>
                             <tr>
-                                <td style="color: var(--text-muted); font-weight: 600;">#<%= st.id %></td>
-                                <td>
-                                    <div style="font-weight: 700; color: #ffffff; font-size: 0.98rem;"><%= st.movie_title %></div>
-                                </td>
-                                <td>
-                                    <div style="color: var(--text-primary); font-weight: 600; font-size: 0.92rem;"><%= st.cinema_name %></div>
-                                    <div style="font-size: 0.8rem; color: var(--color-gold); font-weight: 600;"><%= st.room_name %></div>
-                                </td>
-                                <td>
-                                    <div style="color: #ffffff; font-weight: 600;">
-                                        <%= new Date(st.start_time).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) %>
-                                    </div>
-                                    <div style="font-size: 0.8rem; color: var(--text-muted);">
-                                        <%= new Date(st.start_time).toLocaleDateString('vi-VN') %>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div style="font-size: 0.88rem; font-weight: 600;">
-                                        <span style="color: var(--text-primary);"><%= new Intl.NumberFormat('vi-VN').format(st.price_regular) %>đ</span>
-                                        <span style="color: var(--border-color); margin: 0 0.25rem;">/</span>
-                                        <span style="color: var(--color-gold);"><%= new Intl.NumberFormat('vi-VN').format(st.price_vip) %>đ</span>
-                                        <span style="color: var(--border-color); margin: 0 0.25rem;">/</span>
-                                        <span style="color: #f472b6;"><%= new Intl.NumberFormat('vi-VN').format(st.price_couple) %>đ</span>
-                                    </div>
-                                    <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">Standard / VIP / Couple</div>
-                                </td>
-                                <td>
-                                    <span class="badge badge-green">
-                                        <%= st.status %>
-                                    </span>
-                                </td>
-                                <td style="text-align: right;">
-                                    <a href="/booking/showtime/<%= st.id %>" class="btn btn-secondary btn-sm" target="_blank" style="padding: 0.45rem 0.85rem;">
-                                        Sơ đồ ghế
-                                    </a>
+                                <td colspan="7" class="admin-empty-state">
+                                    <div class="admin-empty-state-title">Chưa có suất chiếu nào</div>
+                                    <p>Nhấn "Thêm suất chiếu mới" để thiết lập lịch phát sóng tại các phòng rạp.</p>
                                 </td>
                             </tr>
-                        <% }); %>
-                    <% } else { %>
-                        <tr>
-                            <td colspan="7" style="text-align: center; padding: 3rem 1rem; color: var(--text-muted);">
-                                Chưa có suất chiếu nào. Nhấn "Thêm suất chiếu mới" để thiết lập lịch chiếu.
-                            </td>
-                        </tr>
-                    <% } %>
-                </tbody>
-            </table>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
+</main>
 
-    <!-- Modal Add Showtime (Dark Cinema Luxury) -->
-    <div id="modalAddShowtime" class="modal-overlay">
-        <div class="modal-content-card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-color);">
-                <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 700; color: #ffffff; margin: 0;">Tạo Suất Chiếu Mới</h3>
-                <button type="button" onclick="document.getElementById('modalAddShowtime').style.display='none'" style="background: none; border: none; color: var(--text-secondary); font-size: 1.5rem; cursor: pointer; line-height: 1; transition: var(--transition);" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--text-secondary)'">&times;</button>
-            </div>
-
-            <form action="/admin/showtimes/create" method="POST">
-                <div class="form-group">
-                    <label class="form-label">Chọn Phim <span style="color: var(--color-primary);">*</span></label>
-                    <select name="movie_id" class="form-control" required>
+<!-- Modal Add Showtime -->
+<div id="modalAddShowtime" class="admin-modal">
+    <div class="admin-modal-content">
+        <div class="admin-modal-header">
+            <h3 class="admin-modal-title">Tạo suất chiếu mới</h3>
+            <button type="button" class="admin-modal-close" onclick="closeModal('modalAddShowtime')">Đóng</button>
+        </div>
+        <form action="/admin/showtimes/create" method="POST">
+            <div class="admin-modal-body">
+                <div class="admin-form-group">
+                    <label class="admin-form-label">Chọn phim *</label>
+                    <select name="movie_id" class="admin-form-select" required>
                         <% movies.forEach(m => { %>
                             <option value="<%= m.id %>"><%= m.title %></option>
                         <% }); %>
                     </select>
                 </div>
-
-                <div class="form-group">
-                    <label class="form-label">Chọn Phòng Chiếu <span style="color: var(--color-primary);">*</span></label>
-                    <select name="room_id" class="form-control" required>
+                <div class="admin-form-group">
+                    <label class="admin-form-label">Chọn phòng chiếu *</label>
+                    <select name="room_id" class="admin-form-select" required>
                         <% rooms.forEach(r => { %>
-                            <option value="<%= r.id %>"><%= r.cinema_name %> - <%= r.name %> (<%= r.room_type %>)</option>
+                            <option value="<%= r.id %>"><%= r.cinema_name %> &mdash; <%= r.name %> (<%= r.room_type %>)</option>
                         <% }); %>
                     </select>
                 </div>
-
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <div class="form-group">
-                        <label class="form-label">Thời gian bắt đầu <span style="color: var(--color-primary);">*</span></label>
-                        <input type="datetime-local" name="start_time" class="form-control" required value="2026-04-10T19:30">
+                <div class="admin-form-grid">
+                    <div class="admin-form-group">
+                        <label class="admin-form-label">Thời gian bắt đầu *</label>
+                        <input type="datetime-local" name="start_time" class="admin-form-input" required value="2026-04-10T19:30">
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Thời lượng dự kiến (phút)</label>
-                        <input type="number" name="duration_minutes" class="form-control" value="130">
+                    <div class="admin-form-group">
+                        <label class="admin-form-label">Thời lượng dự kiến (phút)</label>
+                        <input type="number" name="duration_minutes" class="admin-form-input" value="130">
                     </div>
                 </div>
-
                 <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem;">
-                    <div class="form-group">
-                        <label class="form-label">Vé thường (VNĐ)</label>
-                        <input type="number" name="price_regular" class="form-control" value="85000" step="5000">
+                    <div class="admin-form-group">
+                        <label class="admin-form-label">Vé thường (VNĐ)</label>
+                        <input type="number" name="price_regular" class="admin-form-input" value="85000" step="5000">
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Vé VIP (VNĐ)</label>
-                        <input type="number" name="price_vip" class="form-control" value="110000" step="5000">
+                    <div class="admin-form-group">
+                        <label class="admin-form-label">Vé VIP (VNĐ)</label>
+                        <input type="number" name="price_vip" class="admin-form-input" value="110000" step="5000">
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Vé Đôi (VNĐ)</label>
-                        <input type="number" name="price_couple" class="form-control" value="180000" step="5000">
+                    <div class="admin-form-group">
+                        <label class="admin-form-label">Vé Đôi (VNĐ)</label>
+                        <input type="number" name="price_couple" class="admin-form-input" value="180000" step="5000">
                     </div>
                 </div>
-
-                <div style="display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1.75rem; padding-top: 1rem; border-top: 1px solid var(--border-color);">
-                    <button type="button" onclick="document.getElementById('modalAddShowtime').style.display='none'" class="btn btn-secondary">Hủy</button>
-                    <button type="submit" class="btn btn-primary">Tạo suất chiếu</button>
-                </div>
-            </form>
-        </div>
+            </div>
+            <div class="admin-modal-footer">
+                <button type="button" class="admin-btn admin-btn-secondary" onclick="closeModal('modalAddShowtime')">Hủy</button>
+                <button type="submit" class="admin-btn admin-btn-primary">Tạo suất chiếu</button>
+            </div>
+        </form>
     </div>
-</main>
+</div>
 
-<%- include('../partials/footer') %>
+<!-- Modal Edit Showtime -->
+<div id="modalEditShowtime" class="admin-modal">
+    <div class="admin-modal-content">
+        <div class="admin-modal-header">
+            <h3 class="admin-modal-title">Cập nhật suất chiếu</h3>
+            <button type="button" class="admin-modal-close" onclick="closeModal('modalEditShowtime')">Đóng</button>
+        </div>
+        <form id="formEditShowtime" action="" method="POST">
+            <div class="admin-modal-body">
+                <div class="admin-form-group">
+                    <label class="admin-form-label">Thời gian bắt đầu *</label>
+                    <input type="datetime-local" id="edit_st_start_time" name="start_time" class="admin-form-input" required>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem;">
+                    <div class="admin-form-group">
+                        <label class="admin-form-label">Vé thường (VNĐ)</label>
+                        <input type="number" id="edit_st_price_regular" name="price_regular" class="admin-form-input" required step="5000">
+                    </div>
+                    <div class="admin-form-group">
+                        <label class="admin-form-label">Vé VIP (VNĐ)</label>
+                        <input type="number" id="edit_st_price_vip" name="price_vip" class="admin-form-input" required step="5000">
+                    </div>
+                    <div class="admin-form-group">
+                        <label class="admin-form-label">Vé Đôi (VNĐ)</label>
+                        <input type="number" id="edit_st_price_couple" name="price_couple" class="admin-form-input" required step="5000">
+                    </div>
+                </div>
+            </div>
+            <div class="admin-modal-footer">
+                <button type="button" class="admin-btn admin-btn-secondary" onclick="closeModal('modalEditShowtime')">Hủy</button>
+                <button type="submit" class="admin-btn admin-btn-primary">Lưu thay đổi</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function openModal(id) {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'flex';
+}
+function closeModal(id) {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+}
+function openEditShowtimeModal(st) {
+    document.getElementById('formEditShowtime').action = '/admin/showtimes/' + st.id + '/update';
+    if (st.start_time) {
+        const d = new Date(st.start_time);
+        const pad = (n) => String(n).padStart(2, '0');
+        const localIso = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+        document.getElementById('edit_st_start_time').value = localIso;
+    }
+    document.getElementById('edit_st_price_regular').value = st.price_regular || 85000;
+    document.getElementById('edit_st_price_vip').value = st.price_vip || 110000;
+    document.getElementById('edit_st_price_couple').value = st.price_couple || 180000;
+    openModal('modalEditShowtime');
+}
+</script>
+
+<%- include('partials/admin_footer') %>
